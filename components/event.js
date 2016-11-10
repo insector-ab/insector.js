@@ -3,8 +3,8 @@ import React from 'react';
 import {truncate} from 'underscore.string';
 import classNames from 'classnames';
 
-import {User, EventNode} from 'js/models/node';
-import {Mappable} from 'js/react/proptypes';
+import {User, EventNode} from 'insectorjs/models/node';
+import {Mappable} from 'insectorjs/react/proptypes';
 
 /**
  * EventList

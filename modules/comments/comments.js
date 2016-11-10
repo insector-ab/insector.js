@@ -6,14 +6,14 @@ import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import {Grid, Row, Col} from 'react-bootstrap';
 
-import ReactModule from 'js/react/module';
+import ReactModule from 'insectorjs/react/module';
 import autosize from 'jquery-autosize';
 
 import {Model} from 'guins/model';
-import {User} from 'js/models/node';
-import {ReactTextarea} from 'js/react/form';
-import {FormModel} from 'js/models/form';
+import {ReactTextarea} from 'insectorjs/react/form';
+import {FormModel} from 'insectorjs/models/form';
 
+import {User} from 'js/models/node';
 import {CommentsModel} from './commentsmodel';
 import CommentsController from './commentscontroller';
 

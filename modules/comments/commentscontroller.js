@@ -2,7 +2,7 @@ import _ from 'lodash';
 import $ from 'jquery';
 import ModuleController from 'js/controllers/module';
 import {systemMessage} from 'js/helpers';
-import {CommentsEvent, UpdateType} from './event';
+import {CommentEvent, UpdateType} from './event';
 
 /**
  * CommentsController
@@ -40,7 +40,7 @@ export default class CommentsController extends ModuleController {
                         this.model.newCommentId = data.id;
                         this.model.showNewComment = false;
                         xhr = null;
-                        this.dispatchDOMEvent(CommentsEvent.createCommentUpdatedEvent(this.model.nodeId, UpdateType.CREATED));
+                        this.dispatchDOMEvent(CommentEvent.newCreatedEvent(this.model.nodeId));
                     });
                 }
             }
@@ -62,7 +62,7 @@ export default class CommentsController extends ModuleController {
         return this._xhrController.whenDelete(url).done((data) => {
             systemMessage('Comment deleted.');
             this.loadComments();
-            this.dispatchDOMEvent(CommentsEvent.createCommentUpdatedEvent(this.model.nodeId, UpdateType.DELETED));
+            this.dispatchDOMEvent(CommentEvent.newDeletedEvent(this.model.nodeId));
         });
     }
 

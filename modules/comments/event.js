@@ -1,9 +1,9 @@
 import {Event} from 'guins/event';
 
 /**
- * CommmentsEvent
+ * CommentEvent
  */
-export class CommentsEvent extends Event {
+export class CommentEvent extends Event {
 
     // Check if event affects the number of nodes (increases or decreases)
     affectsCount() {
@@ -11,16 +11,47 @@ export class CommentsEvent extends Event {
     }
 
 }
-CommentsEvent.COMMENT_UPDATED = 'CommentsEvent_COMMENT_UPDATED';
+CommentEvent.COMMENT_UPDATED = 'CommentEvent_COMMENT_UPDATED';
 
+/**
+ * UpdateType
+ */
 export class UpdateType {}
 UpdateType.CREATED = 'UpdateType_CREATED';
 UpdateType.SAVED = 'UpdateType_SAVED';
 UpdateType.DELETED = 'UpdateType_DELETED';
 
-CommentsEvent.createCommentUpdatedEvent = function(nodeId, updateType) {
-    let e = new CommentsEvent(CommentsEvent.COMMENT_UPDATED);
+/**
+ * newCreatedEvent
+ * @param  {Integer} nodeId
+ * @return {CommentEvent}
+ */
+CommentEvent.newCreatedEvent = function(nodeId) {
+    let e = new CommentEvent(CommentEvent.COMMENT_UPDATED);
     e.nodeId = nodeId;
-    e.updateType = updateType;
+    e.updateType = UpdateType.CREATED;
+    return e;
+};
+
+/**
+ * newSavedEvent
+ * @param  {Integer} nodeId
+ * @return {CommentEvent}
+ */
+CommentEvent.newSavedEvent = function(nodeId) {
+    let e = new CommentEvent(CommentEvent.COMMENT_UPDATED);
+    e.nodeId = nodeId;
+    e.updateType = UpdateType.SAVED;
+    return e;
+};
+/**
+ * newDeletedEvent
+ * @param  {Integer} nodeId
+ * @return {CommentEvent}
+ */
+CommentEvent.newDeletedEvent = function(nodeId) {
+    let e = new CommentEvent(CommentEvent.COMMENT_UPDATED);
+    e.nodeId = nodeId;
+    e.updateType = UpdateType.DELETED;
     return e;
 };

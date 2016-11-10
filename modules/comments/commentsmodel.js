@@ -1,6 +1,6 @@
 import {modelRegistry, modelIdentities} from 'guins/model';
-import {FormModel} from 'js/models/form';
-import ModuleModel from 'js/models/module';
+import {FormModel} from 'insectorjs/models/form';
+import ModuleModel from 'insectorjs/models/module';
 
 /**
  * CommentsModel

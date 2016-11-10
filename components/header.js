@@ -95,3 +95,28 @@ NavbarSearch.propTypes = {
     placeholder: React.PropTypes.string,
     value: React.PropTypes.string
 };
+
+/**
+ * DropdownNavItem
+ */
+export class DropdownNavItem extends React.Component {
+
+    render() {
+        return (
+            <li>
+                <a href={this.props.href} tabIndex="0" className="page-route">
+                    {this.props.faIcon &&
+                        <span className={classNames('fa', 'fa-fw', this.props.faIcon)}></span>
+                    }
+                    {this.props.title}
+                </a>
+            </li>
+        );
+    }
+
+}
+DropdownNavItem.propTypes = {
+    href: React.PropTypes.string,
+    faIcon: React.PropTypes.string,
+    title: React.PropTypes.string
+};

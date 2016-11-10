@@ -2,7 +2,7 @@ import {Model, SetterFlag} from 'guins/model';
 
 /**
  * ModuleModel, for use with
- * ReactModule (js/react/module.js)
+ * ReactModule (insectorjs/react/module.js)
  */
 export default class ModuleModel extends Model {
 

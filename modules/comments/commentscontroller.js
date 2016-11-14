@@ -2,7 +2,7 @@ import _ from 'lodash';
 import $ from 'jquery';
 import ModuleController from 'js/controllers/module';
 import {systemMessage} from 'js/helpers';
-import {CommentEvent, UpdateType} from './event';
+import {CommentEvent} from './event';
 
 /**
  * CommentsController
@@ -34,7 +34,7 @@ export default class CommentsController extends ModuleController {
                 let data = _.assign({nodeId: this.model.nodeId}, this.model.commentForm.inputValues);
                 let xhr;
                 if (!xhr) {
-                    xhr = this._xhrController.whenPost(url, data).done((data) => {
+                    xhr = this.xhrController.whenPost(url, data).done((data) => {
                         this.model.commentForm.setInputValue('comment', '');
                         this.model.rawComments.push(data);
                         this.model.newCommentId = data.id;
@@ -52,14 +52,14 @@ export default class CommentsController extends ModuleController {
             throw Error('nodeId required to load comments');
         }
         let url = '/api/v2/node/' + this.model.nodeId + '/comments';
-        return this._xhrController.whenGet(url).done((data) => {
+        return this.xhrController.whenGet(url).done((data) => {
             this.model.rawComments = data;
         });
     }
 
     deleteComment(id) {
         let url = '/api/v2/comments/' + id;
-        return this._xhrController.whenDelete(url).done((data) => {
+        return this.xhrController.whenDelete(url).done((data) => {
             systemMessage('Comment deleted.');
             this.loadComments();
             this.dispatchDOMEvent(CommentEvent.newDeletedEvent(this.model.nodeId));

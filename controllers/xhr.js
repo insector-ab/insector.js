@@ -4,15 +4,15 @@ import JSON from 'JSON2';
 import {systemErrorHandler} from 'insectorjs/helpers';
 /*
 
-    this._xhrController = new XHRController(this.model);
+    this.xhrController = new XHRController(this.model);
 
-    this._xhrController.whenGet('/customer/1234').done((data) => {
+    this.xhrController.whenGet('/customer/1234').done((data) => {
         this.model.customer.update(data.customer);
     });
 
  */
 
-export default class XHRController {
+export class XHRController {
 
     constructor(model) {
         // public
@@ -92,6 +92,66 @@ export default class XHRController {
     _deleteReferences() {
         delete this._model;
         delete this._xhrs;
+    }
+
+}
+
+// --> {"jsonrpc": "2.0", "method": "subtract", "params": [42, 23], "id": 1}
+// <-- {"jsonrpc": "2.0", "result": 19, "id": 1}
+export class JSONRPCController extends XHRController {
+
+    // ADD general Error handling
+
+    constructor(model, apiBaseRoute) {
+        super(model);
+        // http://www.jsonrpc.org/specification
+        this._version = '2.0';
+    }
+
+    getRPCCallData(method, id, params) {
+        // {"jsonrpc": "2.0", "method": "subtract", "params": [42, 23], "id": 1}
+        // or
+        // {"jsonrpc": "2.0", "method": "subtract", "params": {"subtrahend": 23, "minuend": 42}, "id": 3}
+        let rpcdata = {
+            jsonrpc: this._version,
+            method: method,
+            params: params
+
+        };
+        if (id) {
+            rpcdata.id = id;
+        }
+        return rpcdata;
+    }
+
+    whenGet(apiUrl, method, id, params = {}, ajaxParams = {}) {
+        return this.when(apiUrl, _.assign({
+            method: 'GET',
+            dataType: 'json',
+            data: this.getRPCCallData(method, id, params)
+        }, ajaxParams));
+    }
+
+    whenDelete(apiUrl, method, id, params = {}, ajaxParams = {}) {
+        return this.whenGet(apiUrl, method, id, params, _.assign({
+            method: 'DELETE'
+        }, ajaxParams));
+    }
+
+    whenPost(apiUrl, method, id, params = {}, ajaxParams = {}) {
+        return this.when(apiUrl, _.assign({
+            method: 'POST',
+            data: JSON.stringify(this.getRPCCallData(method, id, params)),
+            dataType: 'json',
+            contentType: 'application/json',
+            processData: false
+        }, ajaxParams));
+    }
+
+    whenPut(apiUrl, method, id, params = {}, ajaxParams = {}) {
+        return this.whenPost(apiUrl, method, id, params, _.assign({
+            method: 'PUT'
+        }, ajaxParams));
     }
 
 }

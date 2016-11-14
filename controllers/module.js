@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import _ from 'lodash';
 import ReactController from 'insectorjs/react/controller';
-import XHRController from 'insectorjs/controllers/xhr';
+import {XHRController, JSONRPCController} from 'insectorjs/controllers/xhr';
 import ModalController from 'insectorjs/controllers/modal';
 
 /**
@@ -13,10 +13,6 @@ export default class ModuleController extends ReactController {
         super(model, component);
         // Promise
         this._initializePromise = null;
-        // XHR controller
-        this._xhrController = new XHRController(model);
-        // Modal controller
-        this._modalController = new ModalController(model);
         // Bind
         this.onInitializeDone = this.onInitializeDone.bind(this);
         this.onInitializeFail = this.onInitializeFail.bind(this);
@@ -27,14 +23,42 @@ export default class ModuleController extends ReactController {
         this.initializeAndLaunch();
     }
 
+    get xhrController() {
+        if (!this._xhrController) {
+            this._xhrController = new XHRController(this.model);
+        }
+        return this._xhrController;
+    }
+
+    get modalController() {
+        if (!this._modalController) {
+            this._modalController = new ModalController(this.model);
+        }
+        return this._modalController;
+    }
+
+    get jsonRPCController() {
+        if (!this._jsonRPCController) {
+            this._jsonRPCController = new JSONRPCController(this.model);
+        }
+        return this._jsonRPCController;
+    }
+
     get model() {
         return super.model;
     }
     set model(value) {
         super.model = value;
         // set model in sub controllers
-        this._xhrController.model = value;
-        this._modalController.model = value;
+        if (this._xhrController) {
+            this._xhrController.model = value;
+        }
+        if (this._jsonRPCController) {
+            this._jsonRPCController.model = value;
+        }
+        if (this._modalController) {
+            this._modalController.model = value;
+        }
     }
 
     // Restructure? initialize() in componentWillMount & launch() in componentDidMount
@@ -73,8 +97,16 @@ export default class ModuleController extends ReactController {
 
     dispose() {
         super.dispose();
-        this._xhrController.dispose();
-        this._modalController.dispose();
+
+        if (this._xhrController) {
+            this._xhrController.dispose();
+        }
+        if (this._jsonRPCController) {
+            this._jsonRPCController.dispose();
+        }
+        if (this._modalController) {
+            this._modalController.dispose();
+        }
     }
 
     onInitializeDone(data, textStatus, jqXHR) {
@@ -94,6 +126,7 @@ export default class ModuleController extends ReactController {
         super._deleteReferences();
         // Sub controllers
         delete this._xhrController;
+        delete this._jsonRPCController;
         delete this._modalController;
         // Binds
         delete this.onInitializeDone;

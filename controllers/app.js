@@ -85,7 +85,7 @@ export default class AppController extends ModuleController {
         return false;
     }
 
-    updateDocumentTitle(title) {
+    setDocumentTitle(title) {
         document.title = String(title);
     }
 
@@ -114,7 +114,7 @@ export default class AppController extends ModuleController {
     onUpdateDocumentTitle(event, appEvent) {
         setTimeout(() => {
             console.log('onUpdateDocumentTitle (delayed 100 ms)', appEvent.title);
-            this.updateDocumentTitle(appEvent.title);
+            this.setDocumentTitle(appEvent.title);
         }, 100);
     }
 

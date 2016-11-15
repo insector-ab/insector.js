@@ -141,6 +141,9 @@ ReactView.propTypes = {
     model: React.PropTypes.object
 };
 
+/**
+ * ReactViewError
+ */
 class ReactViewError extends ExtendableError {
 
     constructor(message, data) {

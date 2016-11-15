@@ -2,6 +2,8 @@ import _ from 'lodash';
 import classNames from 'classnames';
 import React from 'react';
 
+// FIX: Move FA**** to components/fontawesome.js
+
 /**
  * FAButton
  */
@@ -25,11 +27,14 @@ export class FAButton extends React.Component {
 
 }
 FAButton.propTypes = {
-    title: React.PropTypes.string,
-    faIcon: React.PropTypes.string,
+    title: React.PropTypes.string.required,
+    faIcon: React.PropTypes.string.required,
     faClassName: React.PropTypes.string,
     children: React.PropTypes.node
 };
+FAButton.defaultProps = {
+    className: 'btn-default'
+}
 
 /**
  * FANavItem
@@ -48,6 +53,7 @@ export class FANavItem extends React.Component {
                         <span className={classNames('fa', 'fa-fw', this.props.faIcon)}></span>
                     }
                     <span> {this.props.title}</span>
+                    {this.props.children}
                 </a>
             </li>
         );
@@ -57,7 +63,8 @@ export class FANavItem extends React.Component {
 FANavItem.propTypes = {
     href: React.PropTypes.string,
     faIcon: React.PropTypes.string,
-    title: React.PropTypes.string
+    title: React.PropTypes.string,
+    children: React.PropTypes.node
 };
 
 /**

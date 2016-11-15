@@ -33,13 +33,6 @@ export class ControlledFormComponent extends React.Component {
         return attrs;
     }
 
-    getPropsValue() {
-        if (_.isUndefined(this.props.value) || _.isNull(this.props.value)) {
-            return '';
-        }
-        return this.props.value;
-    }
-
     onChange(event) {
         this.dispatchEvent(event, 'react.change');
     }
@@ -81,6 +74,9 @@ ReactInput.propTypes = {
         React.PropTypes.number
     ])
 };
+ReactInput.defaultProps = {
+    value: ''
+}
 
 /**
  * ReactTextarea
@@ -99,6 +95,9 @@ export class ReactTextarea extends ControlledFormComponent {
 ReactTextarea.propTypes = {
     value: React.PropTypes.string
 };
+ReactTextarea.defaultProps = {
+    value: ''
+}
 
 /**
  * ReactSelect
@@ -108,7 +107,7 @@ export class ReactSelect extends ControlledFormComponent {
     render() {
         let attrs = this.getAttrs();
         return (
-            <select value={this.getPropsValue()}
+            <select value={this.props.value}
                     {... attrs} >
                 {this.props.children}
             </select>
@@ -123,6 +122,9 @@ ReactSelect.propTypes = {
     ]),
     children: React.PropTypes.node
 };
+ReactSelect.defaultProps = {
+    value: ''
+}
 
 /**
  * ReactDatepicker
@@ -216,7 +218,7 @@ ReactToggle.defaultProps = {
 /**
  * ReactAutocomplete
  */
-export class ReactAutocomplete extends ReactInput {
+export class ReactAutocomplete extends ControlledFormComponent {
 
     constructor(props) {
         super(props);

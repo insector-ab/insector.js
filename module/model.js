@@ -50,4 +50,3 @@ export default class ModuleModel extends Model {
     }
 
 }
-

@@ -76,7 +76,7 @@ ReactInput.propTypes = {
 };
 ReactInput.defaultProps = {
     value: ''
-}
+};
 
 /**
  * ReactTextarea
@@ -97,7 +97,7 @@ ReactTextarea.propTypes = {
 };
 ReactTextarea.defaultProps = {
     value: ''
-}
+};
 
 /**
  * ReactSelect
@@ -124,7 +124,7 @@ ReactSelect.propTypes = {
 };
 ReactSelect.defaultProps = {
     value: ''
-}
+};
 
 /**
  * ReactDatepicker

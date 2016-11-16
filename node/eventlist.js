@@ -164,10 +164,8 @@ CommentEventListItem.propTypes = {
     currentUser: React.PropTypes.instanceOf(NodeModel)
 };
 
-
-
 /**
- * Event components, replace with Facotry?
+ * Event components, replace with Factory?
  */
 EventList.itemClasses = {
     'user_action.create.comment': CommentEventListItem

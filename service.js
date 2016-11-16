@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import _ from 'lodash';
 import path from 'path';
 import {Registry} from 'guins/registry';
@@ -27,31 +28,27 @@ export class XHRService {
     }
 
     get(relativeUrl, ajaxParams = {}) {
-        let url = this._getUrl(relativeUrl);
         let params = this._getAjaxParams(ajaxParams, {method: 'GET'});
-        return this.request(url, params);
+        return this.request(relativeUrl, params);
     }
 
     delete(relativeUrl, ajaxParams = {}) {
-        let url = this._getUrl(relativeUrl);
         let params = this._getAjaxParams(ajaxParams, {method: 'DELETE'});
-        return this.request(url, params);
+        return this.request(relativeUrl, params);
     }
 
     post(relativeUrl, data, ajaxParams = {}) {
-        let url = this._getUrl(relativeUrl);
         let params = this._getAjaxParams(ajaxParams, {method: 'POST', data: data});
-        return this.request(url, params);
+        return this.request(relativeUrl, params);
     }
 
     put(relativeUrl, data, ajaxParams = {}) {
         let params = this._getAjaxParams(ajaxParams, {method: 'PUT', data: data});
-        return this.request(url, params);
+        return this.request(relativeUrl, params);
     }
 
     request(relativeUrl, ajaxParams = {}) {
-        let url = this._getUrl(relativeUrl);
-        return this.ajax(url, ajaxParams);
+        return this.ajax(relativeUrl, ajaxParams);
     }
 
     ajax(url, ajaxParams = {}) {
@@ -101,11 +98,11 @@ XHRService.at = function(baseUrl = '/', defaultAjaxParams) {
         return XHRService._instances.get(baseUrl);
     }
     // Create new XHRService
-    let reg = new XHRService(key, factory);
+    let service = new XHRService(baseUrl, defaultAjaxParams);
     // Register
-    XHRService._instances.register(baseUrl, reg);
+    XHRService._instances.register(baseUrl, service);
     // return
-    return reg;
+    return service;
 };
 XHRService.exists = function(baseUrl) {
     baseUrl = path.normalize(baseUrl);
@@ -121,7 +118,7 @@ export class JSONService extends XHRService {
         super(baseUrl, _.defaults(defaultAjaxParams, {
             dataType: 'json',
             contentType: 'application/json',
-            processData: false 
+            processData: false
         }));
         // http://www.jsonrpc.org/specification
         this._version = '2.0';
@@ -135,11 +132,11 @@ export class JSONService extends XHRService {
     }
 
     rpc(rpcMethod, id, params, ajaxParams = {}) {
-        let params = this._getAjaxParams(ajaxParams, {
+        ajaxParams = this._getAjaxParams(ajaxParams, {
             method: this._guessRequestMethod(rpcMethod, id, params),
             data: this._getRPCData(rpcMethod, id, params)
         });
-        return this.request(relativeUrl, ajaxParams);
+        return this.request(rpcMethod, ajaxParams);
     }
 
     // {"jsonrpc": "2.0", "method": "user.get", "id": 12345}

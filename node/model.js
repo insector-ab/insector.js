@@ -18,9 +18,9 @@ addSymbolsToClass(NodeState, {
 });
 
 /**
- * Class Node
+ * Class NodeModel
  */
-export class Node extends Model {
+export class NodeModel extends Model {
 
     get id() {
         return this.get('id');
@@ -124,15 +124,15 @@ export class Node extends Model {
 
     _getDefaults() {
         let d = super._getDefaults();
-        d.identity = Node.identity;
-        d.discriminator = Node.discriminator;
+        d.identity = NodeModel.identity;
+        d.discriminator = NodeModel.discriminator;
         return d;
     }
 
 }
 
-Node.identity = 'node.Node';
-Node.discriminator = 'node';
+NodeModel.identity = 'node.NodeModel';
+NodeModel.discriminator = 'node';
 
 /**
  * nodeGraph
@@ -146,7 +146,7 @@ export var nodeGraph = Graph.getInstance('node', {nodeRegistryKey: 'uuid', edgeR
  */
 export var nodeIdentities = new Registry();
 // Register Classes/Constructors
-nodeIdentities.register(Node.discriminator, Node);
+nodeIdentities.register(NodeModel.discriminator, NodeModel);
 
 /**
  * nodeFactory

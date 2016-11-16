@@ -3,8 +3,8 @@ import React from 'react';
 import {truncate} from 'underscore.string';
 import classNames from 'classnames';
 
-import {User, EventNode} from 'insectorjs/models/node';
-import {Mappable} from 'insectorjs/react/proptypes';
+import {NodeModel} from 'insectorjs/node/model';
+import {Mappable} from 'insectorjs/proptypes';
 
 /**
  * EventList
@@ -100,7 +100,7 @@ export class EventList extends React.Component {
 }
 EventList.propTypes = {
     events: Mappable,
-    currentUser: React.PropTypes.instanceOf(User),
+    currentUser: React.PropTypes.instanceOf(NodeModel),
     noEventsText: React.PropTypes.string
 };
 EventList.defaultProps = {
@@ -129,8 +129,8 @@ export class DefaultEventListItem extends React.Component {
 
 }
 DefaultEventListItem.propTypes = {
-    event: React.PropTypes.instanceOf(EventNode),
-    currentUser: React.PropTypes.instanceOf(User)
+    event: React.PropTypes.instanceOf(NodeModel),
+    currentUser: React.PropTypes.instanceOf(NodeModel)
 };
 
 /**
@@ -160,8 +160,8 @@ export class CommentEventListItem extends React.Component {
 
 }
 CommentEventListItem.propTypes = {
-    event: React.PropTypes.instanceOf(EventNode),
-    currentUser: React.PropTypes.instanceOf(User)
+    event: React.PropTypes.instanceOf(NodeModel),
+    currentUser: React.PropTypes.instanceOf(NodeModel)
 };
 
 

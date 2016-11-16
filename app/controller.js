@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import page from 'page';
 import {EventPhase} from 'insectorjs/utils';
-import {AppEvent} from 'insectorjs/event';
-import ModuleController from 'insectorjs/controllers/module';
+import ModuleController from 'insectorjs/module/controller';
+import AppEvent from './event';
 
 /**
  * AppController
@@ -123,7 +123,7 @@ export default class AppController extends ModuleController {
     }
 
     _defineRoutes() {
-        throw Error('ABSTRACT method _loadDependencies called');
+        throw Error('ABSTRACT method _defineRoutes called');
     }
 
     _addEventListeners() {

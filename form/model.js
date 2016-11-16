@@ -4,7 +4,10 @@ import {Model, modelIdentities, modelRegistry} from 'guins/model';
 import assert from 'assert';
 import {underscored} from 'underscore.string';
 
-export class FormBaseModel extends Model {
+/**
+ * AbstractFormModel
+ */
+export class AbstractFormModel extends Model {
 
     /**
      * runs validation methods for given value
@@ -115,7 +118,7 @@ export class FormBaseModel extends Model {
 /**
  * FormModel
  */
-export class FormModel extends FormBaseModel {
+export class FormModel extends AbstractFormModel {
 
     constructor(data) {
         let inputItems;
@@ -273,7 +276,7 @@ FormModel.identity = 'form.FormModel';
 /**
  * FormInputModel
  */
-export class FormInputModel extends FormBaseModel {
+export class FormInputModel extends AbstractFormModel {
 
     get name() {
         return this.get('name');
@@ -374,7 +377,7 @@ export let defaultValidators = {
 
     required: function(value, input, context, ... args) {
         if (!value) {
-            input.errorCode = 'requried';
+            input.errorCode = 'required';
             return false;
         }
         return true;

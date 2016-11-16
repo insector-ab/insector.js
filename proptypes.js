@@ -1,4 +1,7 @@
 
+/**
+ * mappable
+ */
 export var mappable = (props, propName, componentName) => {
     // console.log('Here', propName, props[propName], props[propName].map);
     if (props[propName] && 'map' in props[propName]) {
@@ -7,6 +10,9 @@ export var mappable = (props, propName, componentName) => {
     return new Error('Failed propType: `' + propName + '` in `' + componentName + '` needs to be mappable (have method `map`).');
 };
 
+/**
+ * symbol
+ */
 export var symbol = (props, propName, componentName) => {
     // console.log('Here', propName, props[propName], props[propName].map);
     try {

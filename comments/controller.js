@@ -1,7 +1,8 @@
 import _ from 'lodash';
 import $ from 'jquery';
-import ModuleController from 'js/controllers/module';
-import {systemMessage} from 'js/helpers';
+import ModuleController from 'insectorjs/module/controller';
+import {JSONService} from 'insectorjs/service';
+import {systemMessage} from 'insectorjs/helpers';
 import {CommentEvent} from './event';
 
 /**
@@ -19,6 +20,10 @@ export default class CommentsController extends ModuleController {
         };
     }
 
+    get apiService() {
+        return JSONService.at('/api/v2');
+    }
+
     initialize() {
         return this.loadComments();
     }
@@ -30,16 +35,17 @@ export default class CommentsController extends ModuleController {
                 this.model.dispatchChange('commentForm');
             } else { // validation success
                 // post
-                let url = '/api/v2/comments';
+                let url = '/comments/';
                 let data = _.assign({nodeId: this.model.nodeId}, this.model.commentForm.inputValues);
-                let xhr;
-                if (!xhr) {
-                    xhr = this.xhrController.whenPost(url, data).done((data) => {
+                let ajaxPromise;
+                // FIX: Always false?
+                if (!ajaxPromise) {
+                    ajaxPromise = this.apiService.post(url, data).done((data) => {
                         this.model.commentForm.setInputValue('comment', '');
                         this.model.rawComments.push(data);
                         this.model.newCommentId = data.id;
                         this.model.showNewComment = false;
-                        xhr = null;
+                        ajaxPromise = null;
                         this.dispatchDOMEvent(CommentEvent.newCreatedEvent(this.model.nodeId));
                     });
                 }
@@ -51,15 +57,15 @@ export default class CommentsController extends ModuleController {
         if (!this.model.nodeId) {
             throw Error('nodeId required to load comments');
         }
-        let url = '/api/v2/node/' + this.model.nodeId + '/comments';
-        return this.xhrController.whenGet(url).done((data) => {
+        let url = '/node/' + this.model.nodeId + '/comments';
+        return this.apiService.get(url).done((data) => {
             this.model.rawComments = data;
         });
     }
 
     deleteComment(id) {
-        let url = '/api/v2/comments/' + id;
-        return this.xhrController.whenDelete(url).done((data) => {
+        let url = '/comments/' + id;
+        return this.apiService.delete(url).done((data) => {
             systemMessage('Comment deleted.');
             this.loadComments();
             this.dispatchDOMEvent(CommentEvent.newDeletedEvent(this.model.nodeId));

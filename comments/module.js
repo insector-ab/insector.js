@@ -1,21 +1,12 @@
-import $ from 'jquery';
 import _ from 'lodash';
-import moment from 'moment';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import classNames from 'classnames';
-import {Grid, Row, Col} from 'react-bootstrap';
-
-import ReactModule from 'insectorjs/react/module';
-import autosize from 'jquery-autosize';
-
 import {Model} from 'guins/model';
-import {ReactTextarea} from 'insectorjs/react/form';
-import {FormModel} from 'insectorjs/models/form';
-
-import {User} from 'js/models/node';
-import {CommentsModel} from './commentsmodel';
-import CommentsController from './commentscontroller';
+import ReactModule from 'insectorjs/react/module';
+import {NodeModel} from 'insectorjs/node/model';
+import {CommentsModel} from './model';
+import CommentsController from './controller';
+import {CommentList, NewCommentForm} from './components';
 
 /**
  * CommentsModule
@@ -27,7 +18,7 @@ export default class CommentsModule extends ReactModule {
     }
 
     render() {
-    let attrs = _.omit(this.props, ... _.keys(CommentsModule.propTypes));
+        let attrs = _.omit(this.props, ... _.keys(CommentsModule.propTypes));
         attrs.className = classNames(
             'comments',
             attrs.className || '',
@@ -98,7 +89,7 @@ export default class CommentsModule extends ReactModule {
 CommentsModule.propTypes = {
     parentModel: React.PropTypes.instanceOf(Model),
     nodeId: React.PropTypes.number,
-    currentUser: React.PropTypes.instanceOf(User),
+    currentUser: React.PropTypes.instanceOf(NodeModel),
     users: React.PropTypes.array,
     placeholder: React.PropTypes.string
 };

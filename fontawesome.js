@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import classNames from 'classnames';
 import React from 'react';
+import {Media, MediaLeft, MediaBody} from 'insectorjs/base/components';
 
 /**
  * FAButton
@@ -28,7 +29,7 @@ FAButton.propTypes = {
 };
 FAButton.defaultProps = {
     className: 'btn-default'
-}
+};
 
 /**
  * FANavItem

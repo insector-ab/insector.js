@@ -17,13 +17,21 @@ export default class AppController extends ModuleController {
         this.onKeyDown = this.onKeyDown.bind(this);
         this.onRouteTo = this.onRouteTo.bind(this);
         this.onUpdateDocumentTitle = this.onUpdateDocumentTitle.bind(this);
+        this.onWindowPopState = this.onWindowPopState.bind(this);
     }
 
     initialize() {
-        // Define routes
-        this._defineRoutes();
-        // load dependencies
-        return this._loadDependencies();
+        let superPromise = super.initialize();
+        let deferred = $.Deferred();
+        // Load dependencies
+        this._loadDependencies().done(() => {
+            // Define routes
+            this._defineRoutes();
+            // resolve
+            deferred.resolve();
+        });
+        // Return promise
+        return $.when(superPromise, deferred.promise());
     }
 
     launch() {
@@ -89,7 +97,8 @@ export default class AppController extends ModuleController {
         document.title = String(title);
     }
 
-    dispatchAppDOMEvent(event) {
+    // Trigger via $(document) instead?
+    notifyAppEventReceivers(event) {
         // trigger event for each .app-event-receiver el found
         $('.app-event-receiver').each((i, el) => {
             $(el).triggerHandler(event.type, event);
@@ -97,6 +106,7 @@ export default class AppController extends ModuleController {
     }
 
     onInitializeFail(promise, textStatus, statusTitle) {
+        // FIX
         // Try launch anyway
         this.launch();
     }
@@ -118,8 +128,14 @@ export default class AppController extends ModuleController {
         }, 100);
     }
 
+    onWindowPopState(event) {
+        // Hide any open modals
+        this.$('.modal').modal('hide');
+    }
+
+    // Always return promise
     _loadDependencies() {
-        throw Error('ABSTRACT method _loadDependencies called');
+        return $.Deferred().resolve().promise();
     }
 
     _defineRoutes() {
@@ -135,6 +151,8 @@ export default class AppController extends ModuleController {
         // App events
         $(this.componentEl).on(AppEvent.ROUTE_TO, this.onRouteTo);
         $(this.componentEl).on(AppEvent.UPDATE_DOCUMENT_TITLE, this.onUpdateDocumentTitle);
+        // Window history back event
+        $(window).on('popstate', this.onWindowPopState);
     }
 
     _removeEventListeners() {
@@ -146,6 +164,8 @@ export default class AppController extends ModuleController {
         // App events
         $(this.componentEl).off(AppEvent.ROUTE_TO, this.onRouteTo);
         $(this.componentEl).off(AppEvent.UPDATE_DOCUMENT_TITLE, this.onUpdateDocumentTitle);
+        // Window history back event
+        $(window).off('popstate', this.onWindowPopState);
     }
 
     _deleteReferences() {
@@ -155,6 +175,7 @@ export default class AppController extends ModuleController {
         delete this.onKeyDown;
         delete this.onRouteTo;
         delete this.onUpdateDocumentTitle;
+        delete this.onWindowPopState;
     }
 
 }

@@ -1,8 +1,6 @@
 import $ from 'jquery';
 import _ from 'lodash';
 import ReactController from 'insectorjs/react/controller';
-import {XHRController, JSONRPCController} from 'insectorjs/controllers/xhr';
-import ModalController from 'insectorjs/controllers/modal';
 
 /**
  * ModuleController
@@ -47,9 +45,7 @@ export default class ModuleController extends ReactController {
     // intialize should always return a promise
     // Override and do stuff
     initialize() {
-        let promise = $.Deferred();
-        promise.resolve();
-        return promise;
+        return $.Deferred().resolve().promise();
     }
 
     // Called when component is mounted, after initialized promise is resolved

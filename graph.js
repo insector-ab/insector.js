@@ -2,6 +2,9 @@ import _ from 'lodash';
 import {Model, modelIdentities} from 'guins/model';
 import {Registry} from 'guins/registry';
 
+/**
+ * Re-write. Don't extend Model.
+ */
 export class Graph extends Model {
 
     constructor(data) {

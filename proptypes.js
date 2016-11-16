@@ -1,5 +1,5 @@
 
-export var Mappable = (props, propName, componentName) => {
+export var mappable = (props, propName, componentName) => {
     // console.log('Here', propName, props[propName], props[propName].map);
     if (props[propName] && 'map' in props[propName]) {
         return null;

@@ -8,9 +8,9 @@ import classNames from 'classnames';
 import 'bootstrap-datepicker';
 
 /**
- * ControlledFormComponent
+ * AbstractFormControl
  */
-export class ControlledFormComponent extends React.Component {
+export class AbstractFormControl extends React.Component {
 
     constructor(props) {
         super(props);
@@ -49,14 +49,14 @@ export class ControlledFormComponent extends React.Component {
     }
 
 }
-ControlledFormComponent.propTypes = {
+AbstractFormControl.propTypes = {
     value: React.PropTypes.any
 };
 
 /**
  * ReactInput
  */
-export class ReactInput extends ControlledFormComponent {
+export class ReactInput extends AbstractFormControl {
 
     render() {
         let attrs = this.getAttrs();
@@ -81,7 +81,7 @@ ReactInput.defaultProps = {
 /**
  * ReactTextarea
  */
-export class ReactTextarea extends ControlledFormComponent {
+export class ReactTextarea extends AbstractFormControl {
 
     render() {
         let attrs = this.getAttrs();
@@ -102,7 +102,7 @@ ReactTextarea.defaultProps = {
 /**
  * ReactSelect
  */
-export class ReactSelect extends ControlledFormComponent {
+export class ReactSelect extends AbstractFormControl {
 
     render() {
         let attrs = this.getAttrs();
@@ -133,7 +133,7 @@ export class ReactDatepicker extends ReactInput {
 
     constructor(props) {
         super(props);
-        this.onChangeDate = this.onChangeDate.bind(this);
+        this.onDateChange = this.onDateChange.bind(this);
         this.onShow = this.onShow.bind(this);
         this.onHide = this.onHide.bind(this);
     }
@@ -147,7 +147,7 @@ export class ReactDatepicker extends ReactInput {
                 weekStart: 1,
                 autoclose: true
             });
-            this.datepicker.on('changeDate', this.onChangeDate);
+            this.datepicker.on('changeDate', this.onDateChange);
             this.datepicker.on('show', this.onShow);
             this.datepicker.on('hide', this.onHide);
         }
@@ -164,7 +164,7 @@ export class ReactDatepicker extends ReactInput {
         // disable onChange behaviour
     }
 
-    onChangeDate(event) {
+    onDateChange(event) {
         super.onChange(event);
     }
 
@@ -218,7 +218,7 @@ ReactToggle.defaultProps = {
 /**
  * ReactAutocomplete
  */
-export class ReactAutocomplete extends ControlledFormComponent {
+export class ReactAutocomplete extends AbstractFormControl {
 
     constructor(props) {
         super(props);

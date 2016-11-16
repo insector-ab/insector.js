@@ -3,7 +3,7 @@ import {Event} from 'guins/event';
 /**
  * AppEvent
  */
-export class AppEvent extends Event {
+export default class AppEvent extends Event {
 
     static createRouteToEvent(route, inNewWindow) {
         let e = new AppEvent(AppEvent.ROUTE_TO);

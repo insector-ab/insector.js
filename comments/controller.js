@@ -99,10 +99,7 @@ export default class CommentsController extends ModuleController {
 export let validators = {
 
     nodeIdSet: function(value, input, context, ... args) {
-        if (!context.model.nodeId) {
-            return false;
-        }
-        return true;
+        return context.model.has('nodeId');
     }
 
 };

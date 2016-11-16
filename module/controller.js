@@ -23,44 +23,6 @@ export default class ModuleController extends ReactController {
         this.initializeAndLaunch();
     }
 
-    get xhrController() {
-        if (!this._xhrController) {
-            this._xhrController = new XHRController(this.model);
-        }
-        return this._xhrController;
-    }
-
-    get modalController() {
-        if (!this._modalController) {
-            this._modalController = new ModalController(this.model);
-        }
-        return this._modalController;
-    }
-
-    get jsonRPCController() {
-        if (!this._jsonRPCController) {
-            this._jsonRPCController = new JSONRPCController(this.model);
-        }
-        return this._jsonRPCController;
-    }
-
-    get model() {
-        return super.model;
-    }
-    set model(value) {
-        super.model = value;
-        // set model in sub controllers
-        if (this._xhrController) {
-            this._xhrController.model = value;
-        }
-        if (this._jsonRPCController) {
-            this._jsonRPCController.model = value;
-        }
-        if (this._modalController) {
-            this._modalController.model = value;
-        }
-    }
-
     // Restructure? initialize() in componentWillMount & launch() in componentDidMount
     initializeAndLaunch() {
         // Initialize
@@ -95,20 +57,6 @@ export default class ModuleController extends ReactController {
     launch() {
     }
 
-    dispose() {
-        super.dispose();
-
-        if (this._xhrController) {
-            this._xhrController.dispose();
-        }
-        if (this._jsonRPCController) {
-            this._jsonRPCController.dispose();
-        }
-        if (this._modalController) {
-            this._modalController.dispose();
-        }
-    }
-
     onInitializeDone(data, textStatus, jqXHR) {
         // Update model
         if (this.model) {
@@ -124,10 +72,6 @@ export default class ModuleController extends ReactController {
 
     _deleteReferences() {
         super._deleteReferences();
-        // Sub controllers
-        delete this._xhrController;
-        delete this._jsonRPCController;
-        delete this._modalController;
         // Binds
         delete this.onInitializeDone;
         delete this.onInitializeFail;

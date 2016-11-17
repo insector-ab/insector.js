@@ -1,6 +1,6 @@
 import {Model, modelRegistry} from 'guins/model';
-import ModuleModel from 'insectorjs/models/module';
-import {nodeRegistry} from 'insectorjs/models/node';
+import ModuleModel from 'insectorjs/module/model';
+import {nodeRegistry} from 'insectorjs/node/model';
 import {mixin} from 'insectorjs/utils';
 import {ActiveView} from 'insectorjs/mixins';
 

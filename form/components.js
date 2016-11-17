@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import classNames from 'classnames';
-import {ReactInput, ReactSelect} from 'insectorjs/react/form';
+import {ReactInput, ReactSelect} from 'insectorjs/form/controls';
 
 /**
  * FormGroup

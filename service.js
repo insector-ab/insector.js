@@ -131,36 +131,24 @@ export class JSONService extends XHRService {
         this._version = value;
     }
 
-    rpc(rpcMethod, id, params, ajaxParams = {}) {
+    rpc(rpcMethod, params, ajaxParams = {}) {
         ajaxParams = this._getAjaxParams(ajaxParams, {
-            method: this._guessRequestMethod(rpcMethod, id, params),
-            data: this._getRPCData(rpcMethod, id, params)
+            method: 'POST',
+            data: this._getRPCData(rpcMethod, params)
         });
         return this.request(rpcMethod, ajaxParams);
     }
 
-    // {"jsonrpc": "2.0", "method": "user.get", "id": 12345}
-    // {"jsonrpc": "2.0", "method": "diff", "params": [42, 23]}
-    // {"jsonrpc": "2.0", "method": "divide", "params": {"dividend": 42, "divisor": 23}}
-    _getRPCData(method, id, params) {
-        let rpcdata = {method, params, jsonrpc: this.version};
-        if (!_.isUndefined(id)) {
-            rpcdata.id = id;
-        }
-        return rpcdata;
-    }
-
-    _guessRequestMethod(method, id, params) {
-        if (_.includes(method, '.create')) {
-            return 'POST';
-        }
-        if (_.includes(method, '.update')) {
-            return 'PUT';
-        }
-        if (_.includes(method, '.delete')) {
-            return 'DELETE';
-        }
-        return 'GET';
+    // {"jsonrpc": "2.0", "id": 345, "method": "user.get", params: {id: 163886}}
+    // {"jsonrpc": "2.0", "id": 346, "method": "diff", "params": [42, 23]}
+    // {"jsonrpc": "2.0", "id": 347, "method": "divide", "params": {"dividend": 42, "divisor": 23}}
+    _getRPCData(method, params) {
+        return {
+            method,
+            params,
+            jsonrpc: this.version,
+            id: _.uniqueId('rpc')
+        };
     }
 
     _getAjaxParams(... ajaxParamObjs) {

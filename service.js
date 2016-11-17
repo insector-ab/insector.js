@@ -48,24 +48,13 @@ export class XHRService {
     }
 
     request(relativeUrl, ajaxParams = {}) {
-        return this.ajax(relativeUrl, ajaxParams);
+        let url = this._getUrl(relativeUrl);
+        return this.ajax(url, ajaxParams);
     }
 
     ajax(url, ajaxParams = {}) {
-        // Key
-        let key = ajaxParams.method + '_' + url;
-        // Already requesting, return existing promise
-        if (this._jqXHRs[key]) {
-            return this._jqXHRs[key];
-        }
-        // Ajax request
-        let jqXHR = $.ajax(url, ajaxParams);
-        // Always delete jqXHR ref
-        jqXHR.always((jqXHR, textStatus) => {
-            delete this._jqXHRs[key];
-        });
-        // return promise
-        return this._jqXHRs[key];
+        console.log(ajaxParams.method, url, ajaxParams.data);
+        return $.ajax(url, ajaxParams);
     }
 
     dispose() {
@@ -91,14 +80,15 @@ export class XHRService {
 // Store multitons
 XHRService._instances = new Registry();
 // Multiton getter
-XHRService.at = function(baseUrl = '/', defaultAjaxParams) {
+XHRService.at = function(baseUrl = '/', defaultAjaxParams, Constructor) {
     baseUrl = path.normalize(baseUrl);
     // Instance exists?
     if (XHRService.exists(baseUrl)) {
         return XHRService._instances.get(baseUrl);
     }
     // Create new XHRService
-    let service = new XHRService(baseUrl, defaultAjaxParams);
+    Constructor = Constructor || XHRService;
+    let service = new Constructor(baseUrl, defaultAjaxParams);
     // Register
     XHRService._instances.register(baseUrl, service);
     // return
@@ -136,7 +126,7 @@ export class JSONService extends XHRService {
             method: 'POST',
             data: this._getRPCData(rpcMethod, params)
         });
-        return this.request(rpcMethod, ajaxParams);
+        return this.ajax(this.baseUrl, ajaxParams);
     }
 
     // {"jsonrpc": "2.0", "id": 345, "method": "user.get", params: {id: 163886}}
@@ -163,7 +153,7 @@ export class JSONService extends XHRService {
 }
 // Multiton getter
 JSONService.at = function(baseUrl = '/', defaultAjaxParams) {
-    return XHRService.at(baseUrl, defaultAjaxParams);
+    return XHRService.at(baseUrl, defaultAjaxParams, JSONService);
 };
 JSONService.exists = function(baseUrl) {
     return XHRService.exists(baseUrl);

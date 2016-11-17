@@ -5,7 +5,7 @@ import {Registry, InstanceRegistry} from 'guins/registry';
 import {Factory} from 'guins/factory';
 
 import {addSymbolsToClass} from 'insectorjs/utils';
-import {Graph} from 'insectorjs/models/graph';
+import {Graph} from 'insectorjs/graph';
 
 /**
  * NodeState

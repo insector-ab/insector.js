@@ -159,7 +159,7 @@ export class FormModel extends AbstractFormModel {
     }
 
     get inputs() {
-        return this.getInstanceList('inputs', this.get('inputs'), FormInputModel, this.modelRegistry);
+        return this.getModelList('inputs', this.get('inputs'), FormInputModel, this.modelRegistry);
     }
 
     get inputValues() {

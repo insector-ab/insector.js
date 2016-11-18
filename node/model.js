@@ -1,6 +1,6 @@
 import moment from 'moment';
 import {Model} from 'guins/model';
-import {Registry, InstanceRegistry} from 'guins/registry';
+import {Registry, ModelRegistry} from 'guins/registry';
 import {Factory} from 'guins/factory';
 
 import {addSymbolsToClass} from 'insectorjs/utils';
@@ -137,7 +137,11 @@ NodeModel.discriminator = 'node';
  * nodeGraph
  * @type {Graph}
  */
-export var nodeGraph = Graph.getInstance('node', {nodeRegistryKey: 'uuid', edgeRegistryKey: 'uuid', identityKey: 'discriminator'});
+export var nodeGraph = new Graph({
+    nodeRegistryKey: 'uuid',
+    edgeRegistryKey: 'uuid',
+    identityKey: 'discriminator'
+});
 
 /**
  * nodeIdentities
@@ -155,8 +159,8 @@ export var nodeFactory = new Factory(nodeIdentities, 'discriminator');
 
 /**
  * nodeRegistry
- * @type {InstanceRegistry}
+ * @type {ModelRegistry}
  */
-export var nodeRegistry = new InstanceRegistry('uuid', nodeFactory);
+export var nodeRegistry = new ModelRegistry('uuid', nodeFactory);
 // Do not allow Instances that cannot be created via factory
 nodeRegistry.allowNonFactoryInstances = false;

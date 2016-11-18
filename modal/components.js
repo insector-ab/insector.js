@@ -82,6 +82,7 @@ ConfirmModal.propTypes = {
     children: React.PropTypes.node
 };
 ConfirmModal.defaultProps = {
+    size: 'sm',
     confirmButtonText: 'OK',
     confirmButtonStyle: 'btn-primary',
     cancelButtonText: 'Cancel',
@@ -99,7 +100,7 @@ export class DefaultDeleteModal extends React.Component {
             <DeleteModal {... attrs}>
                 <div className="modal-message text-center">
                     <span className="fa fa-2x fa-warning top-icon" />
-                    <h3 className="m-t-05">{this.props.message}</h3>
+                    <div className="m-t-1 m-b-2">{this.props.children}</div>
                 </div>
             </DeleteModal>
         );
@@ -107,7 +108,7 @@ export class DefaultDeleteModal extends React.Component {
 
 }
 DefaultDeleteModal.propTypes = {
-    message: React.PropTypes.string
+    children: React.PropTypes.node
 };
 
 /**

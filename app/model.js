@@ -19,12 +19,17 @@ export default class AppModel extends ModuleModel {
     set isFetching(value) {
         if (value !== this._isFetching) {
             this._isFetching = value;
+            console.log('isFetching dispatch', value);
             this.dispatchChange('isFetching');
         }
+    }
+
+    _getDefaults() {
+        let d = super._getDefaults();
+        return d;
     }
 
 }
 
 // Adds 'activeView', 'activeViewProps', 'previousActiveView'
 mixin(AppModel, ActiveView);
-

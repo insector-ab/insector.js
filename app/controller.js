@@ -18,6 +18,17 @@ export default class AppController extends ModuleController {
         this.onRouteTo = this.onRouteTo.bind(this);
         this.onUpdateDocumentTitle = this.onUpdateDocumentTitle.bind(this);
         this.onWindowPopState = this.onWindowPopState.bind(this);
+        // Ajax events
+        this.onAjaxStart = this.onAjaxStart.bind(this);
+        this.onAjaxError = this.onAjaxError.bind(this);
+        this.onAjaxSuccess = this.onAjaxSuccess.bind(this);
+        this.onAjaxStop = this.onAjaxStop.bind(this);
+    }
+
+    events() {
+        return {
+            'bs.modal.hidden': 'onModalHidden'
+        };
     }
 
     initialize() {
@@ -40,69 +51,25 @@ export default class AppController extends ModuleController {
         this.dispatchDOMEvent(AppEvent.createRouteToEvent(window.location.pathname));
     }
 
+    setDocumentTitle(title) {
+        document.title = String(title);
+    }
+
     onClick(event) {
-        return this.checkRouting('.page-route', event);
+        return this._checkRouting('.page-route', event);
     }
 
     onDblClick(event) {
-        return this.checkRouting('.dbl-page-route', event);
+        return this._checkRouting('.dbl-page-route', event);
     }
 
     onKeyDown(event) {
         switch (event.which) {
             case 13: // enter-key
-                this.checkRouting('.page-route', event);
-                this.checkRouting('.dbl-page-route', event);
+                this._checkRouting('.page-route', event);
+                this._checkRouting('.dbl-page-route', event);
                 break;
         }
-    }
-
-    checkRouting(classname, event) {
-        // console.log('checkRouting', event);
-        let $pageRouteEl = $(event.target).closest(classname);
-        // Check .page-route click
-        if ($pageRouteEl.length) {
-            if ($pageRouteEl.attr('disabled') === 'disabled') {
-                event.preventDefault();
-            } else {
-                return this.pageRouteHandler($pageRouteEl, event);
-            }
-        }
-        return false;
-    }
-
-    pageRouteHandler($el, event) {
-        // href
-        let href = $el.attr('href') || $el.attr('data-href');
-        // open in new window?
-        let isTargetBlankLink = $el.is('a') && $el.attr('target') === '_blank';
-        if (isTargetBlankLink) {
-            return false;
-        }
-        let metaKeyOnNonLink = (event.metaKey || $el.attr('data-target') === '_blank') && !$el.is('a');
-        if (metaKeyOnNonLink) {
-            window.open(href);
-            return false;
-        }
-        if (event.metaKey) {
-            return;
-        }
-        // Stop event
-        event.preventDefault();
-        page.show(href);
-        return false;
-    }
-
-    setDocumentTitle(title) {
-        document.title = String(title);
-    }
-
-    // Trigger via $(document) instead?
-    notifyAppEventReceivers(event) {
-        // trigger event for each .app-event-receiver el found
-        $('.app-event-receiver').each((i, el) => {
-            $(el).triggerHandler(event.type, event);
-        });
     }
 
     onInitializeFail(promise, textStatus, statusTitle) {
@@ -128,14 +95,73 @@ export default class AppController extends ModuleController {
         }, 100);
     }
 
+    onModalHidden(event) {
+        console.log('onModalHidden', event.target);
+    }
+
     onWindowPopState(event) {
         // Hide any open modals
         this.$('.modal').modal('hide');
     }
 
+    onAjaxStart(event) {
+        console.log('onAjaxStart', event);
+        this.model.isFetching = true;
+    }
+
+    onAjaxError(... args) {
+        console.log('onAjaxError', args);
+        this.handleHTTPError(... args);
+    }
+
+    onAjaxSuccess(event, jqXHR, ajaxOptions, data) {
+        console.log('onAjaxSuccess', data);
+    }
+
+    onAjaxStop(event) {
+        console.log('onAjaxStop', event);
+        this.model.isFetching = false;
+    }
+
     // Always return promise
     _loadDependencies() {
         return $.Deferred().resolve().promise();
+    }
+
+    _checkRouting(classname, event) {
+        // console.log('_checkRouting', event);
+        let $pageRouteEl = $(event.target).closest(classname);
+        // Check .page-route click
+        if ($pageRouteEl.length) {
+            if ($pageRouteEl.attr('disabled') === 'disabled') {
+                event.preventDefault();
+            } else {
+                return this._pageRouteHandler($pageRouteEl, event);
+            }
+        }
+        return false;
+    }
+
+    _pageRouteHandler($el, event) {
+        // href
+        let href = $el.attr('href') || $el.attr('data-href');
+        // open in new window?
+        let isTargetBlankLink = $el.is('a') && $el.attr('target') === '_blank';
+        if (isTargetBlankLink) {
+            return false;
+        }
+        let metaKeyOnNonLink = (event.metaKey || $el.attr('data-target') === '_blank') && !$el.is('a');
+        if (metaKeyOnNonLink) {
+            window.open(href);
+            return false;
+        }
+        if (event.metaKey) {
+            return;
+        }
+        // Stop event
+        event.preventDefault();
+        page.show(href);
+        return false;
     }
 
     _defineRoutes() {
@@ -153,6 +179,11 @@ export default class AppController extends ModuleController {
         $(this.componentEl).on(AppEvent.UPDATE_DOCUMENT_TITLE, this.onUpdateDocumentTitle);
         // Window history back event
         $(window).on('popstate', this.onWindowPopState);
+        // Global ajax events
+        $(document).on('ajaxStart', this.onAjaxStart);
+        $(document).on('ajaxError', this.onAjaxError);
+        $(document).on('ajaxSuccess', this.onAjaxSuccess);
+        $(document).on('ajaxStop', this.onAjaxStop);
     }
 
     _removeEventListeners() {
@@ -166,6 +197,11 @@ export default class AppController extends ModuleController {
         $(this.componentEl).off(AppEvent.UPDATE_DOCUMENT_TITLE, this.onUpdateDocumentTitle);
         // Window history back event
         $(window).off('popstate', this.onWindowPopState);
+        // Global ajax events
+        $(document).off('ajaxStart', this.onAjaxStart);
+        $(document).off('ajaxError', this.onAjaxError);
+        $(document).off('ajaxSuccess', this.onAjaxSuccess);
+        $(document).off('ajaxStop', this.onAjaxStop);
     }
 
     _deleteReferences() {

@@ -108,7 +108,7 @@ export default class ReactModule extends ReactView {
         if (!this.modelRegistry.isRegistered(d.uuid)) {
             m = new ModelCls(d, props);
             m.instanceKey = instanceKey;
-            this.modelRegistry.registerInstance(m);
+            this.modelRegistry.registerModel(m);
         } else {
             m = this.modelRegistry.get(d.uuid);
             m.props = props;

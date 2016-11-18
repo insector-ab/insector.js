@@ -95,7 +95,7 @@ export default class ReactModule extends ReactView {
             return new ModelCls(data, props);
         }
         // Restore or create instance
-        // let m = modelRegistry.getInstance( props.parentModel.get(instanceKey, data), ModelCls );
+        // let m = modelRegistry.getModel( props.parentModel.get(instanceKey, data), ModelCls );
         // keep until registry supports more arguments than data
         let m;
         let d = props.parentModel.get(instanceKey, data);

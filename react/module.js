@@ -45,6 +45,14 @@ export default class ReactModule extends ReactView {
         return this.refs.view;
     }
 
+    /**
+     * get modelRegistry
+     * Defaults to modelRegistry, override if needed
+     */
+    get modelRegistry() {
+        return modelRegistry;
+    }
+
     render() {
         return <div ref="view" />;
     }
@@ -94,17 +102,15 @@ export default class ReactModule extends ReactView {
         if (!props.parentModel) {
             return new ModelCls(data, props);
         }
-        // Restore or create instance
-        // let m = modelRegistry.getInstance( props.parentModel.get(instanceKey, data), ModelCls );
         // keep until registry supports more arguments than data
         let m;
         let d = props.parentModel.get(instanceKey, data);
-        if (!modelRegistry.isRegistered(d.uuid)) {
+        if (!this.modelRegistry.isRegistered(d.uuid)) {
             m = new ModelCls(d, props);
             m.instanceKey = instanceKey;
-            modelRegistry.registerInstance(m);
+            this.modelRegistry.registerInstance(m);
         } else {
-            m = modelRegistry.get(d.uuid);
+            m = this.modelRegistry.get(d.uuid);
             m.props = props;
         }
         // If not same data instance, update.

@@ -1,5 +1,4 @@
 import moment from 'moment';
-import {strip} from 'underscore.string';
 import {Model} from 'guins/model';
 import {Registry, ModelRegistry} from 'guins/registry';
 import {Factory} from 'guins/factory';
@@ -65,14 +64,14 @@ export class NodeModel extends Model {
     //     return null;
     // }
 
-    get createdByFullname() {
-        if (this.createdBy) {
-            return this.createdBy.fullname;
-        } else if (this.has('created_by_firstname') || this.has('created_by_surname')) {
-            return strip(this.get('created_by_firstname', '') + ' ' + this.get('created_by_surname', ''));
-        }
-        return null;
-    }
+    // get createdByFullname() {
+    //     if (this.createdBy) {
+    //         return this.createdBy.fullname;
+    //     } else if (this.has('created_by_firstname') || this.has('created_by_surname')) {
+    //         return strip(this.get('created_by_firstname', '') + ' ' + this.get('created_by_surname', ''));
+    //     }
+    //     return null;
+    // }
 
     get createdAt() {
         return moment(this.get('created_at'));
@@ -89,14 +88,14 @@ export class NodeModel extends Model {
     //     return null;
     // }
 
-    get modifiedByFullname() {
-        if (this.modifiedBy) {
-            return this.modifiedBy.fullname;
-        } else if (this.has('modified_by_firstname') || this.has('modified_by_surname')) {
-            return strip(this.get('modified_by_firstname', '') + ' ' + this.get('modified_by_surname', ''));
-        }
-        return null;
-    }
+    // get modifiedByFullname() {
+    //     if (this.modifiedBy) {
+    //         return this.modifiedBy.fullname;
+    //     } else if (this.has('modified_by_firstname') || this.has('modified_by_surname')) {
+    //         return strip(this.get('modified_by_firstname', '') + ' ' + this.get('modified_by_surname', ''));
+    //     }
+    //     return null;
+    // }
 
     get modifiedAt() {
         return moment(this.get('modified_at'));

@@ -146,12 +146,8 @@ export class FormModel extends AbstractFormModel {
         }
     }
 
-    /**
-     * Create input
-     * Defaults to modelRegistry, override if needed
-     */
     createInput(data) {
-        let input = modelRegistry.getModel(data, FormInputModel);
+        const input = modelRegistry.getModel(data, FormInputModel);
         return this.addInput(input);
     }
 
@@ -163,7 +159,7 @@ export class FormModel extends AbstractFormModel {
     }
 
     get inputs() {
-        return this.getInstanceList('inputs', this.get('inputs'), FormInputModel, modelRegistry);
+        return this.getInstanceList('inputs', this.get('inputs'), FormInputModel, this.modelRegistry);
     }
 
     get inputValues() {

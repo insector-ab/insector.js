@@ -24,7 +24,7 @@ export class CommentsModel extends ModuleModel {
             // create form
             let form = new CommentFormModel();
             // register & set
-            this.set('commentForm', modelRegistry.registerInstance(form).data);
+            this.set('commentForm', this.modelRegistry.registerInstance(form).data);
         }
         return modelRegistry.getModel(this.get('commentForm'));
     }
@@ -55,6 +55,14 @@ export class CommentsModel extends ModuleModel {
     }
     set limit(value) {
         this.set('limit', value);
+    }
+
+    /**
+     * get modelRegistry
+     * Defaults to modelRegistry, override if needed
+     */
+    get modelRegistry() {
+        return modelRegistry;
     }
 
     _getDefaults() {

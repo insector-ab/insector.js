@@ -21,12 +21,14 @@ export default class AppModel extends ModuleModel {
     set isFetching(value) {
         if (value !== this._isFetching) {
             this._isFetching = value;
+            console.log('isFetching dispatch', value);
             this.dispatchChange('isFetching');
         }
     }
 
     get systemRegistry() {
-        return modelRegistry.getInstance(this.get('systemRegistry'));
+        console.log('Getting systemRegistry', this.get('systemRegistry').uuid);
+        return modelRegistry.getModel(this.get('systemRegistry'), SystemRegistryModel);
     }
 
     _getDefaults() {
@@ -43,11 +45,11 @@ mixin(AppModel, ActiveView);
 /**
  * SystemRegistryModel
  */
-export class SystemRegistryModel extends Model {
+class SystemRegistryModel extends Model {
 
     get currentUser() {
         if (this.has('user')) {
-            return nodeRegistry.getInstance(this.get('user'));
+            return nodeRegistry.getModel(this.get('user'));
         }
         return null;
     }
@@ -66,6 +68,12 @@ export class SystemRegistryModel extends Model {
 
     get versionReleaseDate() {
         return this.get('version_release_date');
+    }
+
+    _getDefaults() {
+        let d = super._getDefaults();
+        d.systemRegistry = (new SystemRegistryModel()).data;
+        return d;
     }
 
 }

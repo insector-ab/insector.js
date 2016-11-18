@@ -151,7 +151,7 @@ export class FormModel extends AbstractFormModel {
      * Defaults to modelRegistry, override if needed
      */
     createInput(data) {
-        let input = modelRegistry.getInstance(data, FormInputModel);
+        let input = modelRegistry.getModel(data, FormInputModel);
         return this.addInput(input);
     }
 

@@ -26,7 +26,7 @@ export class CommentsModel extends ModuleModel {
             // register & set
             this.set('commentForm', modelRegistry.registerInstance(form).data);
         }
-        return modelRegistry.getInstance(this.get('commentForm'));
+        return modelRegistry.getModel(this.get('commentForm'));
     }
 
     get newCommentId() {

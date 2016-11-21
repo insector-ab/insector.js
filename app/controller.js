@@ -25,12 +25,6 @@ export default class AppController extends ModuleController {
         this.onAjaxStop = this.onAjaxStop.bind(this);
     }
 
-    events() {
-        return {
-            'bs.modal.hidden': 'onModalHidden'
-        };
-    }
-
     initialize() {
         let superPromise = super.initialize();
         let deferred = $.Deferred();
@@ -93,10 +87,6 @@ export default class AppController extends ModuleController {
             console.log('onUpdateDocumentTitle (delayed 100 ms)', appEvent.title);
             this.setDocumentTitle(appEvent.title);
         }, 100);
-    }
-
-    onModalHidden(event) {
-        console.log('onModalHidden', event.target);
     }
 
     onWindowPopState(event) {

@@ -200,7 +200,7 @@ export class Modal extends React.Component {
         attrs.className = classNames('modal', 'fade', attrs.className || '');
         let dialogCls = classNames('modal-dialog', 'modal-' + this.props.size);
         return (
-            <div {... attrs}>
+            <div {... attrs} data-modal-key={this.props.key}>
                 <div className={dialogCls}>
                     <div className="modal-content">
                         {this.props.children}
@@ -293,8 +293,8 @@ export class DefaultModalButtons extends React.Component {
     render() {
         let attrs = _.omit(this.props, ... _.keys(DefaultModalButtons.propTypes));
         attrs.className = classNames('text-right', attrs.className || '');
-        let cancelStyles = classNames('btn', 'pull-left', this.props.cancelButtonStyle);
-        let confirmStyles = classNames('modal-ok', 'btn', this.props.confirmButtonStyle);
+        let cancelStyles = classNames('btn', 'pull-left', this.props.cancelButtonStyle, 'modal-cancel');
+        let confirmStyles = classNames('btn', this.props.confirmButtonStyle, 'modal-ok');
         return (
             <div {... attrs}>
                 <button type="button" className={cancelStyles} tabIndex={-1} data-dismiss="modal">

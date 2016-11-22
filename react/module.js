@@ -82,10 +82,10 @@ export default class ReactModule extends ReactView {
     }
 
     componentWillReceiveProps(nextProps) {
-        // setting new props on model
-        this.model.props = nextProps;
         // controller handles new props
         this.controller.componentWillReceiveProps(nextProps);
+        // setting new props on model
+        this.model.props = nextProps;
     }
 
     componentDidUpdate() {

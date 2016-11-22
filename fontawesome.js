@@ -43,9 +43,9 @@ export function FANavItem(props) {
         <li {... attrs}>
             <a href={props.href} tabIndex="0" className={classes}>
                 {props.faIcon &&
-                    <span className={classNames('fa', 'fa-fw', props.faIcon)}></span>
+                    <span className={classNames('fa', 'fa-fw', props.faIcon)} />
                 }
-                <span> {props.title}</span>
+                <span className="title">{props.title}</span>
                 {props.children}
             </a>
         </li>

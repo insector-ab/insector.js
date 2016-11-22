@@ -94,6 +94,10 @@ export default class AppController extends ModuleController {
         this.$('.modal').modal('hide');
     }
 
+    onWindowError(event) {
+        // Abstract
+    }
+
     onAjaxStart(event) {
         console.log('onAjaxStart', event);
         this.model.isFetching = true;
@@ -167,8 +171,9 @@ export default class AppController extends ModuleController {
         // App events
         $(this.componentEl).on(AppEvent.ROUTE_TO, this.onRouteTo);
         $(this.componentEl).on(AppEvent.UPDATE_DOCUMENT_TITLE, this.onUpdateDocumentTitle);
-        // Window history back event
+        // Window events
         $(window).on('popstate', this.onWindowPopState);
+        $(window).on('error', this.onWindowError);
         // Global ajax events
         $(document).on('ajaxStart', this.onAjaxStart);
         $(document).on('ajaxError', this.onAjaxError);
@@ -185,8 +190,9 @@ export default class AppController extends ModuleController {
         // App events
         $(this.componentEl).off(AppEvent.ROUTE_TO, this.onRouteTo);
         $(this.componentEl).off(AppEvent.UPDATE_DOCUMENT_TITLE, this.onUpdateDocumentTitle);
-        // Window history back event
+        // Window events
         $(window).off('popstate', this.onWindowPopState);
+        $(window).off('error', this.onWindowError);
         // Global ajax events
         $(document).off('ajaxStart', this.onAjaxStart);
         $(document).off('ajaxError', this.onAjaxError);

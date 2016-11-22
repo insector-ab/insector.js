@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import _ from 'lodash';
-import {Model, modelIdentities, modelRegistry} from 'guins/model';
+import {Model, ModelList, modelIdentities, modelRegistry} from 'guins/model';
 import assert from 'assert';
 import {underscored} from 'underscore.string';
 
@@ -167,8 +167,16 @@ export class FormModel extends AbstractFormModel {
     }
 
     get inputs() {
-        return this.getModelList('inputs', this.get('inputs'), FormInputModel, this.modelRegistry);
-        // FIX: Move ModelList instance getter to ModelRegistry
+        if (!this._inputModelList) {
+            this._inputModelList = new ModelList(this.rawInputs, item => {
+                return this.modelRegistry.getModel(item, FormInputModel);
+            });
+        }
+        return this._inputModelList;
+    }
+
+    get rawInputs() {
+        return this.get('inputs');
     }
 
     get inputValues() {

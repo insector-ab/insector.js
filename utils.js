@@ -153,22 +153,6 @@ export function getVisibleClasses(size, display) {
 }
 
 /**
- * getV
- * @param  {Object} sizeObj {xs: True, md: var === somVal} keys: xs,sm,md,lg
- * @param  {String} defaults String with four 1's or 0's, e.g. '1101'
- * @return {String} String with 'v' and four 1's or 0's, e.g. 'v1101'
- */
-export function getV(sizeObj, defaults = '1111') {
-    let defVals = defaults.split('');
-    return 'v' + ['xs', 'sm', 'md', 'lg'].map((size, idx) => {
-        if (!sizeObj.hasOwnProperty(size)) {
-            return defVals[idx];
-        }
-        return sizeObj[size] ? '1' : '0';
-    }).join(''); // eg. v1001 => xs & lg visible
-}
-
-/**
  * Check if value is Symbol
  * @param  {*} value
  * @return {Boolean}

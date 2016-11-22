@@ -16,6 +16,10 @@ export default class ReactController {
         this._delegatedEl = null;
     }
 
+    events() {
+        return {};
+    }
+
     get model() {
         return this._model;
     }

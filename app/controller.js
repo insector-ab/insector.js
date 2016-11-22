@@ -15,14 +15,19 @@ export default class AppController extends ModuleController {
         this.onClick = this.onClick.bind(this);
         this.onDblClick = this.onDblClick.bind(this);
         this.onKeyDown = this.onKeyDown.bind(this);
-        this.onRouteTo = this.onRouteTo.bind(this);
-        this.onUpdateDocumentTitle = this.onUpdateDocumentTitle.bind(this);
         this.onWindowPopState = this.onWindowPopState.bind(this);
         // Ajax events
         this.onAjaxStart = this.onAjaxStart.bind(this);
         this.onAjaxError = this.onAjaxError.bind(this);
         this.onAjaxSuccess = this.onAjaxSuccess.bind(this);
         this.onAjaxStop = this.onAjaxStop.bind(this);
+    }
+
+    events() {
+        return {
+            'routeto.insector.app': 'onRouteTo',
+            'updatedocumenttitle.insector.app': 'onUpdateDocumentTitle'
+        };
     }
 
     initialize() {
@@ -168,9 +173,6 @@ export default class AppController extends ModuleController {
         this.componentEl.addEventListener('click', this.onClick, EventPhase.CAPTURE);
         this.componentEl.addEventListener('dblclick', this.onDblClick, EventPhase.CAPTURE);
         this.componentEl.addEventListener('keydown', this.onKeyDown, EventPhase.CAPTURE);
-        // App events
-        $(this.componentEl).on(AppEvent.ROUTE_TO, this.onRouteTo);
-        $(this.componentEl).on(AppEvent.UPDATE_DOCUMENT_TITLE, this.onUpdateDocumentTitle);
         // Window events
         $(window).on('popstate', this.onWindowPopState);
         $(window).on('error', this.onWindowError);
@@ -187,9 +189,6 @@ export default class AppController extends ModuleController {
         this.componentEl.removeEventListener('click', this.onClick, EventPhase.CAPTURE);
         this.componentEl.removeEventListener('dblclick', this.onDblClick, EventPhase.CAPTURE);
         this.componentEl.removeEventListener('keydown', this.onKeyDown, EventPhase.CAPTURE);
-        // App events
-        $(this.componentEl).off(AppEvent.ROUTE_TO, this.onRouteTo);
-        $(this.componentEl).off(AppEvent.UPDATE_DOCUMENT_TITLE, this.onUpdateDocumentTitle);
         // Window events
         $(window).off('popstate', this.onWindowPopState);
         $(window).off('error', this.onWindowError);

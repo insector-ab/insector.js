@@ -19,6 +19,5 @@ export default class AppEvent extends Event {
     }
 
 }
-// FIX?
-AppEvent.ROUTE_TO = 'AppEvent_ROUTE_TO';
-AppEvent.UPDATE_DOCUMENT_TITLE = 'AppEvent_UPDATE_DOCUMENT_TITLE';
+AppEvent.ROUTE_TO = 'routeto.insector.app';
+AppEvent.UPDATE_DOCUMENT_TITLE = 'updatedocumenttitle.insector.app';

@@ -15,7 +15,7 @@ export function FAButton(props) {
         <button {... attrs}>
             <span className={iconCls} />
             {props.title &&
-                <span> {props.title}</span>
+                <span className="title">{props.title}</span>
             }
             {props.children}
         </button>

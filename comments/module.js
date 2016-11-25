@@ -67,7 +67,7 @@ export default class CommentsModule extends ReactModule {
     componentWillReceiveProps(nextProps) {
         if (nextProps.nodeId !== this.props.nodeId) {
             this.model = this._newModelInstance(nextProps);
-            this.controller.initializeAndLaunch();
+            this.controller.initialize();
         }
     }
 

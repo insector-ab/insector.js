@@ -2,7 +2,6 @@ import _ from 'lodash';
 import $ from 'jquery';
 import ModuleController from 'insectorjs/module/controller';
 import {JSONService} from 'insectorjs/service';
-import {systemMessage} from 'insectorjs/helpers';
 import {CommentEvent} from './event';
 
 /**
@@ -66,7 +65,7 @@ export default class CommentsController extends ModuleController {
     deleteComment(id) {
         let url = '/comments/' + id;
         return this.apiService.delete(url).done((data) => {
-            systemMessage('Comment deleted.');
+            // implement notify, systemMessage('Comment deleted.');
             this.loadComments();
             this.dispatchDOMEvent(CommentEvent.newDeletedEvent(this.model.nodeId));
         });

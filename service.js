@@ -107,7 +107,7 @@ export class JSONService extends XHRService {
     constructor(baseUrl = '/', defaultAjaxParams) {
         super(baseUrl, _.defaults(defaultAjaxParams, {
             dataType: 'json',
-            contentType: 'application/json',
+            contentType: 'application/json; charset=UTF-8',
             processData: false
         }));
         // http://www.jsonrpc.org/specification

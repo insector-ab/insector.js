@@ -138,7 +138,7 @@ export default class ReactController {
         let key;
         // Events, but no target found, throw error.
         if (events && !targetEl) {
-            throw Error('Could not delegate controller events. No target element.');
+            throw new Error('Could not delegate controller events. No target element.');
         }
         // Events found, delegate
         if (events) {

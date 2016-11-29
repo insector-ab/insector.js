@@ -220,7 +220,7 @@ export class FormModel extends AbstractFormModel {
     getInput(name) {
         let input = this.inputs.find({name: name});
         if (!input) {
-            throw Error('FormInputModel not found for: ' + name);
+            throw new Error('FormInputModel not found for: ' + name);
         }
         return input;
     }

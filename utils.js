@@ -76,7 +76,7 @@ export function addSymbolsToClass(Cls, keyValues) {
         if (Cls.has(sym)) {
             return Cls._symbolMap_[sym];
         }
-        throw new ArgumentError('Symbol not found on "' + Cls.name + '".');
+        throw new ArgumentError('Symbol not "' + sym + '" found on "' + Cls.name + '".');
     };
     // Check if Cls has symbol
     Cls.has = function(sym) {

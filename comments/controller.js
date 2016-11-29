@@ -54,7 +54,7 @@ export default class CommentsController extends ModuleController {
 
     loadComments() {
         if (!this.model.nodeId) {
-            throw Error('nodeId required to load comments');
+            throw new Error('nodeId required to load comments');
         }
         let url = '/node/' + this.model.nodeId + '/comments';
         return this.apiService.get(url).done((data) => {

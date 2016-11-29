@@ -11,11 +11,11 @@ export class Graph extends Model {
         super(data);
         // require registry key
         if (!this.data.hasOwnProperty('nodeRegistryKey')) {
-            throw Error('nodeRegistryKey required, unable to register node');
+            throw new Error('nodeRegistryKey required, unable to register node');
         }
         // require registry key
         if (!this.data.hasOwnProperty('edgeRegistryKey')) {
-            throw Error('edgeRegistryKey required, unable to register edge');
+            throw new Error('edgeRegistryKey required, unable to register edge');
         }
         // init relation map
         this.generateRelationMap();
@@ -204,7 +204,7 @@ export class Graph extends Model {
             } else if (itemType === 'node') { // nodes
                 result.push(relatedNode);
             } else {
-                throw Error('Unknown itemType');
+                throw new Error('Unknown itemType');
             }
         }
         // sort

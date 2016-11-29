@@ -163,7 +163,7 @@ export default class AppController extends ModuleController {
     }
 
     _defineRoutes() {
-        throw Error('ABSTRACT method _defineRoutes called');
+        throw new Error('ABSTRACT method _defineRoutes called');
     }
 
     _addEventListeners() {

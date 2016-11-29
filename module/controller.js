@@ -36,8 +36,9 @@ export default class ModuleController extends ReactController {
 
     componentDidMount() {
         super.componentDidMount();
-        this._initializePromise.done(this.onInitializeDone);
-
+        if (this._initializePromise) {
+            this._initializePromise.done(this.onInitializeDone);
+        }
         // if (!this._initializePromise && this.model.initialized) {
         //     this.launch();
         // }
@@ -76,7 +77,8 @@ export default class ModuleController extends ReactController {
     }
 
     onInitializeDone(data, textStatus, jqXHR) {
-        this._initializePromise = null;
+        console.log('onInitializeDone');
+        // this._initializePromise = null;
         // Update model
         if (this.model) {
             this.model.initialized = true;

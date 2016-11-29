@@ -110,7 +110,6 @@ export default class AppController extends ModuleController {
 
     onAjaxError(... args) {
         console.log('onAjaxError', args);
-        this.handleHTTPError(... args);
     }
 
     onAjaxSuccess(event, jqXHR, ajaxOptions, data) {

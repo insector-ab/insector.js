@@ -12,7 +12,7 @@ export function FAButton(props) {
     attrs.className = classNames('btn', attrs.className || '');
     let iconCls = classNames('fa', props.faClassName || '', props.faIcon);
     return (
-        <button {... attrs}>
+        <button {... attrs} title={props.title}>
             <span className={iconCls} />
             {props.title &&
                 <span className="title">{props.title}</span>
@@ -41,7 +41,7 @@ export function FANavItem(props) {
     );
     return (
         <li {... attrs}>
-            <a href={props.href} tabIndex="0" className={classes}>
+            <a href={props.href} tabIndex="0" title={props.title} className={classes}>
                 {props.faIcon &&
                     <span className={classNames('fa', 'fa-fw', props.faIcon)} />
                 }

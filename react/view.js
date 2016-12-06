@@ -70,7 +70,7 @@ export default class ReactView extends React.Component {
         this._removeEventListeners();
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
         // console.log(this.constructor.name, 'componentDidUpdate()', this.model.cid);
     }
 

@@ -88,9 +88,9 @@ export default class ReactModule extends ReactView {
         this.model.props = nextProps;
     }
 
-    componentDidUpdate() {
-        super.componentDidUpdate();
-        this.controller.componentDidUpdate();
+    componentDidUpdate(prevProps, prevState) {
+        super.componentDidUpdate(prevProps, prevState);
+        this.controller.componentDidUpdate(prevProps, prevState);
     }
 
     _newModelInstance(props) {

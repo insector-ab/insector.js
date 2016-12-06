@@ -128,7 +128,7 @@ export default class ReactController {
         }
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
         // ABSTRACT
     }
 

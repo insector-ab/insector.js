@@ -30,16 +30,12 @@ export default class ReactView extends React.Component {
         return null;
     }
 
-    get el() {
+    get componentEl() {
         return ReactDOM.findDOMNode(this);
     }
 
-    get $el() {
-        return $(this.el);
-    }
-
     $(selector) {
-        return this.$el.find(selector);
+        return $(this.componentEl).find(selector);
     }
 
     render() {

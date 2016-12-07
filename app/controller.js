@@ -166,8 +166,8 @@ export default class AppController extends ModuleController {
         throw new Error('ABSTRACT method _defineRoutes called');
     }
 
-    _addEventListeners() {
-        super._addEventListeners();
+    _addViewEventListeners() {
+        super._addViewEventListeners();
         // Add click handlers in capture phase
         this.componentEl.addEventListener('click', this.onClick, EventPhase.CAPTURE);
         this.componentEl.addEventListener('dblclick', this.onDblClick, EventPhase.CAPTURE);
@@ -182,8 +182,8 @@ export default class AppController extends ModuleController {
         $(document).on('ajaxStop', this.onAjaxStop);
     }
 
-    _removeEventListeners() {
-        super._removeEventListeners();
+    _removeViewEventListeners() {
+        super._removeViewEventListeners();
         // Remove click handlers in capture phase
         this.componentEl.removeEventListener('click', this.onClick, EventPhase.CAPTURE);
         this.componentEl.removeEventListener('dblclick', this.onDblClick, EventPhase.CAPTURE);

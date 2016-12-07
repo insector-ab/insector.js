@@ -214,7 +214,7 @@ export default class ReactController {
         // Abstract
     }
 
-    _addModelEventListeners() {
+    _addModelEventListeners(model) {
         // Abstract
     }
 

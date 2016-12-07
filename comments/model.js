@@ -107,6 +107,7 @@ export class CommentFormModel extends FormModel {
     }
 
 }
+CommentFormModel.identity = 'comments.CommentFormModel';
 
 // Register Classes/Constructors
 modelIdentities.register(CommentsModel.identity, CommentsModel);

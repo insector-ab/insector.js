@@ -128,7 +128,9 @@ export default class AppController extends ModuleController {
 
     _checkRouting(classname, event) {
         // console.log('_checkRouting', event);
-        let $pageRouteEl = $(event.target).closest(classname);
+        const $targetEl = $(event.target);
+        const $linkEl = $targetEl.closest('a');
+        const $pageRouteEl = $targetEl.closest(classname);
         // Check .page-route click
         if ($pageRouteEl.length) {
             if ($pageRouteEl.attr('disabled') === 'disabled') {
@@ -136,19 +138,22 @@ export default class AppController extends ModuleController {
             } else {
                 return this._pageRouteHandler($pageRouteEl, event);
             }
+        // If link with href="#" prevent default
+        } else if ($linkEl.length && $linkEl.attr('href') === '#') {
+            event.preventDefault();
         }
         return false;
     }
 
     _pageRouteHandler($el, event) {
         // href
-        let href = $el.attr('href') || $el.attr('data-href');
+        const href = $el.attr('href') || $el.attr('data-href');
         // open in new window?
-        let isTargetBlankLink = $el.is('a') && $el.attr('target') === '_blank';
+        const isTargetBlankLink = $el.is('a') && $el.attr('target') === '_blank';
         if (isTargetBlankLink) {
             return false;
         }
-        let metaKeyOnNonLink = (event.metaKey || $el.attr('data-target') === '_blank') && !$el.is('a');
+        const metaKeyOnNonLink = (event.metaKey || $el.attr('data-target') === '_blank') && !$el.is('a');
         if (metaKeyOnNonLink) {
             window.open(href);
             return false;

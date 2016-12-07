@@ -7,22 +7,23 @@ import {Media, MediaLeft, MediaBody} from 'insectorjs/base/components';
  * FAButton
  */
 export function FAButton(props) {
-    let attrs = _.omit(props, ... _.keys(FAButton.propTypes));
+    const attrs = _.omit(props, ... _.keys(FAButton.propTypes));
     attrs.type = attrs.type || 'button';
+    attrs.title = attrs.title || props.text;
     attrs.className = classNames('btn', attrs.className || '');
-    let iconCls = classNames('fa', props.faClassName || '', props.faIcon);
+    const iconCls = classNames('fa', props.faClassName || '', props.faIcon);
     return (
-        <button {... attrs} title={props.title}>
+        <button {... attrs}>
             <span className={iconCls} />
-            {props.title &&
-                <span className="title">{props.title}</span>
+            {props.text &&
+                <span className="text">{props.text}</span>
             }
             {props.children}
         </button>
     );
 }
 FAButton.propTypes = {
-    title: React.PropTypes.string.required,
+    text: React.PropTypes.string.required,
     faIcon: React.PropTypes.string.required,
     faClassName: React.PropTypes.string,
     children: React.PropTypes.node
@@ -35,17 +36,18 @@ FAButton.defaultProps = {
  * FANavItem
  */
 export function FANavItem(props) {
-    let attrs = _.omit(props, ... _.keys(FANavItem.propTypes));
-    let classes = classNames(
+    const attrs = _.omit(props, ... _.keys(FANavItem.propTypes));
+    attrs.title = attrs.title || props.text;
+    const classes = classNames(
         {'page-route': props.href}
     );
     return (
         <li {... attrs}>
-            <a href={props.href} tabIndex="0" title={props.title} className={classes}>
+            <a href={props.href || '#'} tabIndex="0" className={classes}>
                 {props.faIcon &&
                     <span className={classNames('fa', 'fa-fw', props.faIcon)} />
                 }
-                <span className="title">{props.title}</span>
+                <span className="text">{props.text}</span>
                 {props.children}
             </a>
         </li>
@@ -54,8 +56,11 @@ export function FANavItem(props) {
 FANavItem.propTypes = {
     href: React.PropTypes.string,
     faIcon: React.PropTypes.string,
-    title: React.PropTypes.string,
+    text: React.PropTypes.string,
     children: React.PropTypes.node
+};
+FANavItem.defaultProps = {
+    text: 'FANavItem'
 };
 
 /**

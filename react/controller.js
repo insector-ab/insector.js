@@ -26,11 +26,11 @@ export default class ReactController {
     set model(value) {
         if (value !== this._model) {
             // Remove listeners from current model
-            this._removeEventListeners();
+            this._removeModelEventListeners();
             // Set new model
             this._model = value;
             // Add listeners to new model
-            this._addEventListeners();
+            this._addModelEventListeners();
         }
     }
 
@@ -70,6 +70,8 @@ export default class ReactController {
     }
 
     componentWillMount() {
+        // Model Listeners
+        this._addModelEventListeners();
         // call componentWillMount in subcontrollers
         for (let key in this) {
             if (!this.hasOwnProperty(key)) {
@@ -81,12 +83,9 @@ export default class ReactController {
         }
     }
 
-    // split up _addEventListeners into addModelEventListeners & addViewEventListeners
-    // run _addModelEventListeners in componentWillMount
-    // run _addViewEventListeners in componentDidMount
     componentDidMount() {
-        // Listeners
-        this._addEventListeners();
+        // View Listeners
+        this._addViewEventListeners();
         // call componentDidMount in subcontrollers
         for (let key in this) {
             if (!this.hasOwnProperty(key)) {
@@ -100,7 +99,8 @@ export default class ReactController {
 
     componentWillUnmount() {
         // Listeners
-        this._removeEventListeners();
+        this._removeModelEventListeners();
+        this._removeViewEventListeners();
 
         // call componentWillUnmount in subcontrollers
         for (let key in this) {
@@ -198,7 +198,8 @@ export default class ReactController {
     }
 
     dispose() {
-        this._removeEventListeners();
+        this._removeModelEventListeners();
+        this._removeViewEventListeners();
         // Check subcontrollers on this, recursively
         for (let attr in this) {
             if (_.isObject(this[attr]) && this[attr].hasOwnProperty('dispose')) {
@@ -209,11 +210,19 @@ export default class ReactController {
         this._deleteReferences();
     }
 
-    _addEventListeners() {
+    _addViewEventListeners() {
         // Abstract
     }
 
-    _removeEventListeners() {
+    _addModelEventListeners() {
+        // Abstract
+    }
+
+    _removeViewEventListeners() {
+        // Abstract
+    }
+
+    _removeModelEventListeners() {
         // Abstract
     }
 

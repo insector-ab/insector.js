@@ -65,6 +65,49 @@ MediaBody.propTypes = {
     children: React.PropTypes.node
 };
 
+// --------- Tab components (composition) --------- //
+
+/**
+ * Tabs
+ */
+export function Tabs(props) {
+    let attrs = _.omit(props, ... _.keys(Tabs.propTypes));
+    attrs.className = classNames(
+        'nav',
+        'nav-tabs',
+        attrs.className || ''
+    );
+    return (
+        <ul {... attrs}>
+            {props.children}
+        </ul>
+    );
+}
+Tabs.propTypes = {
+    children: React.PropTypes.node
+};
+
+export function Tab(props) {
+    let attrs = _.omit(props, ... _.keys(Tab.propTypes));
+    attrs.className = classNames(
+        {'active': props.active},
+        attrs.className || ''
+    );
+    return (
+        <li {... attrs}>
+            <a title={props.title}
+               href={props.href}
+               className="page-route">{props.text}</a>
+        </li>
+    );
+}
+Tab.propTypes = {
+    active: React.PropTypes.boolean,
+    title: React.PropTypes.string,
+    text: React.PropTypes.string,
+    href: React.PropTypes.string
+};
+
 // --------- Special, move somewhere else? --------- //
 
 /**

@@ -11,9 +11,10 @@ import {Graph} from 'insectorjs/graph';
  */
 export class NodeState {}
 addSymbolsToClass(NodeState, {
-    NORMAL: 'NORMAL',
-    AUTOSAVE: 'AUTOSAVE',
-    DELETED: 'DELETED'
+    TEMPORARY: 'temporary',
+    NORMAL: 'normal',
+    AUTOSAVE: 'autosave',
+    DELETED: 'deleted'
 });
 
 /**

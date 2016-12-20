@@ -27,42 +27,22 @@ export default class ModuleController extends ReactController {
                     throw new Error('ModuleController.initialize() should always return a promise');
                 }
                 this._initializePromise = $promise;
+                this._initializePromise.fail(this.onInitializeFail);
             }
-            this._initializePromise.fail(this.onInitializeFail);
-            // this._initializePromise.done(this.onInitializeDone);
-            // this._initializePromise = null;
         }
     }
 
     componentDidMount() {
         super.componentDidMount();
+        // initializing, launches when done
         if (this._initializePromise) {
             this._initializePromise.done(this.onInitializeDone);
+        } else if (this.model.initialized) {
+            this.launch();
+        } else {
+            throw new Error('ModuleController.componentDidMount() No this._initializePromise found and model not initialized, module will not launch()');
         }
-        // if (!this._initializePromise && this.model.initialized) {
-        //     this.launch();
-        // }
     }
-
-    // Restructure? initialize() in componentWillMount & launch() in componentDidMount
-    // initializeAndLaunch() {
-    //     // Initialize
-    //     if (!this.model.initialized) {
-    //         if (!this._initializePromise) {
-    //             let $promise = this.initialize();
-
-    //             if (!$promise || !_.isFunction($promise.done)) {
-    //                 throw new Error('ModuleController.initialize() should always return a promise');
-    //             }
-    //             this._initializePromise = $promise;
-    //         }
-    //         this._initializePromise.done(this.onInitializeDone);
-    //         this._initializePromise.fail(this.onInitializeFail);
-    //         this._initializePromise = null;
-    //     } else {
-    //         this.launch();
-    //     }
-    // }
 
     // Called when component will mount and ModuleModel is not initialized
     // intialize should always return a promise
@@ -77,8 +57,7 @@ export default class ModuleController extends ReactController {
     }
 
     onInitializeDone(data, textStatus, jqXHR) {
-        console.log('onInitializeDone');
-        // this._initializePromise = null;
+        this._initializePromise = null;
         // Update model
         if (this.model) {
             this.model.initialized = true;

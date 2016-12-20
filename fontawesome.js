@@ -14,7 +14,9 @@ export function FAButton(props) {
     const iconCls = classNames('fa', props.faClassName || '', props.faIcon);
     return (
         <button {... attrs}>
-            <span className={iconCls} />
+            {props.faIcon &&
+                <span className={iconCls} />
+            }
             {props.text &&
                 <span className="text">{props.text}</span>
             }

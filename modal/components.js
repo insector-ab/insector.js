@@ -187,7 +187,7 @@ export class CloseButton extends React.Component {
 export class Modal extends React.Component {
 
     componentDidMount() {
-        let $el = $(ReactDOM.findDOMNode(this));
+        const $el = $(ReactDOM.findDOMNode(this));
         if (this.props.modalOptions) {
             $el.modal(this.props.modalOptions);
         } else {

@@ -45,6 +45,39 @@ EventPhase.CAPTURE = true;
 EventPhase.BUBBLE = false;
 
 /**
+ * Define Symbol Class methods
+ */
+function defineSymbolClassMethods(Cls) {
+    // From value method
+    Cls.fromValue = function(value, defaultValue) {
+        if (Cls._valueMap_.hasOwnProperty(value)) {
+            return Cls._valueMap_[value];
+        }
+        if (typeof defaultValue !== 'undefined') {
+            return defaultValue;
+        }
+        throw new ArgumentError(Cls.name + ' symbol for value "' + value + '" not found.');
+    };
+    // To value
+    Cls.toValue = function(sym) {
+        if (Cls.has(sym)) {
+            return Cls._symbolMap_[sym];
+        }
+        throw new ArgumentError('Symbol "' + sym + '" not found on "' + Cls.name + '".');
+    };
+    // Check if Cls has symbol
+    Cls.has = function(sym) {
+        return Cls._symbolMap_.hasOwnProperty(sym);
+    };
+    // 'allKeys' getter. List of defined symbol keys on Cls.
+    Object.defineProperty(Cls, 'allKeys', {
+        get: function() {
+            return _.filter(_.keys(Cls), function(k) { return k.match(/^[A-Z0-9_]+$/); });
+        }
+    });
+}
+
+/**
  * addSymbolsToClass
  */
 export function addSymbolsToClass(Cls, keyValues) {
@@ -61,33 +94,10 @@ export function addSymbolsToClass(Cls, keyValues) {
             Cls._valueMap_[keyValues[key]] = Cls[key]; // valueMap[ 'value' ] = Symbol()
         }
     }
-    // From value method
-    Cls.fromValue = function(value, defaultValue) {
-        if (Cls._valueMap_.hasOwnProperty(value)) {
-            return Cls._valueMap_[value];
-        }
-        if (typeof defaultValue !== 'undefined') {
-            return defaultValue;
-        }
-        throw new ArgumentError(Cls.name + ' symbol for value "' + value + '" not found.');
-    };
-    // To value
-    Cls.toValue = function(sym) {
-        if (Cls.has(sym)) {
-            return Cls._symbolMap_[sym];
-        }
-        throw new ArgumentError('Symbol not "' + sym + '" found on "' + Cls.name + '".');
-    };
-    // Check if Cls has symbol
-    Cls.has = function(sym) {
-        return Cls._symbolMap_.hasOwnProperty(sym);
-    };
-    // 'allKeys' getter. List of defined symbol keys on Cls.
-    Object.defineProperty(Cls, 'allKeys', {
-        get: function() {
-            return _.filter(_.keys(Cls), function(k) { return k.match(/^[A-Z0-9_]+$/); });
-        }
-    });
+    // If no class methods defined
+    if (!Cls.hasOwnProperty('fromValue')) {
+        defineSymbolClassMethods(Cls);
+    }
 }
 
 /**
@@ -110,7 +120,10 @@ export function importSymbolsToClass(Cls, FromCls, keys) {
         val = Cls._symbolMap_[sym];
         Cls._valueMap_[val] = sym;
     }
-}
+    // If no class methods defined
+    if (!Cls.hasOwnProperty('fromValue')) {
+        defineSymbolClassMethods(Cls);
+    }}
 
 /**
  * getHiddenClasses

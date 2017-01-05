@@ -3,14 +3,14 @@ import {Model} from 'guins/model';
 import {Registry, ModelRegistry} from 'guins/registry';
 import {Factory} from 'guins/factory';
 
-import {addSymbolsToClass} from 'insectorjs/utils';
+import {addConstantsToClass} from 'insectorjs/utils';
 import {Graph} from 'insectorjs/graph';
 
 /**
  * NodeState
  */
 export class NodeState {}
-addSymbolsToClass(NodeState, {
+addConstantsToClass(NodeState, {
     TEMPORARY: 'temporary',
     NORMAL: 'normal',
     AUTOSAVE: 'autosave',

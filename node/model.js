@@ -1,7 +1,5 @@
 import moment from 'moment';
-import {Model} from 'guins/model';
-import {Registry, ModelRegistry} from 'guins/registry';
-import {Factory} from 'guins/factory';
+import {Model, ModelRegistry, Factory} from 'mozy';
 
 import {addConstantsToClass} from 'insectorjs/utils';
 import {Graph} from 'insectorjs/graph';
@@ -138,30 +136,21 @@ NodeModel.discriminator = 'node';
  * nodeGraph
  * @type {Graph}
  */
-export var nodeGraph = new Graph({
-    nodeRegistryKey: 'uuid',
-    edgeRegistryKey: 'uuid',
-    identityKey: 'discriminator'
-});
-
+export const nodeGraph = new Graph({identityKey: 'discriminator'});
 /**
  * nodeIdentities
  * @type {Registry}
  */
-export var nodeIdentities = new Registry();
+export const nodeIdentities = new Map();
 // Register Classes/Constructors
-nodeIdentities.register(NodeModel.discriminator, NodeModel);
-
+nodeIdentities.set(NodeModel.discriminator, NodeModel);
 /**
  * nodeFactory
  * @type {Factory}
  */
-export var nodeFactory = new Factory(nodeIdentities, 'discriminator');
-
+export const nodeFactory = new Factory(nodeIdentities, 'discriminator');
 /**
  * nodeRegistry
  * @type {ModelRegistry}
  */
-export var nodeRegistry = new ModelRegistry('uuid', nodeFactory);
-// Do not allow Instances that cannot be created via factory
-nodeRegistry.allowNonFactoryInstances = false;
+export const nodeRegistry = new ModelRegistry('uuid', nodeFactory);

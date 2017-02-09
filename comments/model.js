@@ -1,4 +1,4 @@
-import {modelRegistry, modelIdentities} from 'guins/model';
+import {modelRegistry, modelIdentities} from 'mozy';
 import {FormModel} from 'insectorjs/form/model';
 import ModuleModel from 'insectorjs/module/model';
 
@@ -19,13 +19,6 @@ export class CommentsModel extends ModuleModel {
     }
 
     get commentForm() {
-        // create form if not set
-        if (!this.has('commentForm')) {
-            // create form
-            let form = new CommentFormModel();
-            // register & set
-            this.set('commentForm', this.modelRegistry.registerInstance(form).data);
-        }
         return modelRegistry.getModel(this.get('commentForm'));
     }
 
@@ -57,14 +50,6 @@ export class CommentsModel extends ModuleModel {
         this.set('limit', value);
     }
 
-    /**
-     * get modelRegistry
-     * Defaults to modelRegistry, override if needed
-     */
-    get modelRegistry() {
-        return modelRegistry;
-    }
-
     _getDefaults() {
         let d = super._getDefaults();
         d.identity = CommentsModel.identity;
@@ -73,42 +58,17 @@ export class CommentsModel extends ModuleModel {
         d.limit = 5;
         d.comments = [];
         d.newCommentid = null;
+        d.commentForm = (new FormModel({
+            validation: ['nodeIdSet'],
+            inputs: [
+                {name: 'comment', validation: ['required']}
+            ]
+        })).getModelData();
         return d;
     }
 
 }
 CommentsModel.identity = 'comments.CommentsModel';
 
-/**
- * CommentFormModel
- */
-export class CommentFormModel extends FormModel {
-
-    constructor(data) {
-        // no data, add items
-        if (!data) {
-            data = {
-                validation: ['nodeIdSet'],
-                inputItems: [
-                    {
-                        name: 'comment',
-                        validation: ['required']
-                    }
-                ]
-            };
-        }
-        super(data);
-    }
-
-    _getDefaults(... constructorArgs) {
-        let d = super._getDefaults();
-        d.identity = CommentFormModel.identity;
-        return d;
-    }
-
-}
-CommentFormModel.identity = 'comments.CommentFormModel';
-
 // Register Classes/Constructors
-modelIdentities.register(CommentsModel.identity, CommentsModel);
-modelIdentities.register(CommentFormModel.identity, CommentFormModel);
+modelIdentities.set(CommentsModel.identity, CommentsModel);

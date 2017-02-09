@@ -2,8 +2,6 @@ import _ from 'lodash';
 import React from 'react';
 import assert from 'assert';
 
-import {SetterFlag, modelRegistry} from 'guins/model';
-
 import ReactView from './view';
 
 /**
@@ -43,14 +41,6 @@ export default class ReactModule extends ReactView {
     get targetComponent() {
         assert(this.refs.hasOwnProperty('view'), 'No ref attribute in ' + this.constructor.name + '.render: <Module ref="view" />.');
         return this.refs.view;
-    }
-
-    /**
-     * get modelRegistry
-     * Defaults to modelRegistry, override if needed
-     */
-    get modelRegistry() {
-        return modelRegistry;
     }
 
     render() {
@@ -95,32 +85,6 @@ export default class ReactModule extends ReactView {
 
     _newModelInstance(props) {
         // Abstract
-    }
-
-    _defaultNewModelInstance(props, ModelCls, instanceKey, data = {}) {
-        // Standalone/debug
-        if (!props.parentModel) {
-            return new ModelCls(data, props);
-        }
-        // keep until registry supports more arguments than data
-        let m;
-        let d = props.parentModel.get(instanceKey, data);
-        if (!this.modelRegistry.isRegistered(d.uuid)) {
-            m = new ModelCls(d, props);
-            m.instanceKey = instanceKey;
-            this.modelRegistry.registerInstance(m);
-        } else {
-            m = this.modelRegistry.get(d.uuid);
-            m.props = props;
-        }
-        // If not same data instance, update.
-        if (m.data !== d) {
-            m.data = d;
-        }
-        // store module instance data on parent Model
-        props.parentModel.set(instanceKey, m.data, SetterFlag.SILENT);
-
-        return m;
     }
 
     _newControllerInstance(model, props) {

@@ -2,8 +2,6 @@ import $ from 'jquery';
 import _ from 'lodash';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {PropertyChangeEvent} from 'guins/event';
-import {ExtendableError} from 'guins/error';
 
 /**
  * ReactView
@@ -75,7 +73,7 @@ export default class ReactView extends React.Component {
     }
 
     onModelChange(event) {
-        // console.log('onModelChange', event.property, this.constructor.name, this.cid);
+        // console.log('onModelChange', event, this.constructor.name, this.cid);
         if (this._modelListenerProps) {
             // If boolean true, react to all events
             if (this._modelListenerProps === true) {
@@ -116,19 +114,15 @@ export default class ReactView extends React.Component {
         model = model || this.model;
         if (this._modelListenerProps) {
             if (!model) {
-                throw new ReactViewError('modelListenerProps was specified but model is missing.', {
-                    view: this.constructor.name,
-                    modelListenerProps: this._modelListenerProps,
-                    model: model
-                });
+                throw new Error('modelListenerProps was specified but model is missing.');
             }
-            model.addListener(PropertyChangeEvent.PROPERTY_CHANGE, this.onModelChange);
+            model.addListener('change', this.onModelChange);
         }
     }
 
     _removeEventListeners() {
         if (this._modelListenerProps) {
-            this.model.removeListener(PropertyChangeEvent.PROPERTY_CHANGE, this.onModelChange);
+            this.model.removeListener('change', this.onModelChange);
         }
     }
 
@@ -136,14 +130,3 @@ export default class ReactView extends React.Component {
 ReactView.propTypes = {
     model: React.PropTypes.object
 };
-
-/**
- * ReactViewError
- */
-class ReactViewError extends ExtendableError {
-
-    constructor(message, data) {
-        super([message, JSON.stringify(data)].join('\n'));
-    }
-
-}

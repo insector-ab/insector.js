@@ -1,4 +1,4 @@
-import {Model, SetterFlag} from 'guins/model';
+import Model, {UNSET_IF_FALSE} from 'mozy/model';
 
 /**
  * ModuleModel, for use with
@@ -33,16 +33,19 @@ export default class ModuleModel extends Model {
         return this.get('initialized', false);
     }
     set initialized(value) {
-        this.set('initialized', value, SetterFlag.UNSET_IF_FALSE);
+        this.set('initialized', value, UNSET_IF_FALSE);
     }
 
-    removeFromParent() {
-        let parent = this.props.parentModel;
-        console.log('removeFromParent', parent, this.instanceKey, parent.has(this.instanceKey));
-        if (parent && parent.has(this.instanceKey)) {
-            parent.unset(this.instanceKey);
-        }
-    }
+    // /**
+    //  * FIX: Not used? Finish implementing removal of ModuleModel from parent
+    //  */
+    // removeFromParent() {
+    //     let parent = this.props.parentModel;
+    //     console.log('removeFromParent', parent, this.instanceKey, parent.has(this.instanceKey));
+    //     if (parent && parent.has(this.instanceKey)) {
+    //         parent.unset(this.instanceKey);
+    //     }
+    // }
 
     _deleteReferences() {
         super._deleteReferences();

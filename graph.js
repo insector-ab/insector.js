@@ -1,6 +1,5 @@
 import _ from 'lodash';
-import {Model, modelIdentities} from 'guins/model';
-import {Registry} from 'guins/registry';
+import {Model, modelIdentities} from 'mozy';
 
 /**
  * Re-write. Don't extend Model.
@@ -9,14 +8,6 @@ export class Graph extends Model {
 
     constructor(data) {
         super(data);
-        // require registry key
-        if (!this.data.hasOwnProperty('nodeRegistryKey')) {
-            throw new Error('nodeRegistryKey required, unable to register node');
-        }
-        // require registry key
-        if (!this.data.hasOwnProperty('edgeRegistryKey')) {
-            throw new Error('edgeRegistryKey required, unable to register edge');
-        }
         // init relation map
         this.generateRelationMap();
     }
@@ -217,6 +208,8 @@ export class Graph extends Model {
     _getDefaults() {
         let d = super._getDefaults();
         d.identity = Graph.identity;
+        d.nodeRegistryKey = 'uuid';
+        d.edgeRegistryKey = 'uuid';
         d.nodeMap = {};
         d.edgeMap = {};
         return d;
@@ -224,7 +217,7 @@ export class Graph extends Model {
 
 }
 Graph.identity = 'graph.Graph';
-modelIdentities.register(Graph.identity, Graph);
+modelIdentities.set(Graph.identity, Graph);
 
 /**
  * Default filter methods
@@ -237,17 +230,17 @@ export function filterBy(item, key, value) {
  * Graph multiton
  */
 // Store multitons
-Graph._instances = new Registry();
+Graph._instances = new Map();
 // Multiton getter
-Graph.getInstance = function(name, data = {}) {
+Graph.get = function(name, data = {}) {
     // Instance exists?
-    if (Graph._instances.isRegistered(name)) {
+    if (Graph._instances.has(name)) {
         return Graph._instances.get(name);
     }
     // Create new Graph
     let graph = new Graph(data);
     // Register
-    Graph._instances.register(name, graph);
+    Graph._instances.set(name, graph);
     // return
     return graph;
 };

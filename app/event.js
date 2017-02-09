@@ -1,4 +1,4 @@
-import {Event} from 'guins/event';
+import Event from '../event';
 
 /**
  * AppEvent

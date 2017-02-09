@@ -1,8 +1,7 @@
 import $ from 'jquery';
 import _ from 'lodash';
-import {Model, ModelList, modelIdentities, modelRegistry} from 'guins/model';
+import {Model, ModelList, modelIdentities, modelRegistry} from 'mozy';
 import assert from 'assert';
-import {underscored} from 'underscore.string';
 
 /**
  * AbstractFormModel
@@ -120,37 +119,12 @@ export class AbstractFormModel extends Model {
  */
 export class FormModel extends AbstractFormModel {
 
-    constructor(data) {
-        let inputItems;
-        if (data) {
-            inputItems = data.inputItems ? data.inputItems : null;
-            delete data.inputItems;
-        }
-        super(data);
-        this.createInputs(inputItems);
-    }
-
     addInput(formInput) {
         assert(formInput instanceof FormInputModel);
         this.inputs.add(formInput);
         this.dispatchChange('inputs');
         return formInput;
     }
-
-    createInputs(items) {
-        if (!items) {
-            return;
-        }
-        for (let i = 0, il = items.length; i < il; i++) {
-            this.createInput(items[i]);
-        }
-    }
-
-    createInput(data) {
-        let input = this.modelRegistry.getModel(data, FormInputModel);
-        return this.addInput(input);
-    }
-
     /**
      * get modelRegistry
      * Defaults to modelRegistry, override if needed
@@ -180,7 +154,7 @@ export class FormModel extends AbstractFormModel {
     }
 
     get inputValues() {
-        return this.getInputValues();
+        return _.fromPairs(this.inputs.map((input) => [input.name, input.value]));
     }
 
     get isValid() {
@@ -199,30 +173,16 @@ export class FormModel extends AbstractFormModel {
         this.set('validationString', value);
     }
 
-    getInputValues(underscoreKeys = false) {
-        let values = {};
-        let key;
-        this.inputs.each((item) => {
-            if (underscoreKeys) {
-                key = underscored(item.name);
-            } else {
-                key = item.name;
-            }
-            values[key] = item.value;
-        });
-        return values;
-    }
-
     hasInput(name) {
-        return Boolean(this.inputs.find({name: name}));
+        return !!_.findIndex(this.inputs.items, {name: name});
     }
 
     getInput(name) {
-        let input = this.inputs.find({name: name});
-        if (!input) {
+        let inputIndex = _.findIndex(this.inputs.items, {name: name});
+        if (inputIndex === -1) {
             throw new Error('FormInputModel not found for: ' + name);
         }
-        return input;
+        return this.inputs.at(inputIndex);
     }
 
     getInputValue(name) {
@@ -383,8 +343,8 @@ FormInputModel.identity = 'form.FormInputModel';
 /**
  * Reg models
  */
-modelIdentities.register(FormModel.identity, FormModel);
-modelIdentities.register(FormInputModel.identity, FormInputModel);
+modelIdentities.set(FormModel.identity, FormModel);
+modelIdentities.set(FormInputModel.identity, FormInputModel);
 
 export let defaultValidators = {
 

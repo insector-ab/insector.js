@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import _ from 'lodash';
 import path from 'path';
-import {Registry} from 'guins/registry';
 
 /**
  * XHRService
@@ -78,26 +77,24 @@ export class XHRService {
 }
 
 // Store multitons
-XHRService._instances = new Registry();
+XHRService._instances = new Map();
 // Multiton getter
-XHRService.at = function(baseUrl = '/', defaultAjaxParams, Constructor) {
+XHRService.get = function(baseUrl = '/', defaultAjaxParams, Constructor) {
     baseUrl = path.normalize(baseUrl);
     // Instance exists?
-    if (XHRService.exists(baseUrl)) {
+    if (XHRService._instances.has(baseUrl)) {
         return XHRService._instances.get(baseUrl);
     }
     // Create new XHRService
     Constructor = Constructor || XHRService;
     let service = new Constructor(baseUrl, defaultAjaxParams);
     // Register
-    XHRService._instances.register(baseUrl, service);
+    XHRService._instances.set(baseUrl, service);
     // return
     return service;
 };
-XHRService.exists = function(baseUrl) {
-    baseUrl = path.normalize(baseUrl);
-    return XHRService._instances.isRegistered(baseUrl);
-};
+// Alias
+XHRService.at = XHRService.get;
 
 /**
  * JSONService
@@ -154,7 +151,4 @@ export class JSONService extends XHRService {
 // Multiton getter
 JSONService.at = function(baseUrl = '/', defaultAjaxParams) {
     return XHRService.at(baseUrl, defaultAjaxParams, JSONService);
-};
-JSONService.exists = function(baseUrl) {
-    return XHRService.exists(baseUrl);
 };

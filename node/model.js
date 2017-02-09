@@ -105,7 +105,7 @@ export class NodeModel extends Model {
     }
 
     get isPersisted() {
-        return this.has('id');
+        return this.has('created_at');
     }
 
     get isModified() {

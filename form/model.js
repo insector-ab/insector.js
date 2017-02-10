@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import _ from 'lodash';
-import {Model, ModelList, modelIdentities, modelRegistry} from 'mozy';
-import assert from 'assert';
+import {Model, modelIdentities, modelRegistry} from 'mozy';
 
 /**
  * AbstractFormModel
@@ -119,11 +118,21 @@ export class AbstractFormModel extends Model {
  */
 export class FormModel extends AbstractFormModel {
 
+    constructor(data, ...args) {
+        // Make sure inputs have identity
+        if (data.hasOwnProperty('inputs')) {
+            data.inputs.forEach(obj => {
+                obj.identity = obj.identity || FormInputModel.identity;
+            });
+        }
+        // super
+        super(data, ...args);
+    }
+
     addInput(formInput) {
-        assert(formInput instanceof FormInputModel);
         this.inputs.add(formInput);
         this.dispatchChange('inputs');
-        return formInput;
+        return this;
     }
     /**
      * get modelRegistry
@@ -141,12 +150,7 @@ export class FormModel extends AbstractFormModel {
     }
 
     get inputs() {
-        if (!this._inputModelList) {
-            this._inputModelList = new ModelList(this.rawInputs, item => {
-                return this.modelRegistry.getModel(item, FormInputModel);
-            });
-        }
-        return this._inputModelList;
+        return modelRegistry.getModelList(this.rawInputs, this.cid + '.inputs');
     }
 
     get rawInputs() {
@@ -195,15 +199,15 @@ export class FormModel extends AbstractFormModel {
 
     reset() {
         this.unset('validationString');
-        this.inputs.each((item) => {
-            item.reset();
+        this.inputs.models.forEach((input) => {
+            input.reset();
         });
     }
 
     validate(context, customValidators) {
         // inititate input validation
-        let deferreds = this.inputs.map((item) => {
-            return item.validate(context, customValidators);
+        let deferreds = this.inputs.map((input) => {
+            return input.validate(context, customValidators);
         });
 
         // when inputs validated

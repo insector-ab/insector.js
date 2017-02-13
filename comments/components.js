@@ -5,7 +5,6 @@ import moment from 'moment';
 import autosize from 'jquery-autosize';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Grid, Row, Col} from 'react-bootstrap';
 import {ReactTextarea} from 'insectorjs/form/controls';
 import {FormModel} from 'insectorjs/form/model';
 
@@ -105,33 +104,34 @@ Comment.propTypes = {
 class NewCommentForm extends React.Component {
 
     render() {
-        let attrs = _.omit(this.props, 'children', 'formModel', 'placeholder');
-        let comment = this.props.formModel.getInput('comment');
+        const attrs = _.omit(this.props, 'children', 'formModel', 'placeholder');
+        attrs.className = classNames('container-fluid', attrs.className);
+        const comment = this.props.formModel.getInput('comment');
         return (
-            <Grid fluid {... attrs}>
-                <Row>
-                    <Col xs={10} className="p-h-0">
+            <div {... attrs}>
+                <div className="row">
+                    <div className="col-xs-10 p-h-0">
                         <ReactTextarea name="comment"
                                        rows="1"
                                        className="autosize field-comment form-control"
                                        placeholder={this.props.placeholder}
                                        value={comment.value} />
-                    </Col>
-                    <Col xs={2} className="p-h-0">
+                    </div>
+                    <div className="col-xs-2 p-h-0">
                         <button type="button"
                                 className="btn btn-block btn-default btn-save-comment">
                             <span className="fa fa-fw fa-save" />
                             <span className="hidden-xs">Save</span>
                         </button>
-                    </Col>
-                </Row>
-            </Grid>
+                    </div>
+                </div>
+            </div>
         );
     }
 
     componentDidMount() {
-        let $el = $(ReactDOM.findDOMNode(this));
-        let $fieldEl = $el.find('.field-comment');
+        const $el = $(ReactDOM.findDOMNode(this));
+        const $fieldEl = $el.find('.field-comment');
         // Auto size it
         autosize($fieldEl);
         // Move focus

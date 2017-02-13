@@ -25,8 +25,8 @@ export function FAButton(props) {
     );
 }
 FAButton.propTypes = {
-    text: React.PropTypes.string.required,
-    faIcon: React.PropTypes.string.required,
+    text: React.PropTypes.string.isRequired,
+    faIcon: React.PropTypes.string.isRequired,
     faClassName: React.PropTypes.string,
     children: React.PropTypes.node
 };

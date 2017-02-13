@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import React from 'react';
 import assert from 'assert';
 
 import ReactView from './view';
@@ -40,6 +41,10 @@ export default class ReactModule extends ReactView {
     get targetComponent() {
         assert(this.refs.hasOwnProperty('view'), 'No ref attribute in ' + this.constructor.name + '.render: <Module ref="view" />.');
         return this.refs.view;
+    }
+
+    render() {
+        return <div ref="view" />;
     }
 
     componentWillMount() {

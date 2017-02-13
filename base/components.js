@@ -102,7 +102,7 @@ export function Tab(props) {
     );
 }
 Tab.propTypes = {
-    active: React.PropTypes.boolean,
+    active: React.PropTypes.bool,
     title: React.PropTypes.string,
     text: React.PropTypes.string,
     href: React.PropTypes.string

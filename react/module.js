@@ -9,8 +9,8 @@ import ReactView from './view';
  */
 export default class ReactModule extends ReactView {
 
-    constructor(props, modelListenerProps) {
-        super(props, modelListenerProps);
+    constructor(props) {
+        super(props);
         // Model
         let model = this._newModelInstance(props);
         // Controller
@@ -19,19 +19,6 @@ export default class ReactModule extends ReactView {
 
     get model() {
         return this.controller.model;
-    }
-    set model(value) {
-        if (value !== this.controller.model) {
-            // console.log('ReactModule.model setting', value);
-            // Remove listeners from current model
-            this._removeEventListeners();
-            // Set new model
-            this.controller.model = value;
-            // Add listeners to new model
-            this._addEventListeners();
-            // notify
-            this.model.dispatchChange('model');
-        }
     }
 
     get controller() {
@@ -48,7 +35,6 @@ export default class ReactModule extends ReactView {
     }
 
     componentWillMount() {
-        super.componentWillMount();
         // controller event handler
         this.controller.componentWillMount();
     }

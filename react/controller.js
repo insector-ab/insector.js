@@ -64,7 +64,7 @@ export default class ReactController {
     }
 
     dispatchDOMEvent(event, target) {
-        console.log(this.constructor.name, 'dispatchDOMEvent', event.type);
+        // console.log(this.constructor.name, 'dispatchDOMEvent', event.type);
         event.target = target || this.componentEl;
         $(event.target).trigger(event.type, event);
     }
@@ -229,7 +229,7 @@ export default class ReactController {
     _deleteReferences() {
         delete this._model;
         delete this._component;
-        delete this._eventsTargetEl;
+        delete this._delegatedEl;
     }
 
 }

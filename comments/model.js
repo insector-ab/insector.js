@@ -57,7 +57,7 @@ export class CommentsModel extends ModuleModel {
         d.showAll = false;
         d.limit = 5;
         d.comments = [];
-        d.newCommentid = null;
+        d.newCommentid = undefined;
         d.commentForm = (new FormModel({
             validation: ['nodeIdSet'],
             inputs: [

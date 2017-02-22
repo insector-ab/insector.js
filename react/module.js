@@ -52,7 +52,7 @@ export default class ReactModule extends ReactView {
         // controller event handler
         this.controller.componentWillUnmount();
         // Unset view in controller
-        this.controller.component = null;
+        this.controller.component = undefined;
         // Super (calls _removeEventListeners)
         super.componentWillUnmount();
     }

@@ -56,22 +56,6 @@ export class NodeModel extends Model {
         return this.get('created_by_id');
     }
 
-    // get createdBy() {
-    //     try {
-    //         return nodeRegistry.get(this.createdById);
-    //     } catch (err) {}
-    //     return null;
-    // }
-
-    // get createdByFullname() {
-    //     if (this.createdBy) {
-    //         return this.createdBy.fullname;
-    //     } else if (this.has('created_by_firstname') || this.has('created_by_surname')) {
-    //         return strip(this.get('created_by_firstname', '') + ' ' + this.get('created_by_surname', ''));
-    //     }
-    //     return null;
-    // }
-
     get createdAt() {
         return moment(this.get('created_at'));
     }
@@ -79,22 +63,6 @@ export class NodeModel extends Model {
     get modifiedById() {
         return this.get('modified_by_id');
     }
-
-    // get modifiedBy() {
-    //     try {
-    //         return nodeRegistry.get(this.modifiedById);
-    //     } catch (err) {}
-    //     return null;
-    // }
-
-    // get modifiedByFullname() {
-    //     if (this.modifiedBy) {
-    //         return this.modifiedBy.fullname;
-    //     } else if (this.has('modified_by_firstname') || this.has('modified_by_surname')) {
-    //         return strip(this.get('modified_by_firstname', '') + ' ' + this.get('modified_by_surname', ''));
-    //     }
-    //     return null;
-    // }
 
     get modifiedAt() {
         return moment(this.get('modified_at'));
@@ -113,7 +81,7 @@ export class NodeModel extends Model {
     }
 
     get isNew() {
-        return !this.isPersisted && this._modified == null;
+        return !this.isPersisted && this._modified == undefined;
     }
 
     isModifiedBefore(datetime) {

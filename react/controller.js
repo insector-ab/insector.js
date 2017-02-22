@@ -13,7 +13,7 @@ export default class ReactController {
         // private
         this._model = model;
         this._component = component;
-        this._delegatedEl = null;
+        this._delegatedEl = undefined;
     }
 
     events() {

@@ -10,7 +10,7 @@ export default class ModuleController extends ReactController {
     constructor(model, component) {
         super(model, component);
         // Promise
-        this._initializePromise = null;
+        this._initializePromise = undefined;
         // Bind
         this.onInitializeDone = this.onInitializeDone.bind(this);
         this.onInitializeFail = this.onInitializeFail.bind(this);
@@ -57,7 +57,7 @@ export default class ModuleController extends ReactController {
     }
 
     onInitializeDone(data, textStatus, jqXHR) {
-        this._initializePromise = null;
+        this._initializePromise = undefined;
         // Update model
         if (this.model) {
             this.model.initialized = true;

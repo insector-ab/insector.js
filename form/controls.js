@@ -27,7 +27,7 @@ export class AbstractFormControl extends React.Component {
     }
 
     getAttrs() {
-        let attrs = _.omit(this.props, ... _.keys(this.constructor.propTypes));
+        let attrs = _.omit(this.props, ..._.keys(this.constructor.propTypes));
         attrs.onChange = this.onChange;
         attrs.onBlur = this.onBlur;
         return attrs;
@@ -41,7 +41,7 @@ export class AbstractFormControl extends React.Component {
         this.dispatchEvent(event, 'react.blur');
     }
 
-    dispatchEvent(event, type, ... extraArgs) {
+    dispatchEvent(event, type, ...extraArgs) {
         // args
         let args = _.concat([event, this], extraArgs);
         // dispatch react synthetic event
@@ -63,7 +63,7 @@ export class ReactInput extends AbstractFormControl {
         return (
             <input type={this.props.type || 'text'}
                    value={this.props.value}
-                   {... attrs} />
+                   {...attrs} />
         );
     }
 
@@ -87,7 +87,7 @@ export class ReactTextarea extends AbstractFormControl {
         let attrs = this.getAttrs();
         return (
             <textarea value={this.props.value}
-                      {... attrs} />
+                      {...attrs} />
         );
     }
 
@@ -108,7 +108,7 @@ export class ReactSelect extends AbstractFormControl {
         let attrs = this.getAttrs();
         return (
             <select value={this.props.value}
-                    {... attrs} >
+                    {...attrs} >
                 {this.props.children}
             </select>
         );
@@ -155,7 +155,7 @@ export class ReactDatepicker extends ReactInput {
 
     componentWillUnmount() {
         if (this.datepicker) {
-            this.datepicker.off(null, null, this);
+            this.datepicker.off(undefined, undefined, this);
             delete this.datepicker;
         }
     }
@@ -255,7 +255,7 @@ export class ReactAutocomplete extends AbstractFormControl {
 
     onSelect(value, item) {
         // dispatch, no event available
-        this.dispatchEvent(null, 'react.autocomplete.select', value, item);
+        this.dispatchEvent(undefined, 'react.autocomplete.select', value, item);
     }
 
     onChange(event, value) {

@@ -38,7 +38,7 @@ export class AbstractFormModel extends Model {
                     validationArgs = [];
                 }
                 validationMethod = this._getValidationMethod(validationKey, customValidators);
-                this._doValidate(value, validationMethod, model, context, ... validationArgs).done((result, model) => {
+                this._doValidate(value, validationMethod, model, context, ...validationArgs).done((result, model) => {
                     // if valid
                     if (result) {
                         i++;
@@ -76,7 +76,7 @@ export class AbstractFormModel extends Model {
      * @param  {[type]} context    [description]
      * @return {[type]}            [description]
      */
-    _doValidate(value, validationMethod, model, context, ... validationArgs) {
+    _doValidate(value, validationMethod, model, context, ...validationArgs) {
         let $deferred = $.Deferred();
         // no validation, resolve
         if (!_.isFunction(validationMethod)) {
@@ -84,7 +84,7 @@ export class AbstractFormModel extends Model {
             return $deferred;
         }
         // validate
-        let result = validationMethod(value, model, context, ... validationArgs);
+        let result = validationMethod(value, model, context, ...validationArgs);
 
         // no XHR object, value validated, resolve
         if (!this._isXHRObject(result)) {
@@ -197,19 +197,11 @@ export class FormModel extends AbstractFormModel {
         this.getInput(name).value = value;
     }
 
-    reset() {
-        this.unset('validationString');
-        this.inputs.models.forEach((input) => {
-            input.reset();
-        });
-    }
-
     validate(context, customValidators) {
         // inititate input validation
         let deferreds = this.inputs.map((input) => {
             return input.validate(context, customValidators);
         });
-
         // when inputs validated
         let $deferred = $.Deferred();
         $.when(...deferreds).done(() => {
@@ -238,6 +230,13 @@ export class FormModel extends AbstractFormModel {
         return this.inputs.map((item) => {
             return item.name + ':' + item.value;
         }).join(',');
+    }
+
+    reset(data, flags = 0) {
+        // Just reset inputs
+        this.inputs.forEach(input => {
+            input.reset();
+        });
     }
 
     _getDefaults() {
@@ -293,19 +292,7 @@ export class FormInputModel extends AbstractFormModel {
     }
 
     get value() {
-        let val = null;
-        if (this.has('value')) {
-            val = this.get('value');
-        } else if (this.defaultValue) {
-            // if method call and return value
-            if (_.isFunction(this.defaultValue)) {
-                val = this.defaultValue();
-            } else {
-                val = this.defaultValue;
-            }
-        }
-        // don't return undefined, no value = null
-        return !_.isUndefined(val) ? val : null;
+        return this.get('value', _.result(this, 'defaultValue'));
     }
     set value(value) {
         this.unset('isValidated');
@@ -352,7 +339,7 @@ modelIdentities.set(FormInputModel.identity, FormInputModel);
 
 export let defaultValidators = {
 
-    required: function(value, input, context, ... args) {
+    required: function(value, input, context, ...args) {
         if (!value) {
             input.errorCode = 'required';
             return false;
@@ -360,7 +347,7 @@ export let defaultValidators = {
         return true;
     },
 
-    email: function(value, input, context, ... args) {
+    email: function(value, input, context, ...args) {
         if (value && !/.+@.+\..+/.test(value)) {
             input.errorCode = 'invalidFormat';
             return false;
@@ -368,7 +355,7 @@ export let defaultValidators = {
         return true;
     },
 
-    minChars: function(value, input, context, ... args) {
+    minChars: function(value, input, context, ...args) {
         let limit = args[0];
         if (value && value.length < limit) {
             input.errorCode = 'minChars';

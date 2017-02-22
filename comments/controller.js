@@ -44,7 +44,7 @@ export default class CommentsController extends ModuleController {
                         this.model.rawComments.push(data);
                         this.model.newCommentId = data.id;
                         this.model.showNewComment = false;
-                        ajaxPromise = null;
+                        ajaxPromise = undefined;
                         this.dispatchDOMEvent(CommentEvent.newCreatedEvent(this.model.nodeId));
                     });
                 }

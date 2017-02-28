@@ -81,7 +81,7 @@ export class NodeModel extends Model {
     }
 
     get isNew() {
-        return !this.isPersisted && this._modified == undefined;
+        return !this.isPersisted && this._modified === undefined;
     }
 
     isModifiedBefore(datetime) {
@@ -122,3 +122,20 @@ export const nodeFactory = new Factory(nodeIdentities, 'discriminator');
  * @type {ModelRegistry}
  */
 export const nodeRegistry = new ModelRegistry('uuid', nodeFactory);
+/**
+ * getNodeRelationListHandler
+ */
+export function getNodeRelationListHandler(nodeDataMap, nodeModelRegistry) {
+    return {
+        getModel: function(key) {
+            const data = nodeDataMap.get(key);
+            if (!data) {
+                throw new Error('Node data for key ' + key + 'not found.');
+            }
+            return nodeModelRegistry.getModel(data);
+        },
+        getItem: function(model) {
+            return model.uuid;
+        }
+    };
+}

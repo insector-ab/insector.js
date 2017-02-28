@@ -18,7 +18,7 @@ export default class ReactModule extends ReactView {
     }
 
     get model() {
-        return this.controller.model;
+        return this.controller && this.controller.model;
     }
 
     get controller() {

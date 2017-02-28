@@ -19,7 +19,6 @@ export default class AppModel extends ModuleModel {
     set isFetching(value) {
         if (value !== this._isFetching) {
             this._isFetching = value;
-            console.log('isFetching dispatch', value);
             this.dispatchChange('isFetching');
         }
     }

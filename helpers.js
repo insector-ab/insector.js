@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import accounting from 'accounting';
-import {slugify, underscored} from 'underscore.string';
+import {slugify} from 'underscore.string';
 
 /**
  * Format money
@@ -29,6 +29,13 @@ export function formatMoney(value, currency, config = {}) {
         case 'SEK': return formatKronor(value);
     }
     return accounting.formatMoney(value, _.assign({symbol: currency, format: '%s %v'}, config));
+}
+
+/**
+ * Return attributes present in props but not in denifed propTypes.
+ */
+export function getAttrs(props, cls) {
+    return _.omit(props, ...Object.keys(cls.propTypes));
 }
 
 /*

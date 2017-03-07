@@ -1,16 +1,21 @@
-import _ from 'lodash';
 import classNames from 'classnames';
 import React from 'react';
-import {Media, MediaLeft, MediaBody} from 'insectorjs/base/components';
+import {Media, MediaLeft, MediaBody} from './bootstrap/components';
+import {getAttrs} from './helpers';
 
 /**
  * FAButton
  */
 export function FAButton(props) {
-    const attrs = _.omit(props, ... _.keys(FAButton.propTypes));
+    const attrs = getAttrs(props, FAButton);
     attrs.type = attrs.type || 'button';
     attrs.title = attrs.title || props.text;
-    attrs.className = classNames('btn', attrs.className || '');
+    attrs.className = classNames(
+        'btn',
+        (props.active ? props.btnActiveClassName : props.btnClassName),
+        {active: props.active},
+        attrs.className || ''
+    );
     const iconCls = classNames('fa', props.faClassName || '', props.faIcon);
     return (
         <button {... attrs}>
@@ -28,17 +33,20 @@ FAButton.propTypes = {
     text: React.PropTypes.string,
     faIcon: React.PropTypes.string,
     faClassName: React.PropTypes.string,
+    btnClassName: React.PropTypes.string,
+    active: React.PropTypes.bool,
+    btnActiveClassName: React.PropTypes.string,
     children: React.PropTypes.node
 };
 FAButton.defaultProps = {
-    className: 'btn-default'
+    btnClassName: 'btn-default'
 };
 
 /**
  * FANavItem
  */
 export function FANavItem(props) {
-    const attrs = _.omit(props, ... _.keys(FANavItem.propTypes));
+    const attrs = getAttrs(props, FANavItem);
     attrs.title = attrs.title || props.text;
     const classes = classNames(
         {'page-route': props.href}
@@ -69,7 +77,7 @@ FANavItem.defaultProps = {
  * FAMediaItem
  */
 export function FAMediaItem(props) {
-    let attrs = _.omit(props, ... _.keys(FAMediaItem.propTypes));
+    let attrs = getAttrs(props, FAMediaItem);
     attrs.className = classNames('fa-media', attrs.className || '');
     return (
         <Media {... attrs}>
@@ -97,7 +105,7 @@ FAMediaItem.defaultProps = {
  * FATree
  */
 export function FATree(props) {
-    let attrs = _.omit(props, ... _.keys(FATree.propTypes));
+    let attrs = getAttrs(props, FATree);
     attrs.className = classNames('tree', attrs.className || '');
     return (
         <div {...attrs}>
@@ -118,7 +126,7 @@ FATree.propTypes = {
  * FATreeBranch
  */
 export function FATreeBranch(props) {
-    let attrs = _.omit(props, ... _.keys(FATreeBranch.propTypes));
+    let attrs = getAttrs(props, FATreeBranch);
     return (
         <li {...attrs}>
             <FATreeNode href={props.href} title={props.title} faIcon={props.faIcon} />
@@ -141,7 +149,7 @@ FATreeBranch.propTypes = {
  * FATreeNode
  */
 export function FATreeNode(props) {
-    let attrs = _.omit(props, ... _.keys(FATreeNode.propTypes));
+    let attrs = getAttrs(props, FATreeNode);
     attrs.className = classNames(
         {untitled: !props.title},
         attrs.className || ''
@@ -149,7 +157,7 @@ export function FATreeNode(props) {
     let elements = [];
     // icon
     let iconClasses = classNames('icon', 'fa', 'fa-fw', props.faIcon || 'fa-circle-o');
-    elements.push(<span key={'icon'} className={iconClasses}></span>);
+    elements.push(<span key={'icon'} className={iconClasses} />);
     // Title
     let title = props.title || 'Untitled';
     elements.push(<span key={'title'}>{title}</span>);

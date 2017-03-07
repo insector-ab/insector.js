@@ -1,8 +1,9 @@
-import $ from 'jquery';
-import _ from 'lodash';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import classNames from 'classnames';
+import {Modal, ModalHeader, ModalBody, ModalFooter} from '../bootstrap/components';
+import {getAttrs} from '../helpers';
+import 'bootstrap-sass';
+import './style.scss';
 
 /**
  * FormModal
@@ -10,9 +11,9 @@ import classNames from 'classnames';
 export class FormModal extends React.Component {
 
     render() {
-        let attrs = _.omit(this.props, ... _.keys(FormModal.propTypes));
+        let attrs = getAttrs(this.props, FormModal);
         return (
-            <Modal {... attrs}>
+            <Modal {...attrs}>
                 <ModalHeader>
                     <h4 className="m-v-0">
                         {this.props.titleIcon &&
@@ -59,9 +60,9 @@ FormModal.defaultProps = {
 export class ConfirmModal extends React.Component {
 
     render() {
-        let attrs = _.omit(this.props, ... _.keys(ConfirmModal.propTypes));
+        let attrs = getAttrs(this.props, ConfirmModal);
         return (
-            <Modal {... attrs}>
+            <Modal {...attrs}>
                 <ModalBody closeButton={true}>
                     {this.props.children}
                     <DefaultModalButtons confirmButtonText={this.props.confirmButtonText}
@@ -95,10 +96,10 @@ ConfirmModal.defaultProps = {
 export class DefaultDeleteModal extends React.Component {
 
     render() {
-        let attrs = _.omit(this.props, ... _.keys(DefaultDeleteModal.propTypes));
+        let attrs = getAttrs(this.props, DefaultDeleteModal);
         return (
-            <DeleteModal {... attrs}>
-                <div className="modal-message text-center">
+            <DeleteModal {...attrs}>
+                <div className="text-center">
                     <span className="fa fa-2x fa-warning top-icon" />
                     <div className="m-t-1 m-b-2">{this.props.children}</div>
                 </div>
@@ -117,9 +118,9 @@ DefaultDeleteModal.propTypes = {
 export class DeleteModal extends React.Component {
 
     render() {
-        let attrs = _.omit(this.props, ... _.keys(DeleteModal.propTypes));
+        let attrs = getAttrs(this.props, DeleteModal);
         return (
-            <ConfirmModal {... attrs}>
+            <ConfirmModal {...attrs}>
                 {this.props.children}
             </ConfirmModal>
         );
@@ -141,10 +142,10 @@ DeleteModal.defaultProps = {
 export class AlertModal extends React.Component {
 
     render() {
-        let attrs = _.omit(this.props, ... _.keys(AlertModal.propTypes));
+        let attrs = getAttrs(this.props, AlertModal);
         attrs.size = attrs.size || 'sm';
         return (
-            <Modal {... attrs}>
+            <Modal {...attrs}>
                 <ModalBody>
                     {this.props.children}
                     <button type="button"
@@ -167,136 +168,17 @@ AlertModal.defaultProps = {
 };
 
 /**
- * CloseButton
- */
-export class CloseButton extends React.Component {
-
-    render() {
-        return (
-            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        );
-    }
-
-}
-
-/**
- * Modal, composition version
- */
-export class Modal extends React.Component {
-
-    componentDidMount() {
-        const $el = $(ReactDOM.findDOMNode(this));
-        if (this.props.modalOptions) {
-            $el.modal(this.props.modalOptions);
-        } else {
-            $el.modal('show');
-        }
-    }
-
-    render() {
-        let attrs = _.omit(this.props, ... _.keys(Modal.propTypes));
-        attrs.className = classNames('modal', 'fade', attrs.className || '');
-        let dialogCls = classNames('modal-dialog', 'modal-' + this.props.size);
-        return (
-            <div {... attrs} data-modal-key={this.props.key}>
-                <div className={dialogCls}>
-                    <div className="modal-content">
-                        {this.props.children}
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-}
-Modal.propTypes = {
-    modalOptions: React.PropTypes.object,
-    size: React.PropTypes.string,
-    children: React.PropTypes.node
-};
-Modal.defaultProps = {
-    size: 'md'
-};
-
-/**
- * ModalHeader
- */
-export class ModalHeader extends React.Component {
-
-    render() {
-        let attrs = _.omit(this.props, ... _.keys(ModalHeader.propTypes));
-        attrs.className = classNames('modal-header', attrs.className || '');
-        return (
-            <div {... attrs}>
-                <CloseButton />
-                {this.props.children}
-            </div>
-        );
-    }
-
-}
-ModalHeader.propTypes = {
-    children: React.PropTypes.node
-};
-
-/**
- * ModalBody
- */
-export class ModalBody extends React.Component {
-
-    render() {
-        let attrs = _.omit(this.props, ... _.keys(ModalBody.propTypes));
-        attrs.className = classNames('modal-body', attrs.className || '');
-        return (
-            <div {... attrs}>
-                {this.props.closeButton &&
-                    <CloseButton />
-                }
-                {this.props.children}
-            </div>
-        );
-    }
-
-}
-ModalBody.propTypes = {
-    closeButton: React.PropTypes.bool,
-    children: React.PropTypes.node
-};
-
-/**
- * ModalFooter
- */
-export class ModalFooter extends React.Component {
-
-    render() {
-        let attrs = _.omit(this.props, ... _.keys(ModalFooter.propTypes));
-        attrs.className = classNames('modal-footer', attrs.className || '');
-        return (
-            <div {... attrs}>
-                {this.props.children}
-            </div>
-        );
-    }
-
-}
-ModalFooter.propTypes = {
-    children: React.PropTypes.node
-};
-
-/**
  * DefaultModalButtons
  */
 export class DefaultModalButtons extends React.Component {
 
     render() {
-        let attrs = _.omit(this.props, ... _.keys(DefaultModalButtons.propTypes));
+        let attrs = getAttrs(this.props, DefaultModalButtons);
         attrs.className = classNames('text-right', attrs.className || '');
         let cancelStyles = classNames('btn', 'pull-left', this.props.cancelButtonStyle, 'modal-cancel');
         let confirmStyles = classNames('btn', this.props.confirmButtonStyle, 'modal-ok');
         return (
-            <div {... attrs}>
+            <div {...attrs}>
                 <button type="button" className={cancelStyles} tabIndex={-1} data-dismiss="modal">
                     {this.props.cancelButtonText}
                 </button>

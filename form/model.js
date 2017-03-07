@@ -134,13 +134,6 @@ export class FormModel extends AbstractFormModel {
         this.dispatchChange('inputs');
         return this;
     }
-    /**
-     * get modelRegistry
-     * Defaults to modelRegistry, override if needed
-     */
-    get modelRegistry() {
-        return modelRegistry;
-    }
 
     get validation() {
         return this.get('validation');

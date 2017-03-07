@@ -1,6 +1,6 @@
 {
-  "name": "InsectorJS",
-  "description": "InsectorJS",
+  "name": "insectorjs",
+  "description": "Bag of stuff for js projects.",
   "version": "0.0.1",
   "private": true,
   "author": "Insector AB <mail@insector.se>",

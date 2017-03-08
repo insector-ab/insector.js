@@ -192,7 +192,9 @@
 .fs-200 { font-size: 200% !important; }
 
 /* Flex */
-.flex {
+.flex,
+.flex-row,
+.flex-col {
     display: flex;
     .flex-grow-1 { flex-grow: 1; }
     .flex-grow-2 { flex-grow: 2; }
@@ -203,4 +205,10 @@
     .flex-grow-7 { flex-grow: 7; }
     .flex-grow-8 { flex-grow: 8; }
     .flex-grow-9 { flex-grow: 9; }
+}
+.flex-row {
+    flex-direction: row !important;
+}
+.flex-col {
+    flex-direction: column !important;
 }

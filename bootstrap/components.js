@@ -152,7 +152,7 @@ export function ModalHeader(props) {
     return (
         <div {...attrs}>
             <ModalCloseButton />
-            {this.props.children}
+            {props.children}
         </div>
     );
 }

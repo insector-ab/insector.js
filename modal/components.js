@@ -8,33 +8,29 @@ import './style.scss';
 /**
  * FormModal
  */
-export class FormModal extends React.Component {
-
-    render() {
-        let attrs = getAttrs(this.props, FormModal);
-        return (
-            <Modal {...attrs}>
-                <ModalHeader>
-                    <h4 className="m-v-0">
-                        {this.props.titleIcon &&
-                            <span className={classNames('fa', 'm-r-05', this.props.titleIcon)} />
-                        }
-                        <span>{this.props.title}</span>
-                    </h4>
-                </ModalHeader>
-                <ModalBody>
-                    {this.props.children}
-                </ModalBody>
-                <ModalFooter>
-                    <DefaultModalButtons confirmButtonText={this.props.confirmButtonText}
-                                         confirmButtonStyle={this.props.confirmButtonStyle}
-                                         cancelButtonText={this.props.cancelButtonText}
-                                         cancelButtonStyle={this.props.cancelButtonStyle} />
-                </ModalFooter>
-            </Modal>
-        );
-    }
-
+export function FormModal(props) {
+    const attrs = getAttrs(props, FormModal);
+    return (
+        <Modal {...attrs}>
+            <ModalHeader>
+                <h4 className="m-v-0">
+                    {props.titleIcon &&
+                        <span className={classNames('fa', 'm-r-1', props.titleIcon)} />
+                    }
+                    <span>{props.title}</span>
+                </h4>
+            </ModalHeader>
+            <ModalBody>
+                {props.children}
+            </ModalBody>
+            <ModalFooter>
+                <DefaultModalButtons confirmButtonText={props.confirmButtonText}
+                                     confirmButtonStyle={props.confirmButtonStyle}
+                                     cancelButtonText={props.cancelButtonText}
+                                     cancelButtonStyle={props.cancelButtonStyle} />
+            </ModalFooter>
+        </Modal>
+    );
 }
 FormModal.propTypes = {
     title: React.PropTypes.string,

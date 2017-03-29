@@ -1,36 +1,32 @@
-import _ from 'lodash';
 import React from 'react';
 import classNames from 'classnames';
 import {ReactInput, ReactSelect} from 'insectorjs/form/controls';
+import {getAttrs} from '../helpers';
 
 /**
  * FormGroup
  */
-export class FormGroup extends React.Component {
+export function FormGroup(props) {
+    const attrs = getAttrs(props, FormGroup);
+    attrs.className = classNames('form-group', attrs.className || '');
 
-    render() {
-        let attrs = _.omit(this.props, ... _.keys(FormGroup.propTypes));
-        attrs.className = classNames('form-group', attrs.className || '');
+    const labelSize = parseInt(props.labelSize || '3');
+    const leftColClasses = classNames(
+        'col-md-' + labelSize,
+        'control-label'
+    );
+    const rightColClasses = classNames(
+        'col-md-' + (12 - labelSize)
+    );
 
-        var labelSize = parseInt(this.props.labelSize || '3');
-        var leftColClasses = classNames(
-            'col-md-' + labelSize,
-            'control-label'
-        );
-        var rightColClasses = classNames(
-            'col-md-' + (12 - labelSize)
-        );
-
-        return (
-            <div {... attrs}>
-                <label className={leftColClasses} htmlFor={this.props.labelFor}>{this.props.label}</label>
-                <div className={rightColClasses}>
-                    {this.props.children}
-                </div>
+    return (
+        <div {... attrs}>
+            <label className={leftColClasses} htmlFor={props.labelFor}>{props.label}</label>
+            <div className={rightColClasses}>
+                {props.children}
             </div>
-        );
-    }
-
+        </div>
+    );
 }
 FormGroup.propTypes = {
     label: React.PropTypes.string,
@@ -42,21 +38,17 @@ FormGroup.propTypes = {
 /**
  * CheckboxGroup
  */
-export class CheckboxGroup extends React.Component {
-
-    render() {
-        let attrs = _.omit(this.props, ... _.keys(CheckboxGroup.propTypes));
-        attrs.className = classNames('checkbox', attrs.className || '');
-        return (
-            <div {... attrs}>
-                <label>
-                    {this.props.children}
-                    {this.props.label}
-                </label>
-            </div>
-        );
-    }
-
+export function CheckboxGroup(props) {
+    const attrs = getAttrs(props, CheckboxGroup);
+    attrs.className = classNames('checkbox', attrs.className || '');
+    return (
+        <div {... attrs}>
+            <label>
+                {props.children}
+                {props.label}
+            </label>
+        </div>
+    );
 }
 CheckboxGroup.propTypes = {
     label: React.PropTypes.string,
@@ -68,68 +60,52 @@ CheckboxGroup.propTypes = {
 /**
  * FormTextInput
  */
-export class FormTextInput extends React.Component {
-
-    render() {
-        let attrs = _.omit(this.props, ... _.keys(FormTextInput.propTypes));
-        attrs.className = classNames('form-control', attrs.className || '');
-        return (
-            <ReactInput type="text"
-                        {... attrs} />
-        );
-    }
-
+export function FormTextInput(props) {
+    const attrs = getAttrs(props, FormTextInput);
+    attrs.className = classNames('form-control', attrs.className || '');
+    return (
+        <ReactInput type="text"
+                    {... attrs} />
+    );
 }
 FormTextInput.propTypes = {};
 
 /**
  * FormPasswordInput
  */
-export class FormPasswordInput extends React.Component {
-
-    render() {
-        let attrs = _.omit(this.props, ... _.keys(FormPasswordInput.propTypes));
-        attrs.className = classNames('form-control', attrs.className || '');
-        return (
-            <ReactInput type="password"
-                        {... attrs} />
-        );
-    }
-
+export function FormPasswordInput(props) {
+    const attrs = getAttrs(props, FormPasswordInput);
+    attrs.className = classNames('form-control', attrs.className || '');
+    return (
+        <ReactInput type="password"
+                    {... attrs} />
+    );
 }
 FormPasswordInput.propTypes = {};
 
 /**
  * FormCheckbox
  */
-export class FormCheckbox extends React.Component {
-
-    render() {
-        let attrs = _.omit(this.props, ... _.keys(FormCheckbox.propTypes));
-        return (
-            <ReactInput type="checkbox"
-                        {... attrs} />
-        );
-    }
-
+export function FormCheckbox(props) {
+    const attrs = getAttrs(props, FormCheckbox);
+    return (
+        <ReactInput type="checkbox"
+                    {... attrs} />
+    );
 }
 FormCheckbox.propTypes = {};
 
 /**
  * FormSelect
  */
-export class FormSelect extends React.Component {
-
-    render() {
-        let attrs = _.omit(this.props, ... _.keys(FormSelect.propTypes));
-        attrs.className = classNames('form-control', attrs.className || '');
-        return (
-            <ReactSelect {... attrs} >
-                {this.props.children}
-            </ReactSelect>
-        );
-    }
-
+export function FormSelect(props) {
+    const attrs = getAttrs(props, FormSelect);
+    attrs.className = classNames('form-control', attrs.className || '');
+    return (
+        <ReactSelect {... attrs} >
+            {props.children}
+        </ReactSelect>
+    );
 }
 FormSelect.propTypes = {
     children: React.PropTypes.node

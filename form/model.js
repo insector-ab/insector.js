@@ -62,7 +62,7 @@ export class AbstractFormModel extends Model {
     }
 
     _getValidationMethod(validationKey, customValidators) {
-        let methods = _.assign({}, defaultValidators, customValidators || {});
+        let methods = Object.assign({}, defaultValidators, customValidators || {});
         if (typeof methods[validationKey] !== 'function') {
             throw new Error('Validation method not found for: "' + validationKey + '"');
         }
@@ -214,7 +214,7 @@ export class FormModel extends AbstractFormModel {
 
     getInputsValidationString() {
         return this.inputs.map((item) => {
-            let valstr = item.name + ':' + item.validatedValue;
+            let valstr = item.name + (_.isUndefined(item.validatedValue) ? '' : ':' + item.validatedValue);
             return valstr;
         }).join(',');
     }

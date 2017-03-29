@@ -6,19 +6,19 @@ import {slugify} from 'underscore.string';
  * Format money
  */
 export function formatEuro(value, config = {}) {
-    return accounting.formatMoney(value, _.assign({symbol: '€', format: '%s %v', thousand: '.', decimal: ','}, config));
+    return accounting.formatMoney(value, Object.assign({symbol: '€', format: '%s %v', thousand: '.', decimal: ','}, config));
 }
 
 export function formatDollar(value, config = {}) {
-    return accounting.formatMoney(value, _.assign({symbol: '$', format: '%s %v', thousand: ',', decimal: '.'}, config));
+    return accounting.formatMoney(value, Object.assign({symbol: '$', format: '%s %v', thousand: ',', decimal: '.'}, config));
 }
 
 export function formatPound(value, config = {}) {
-    return accounting.formatMoney(value, _.assign({symbol: '£', format: '%s %v', thousand: ',', decimal: '.'}, config));
+    return accounting.formatMoney(value, Object.assign({symbol: '£', format: '%s %v', thousand: ',', decimal: '.'}, config));
 }
 
 export function formatKronor(value, config = {}) {
-    return accounting.formatMoney(value, _.assign({symbol: 'Kr', format: '%v %s', thousand: ' ', decimal: ','}, config));
+    return accounting.formatMoney(value, Object.assign({symbol: 'Kr', format: '%v %s', thousand: ' ', decimal: ','}, config));
 }
 
 export function formatMoney(value, currency, config = {}) {
@@ -28,7 +28,7 @@ export function formatMoney(value, currency, config = {}) {
         case 'GBP': return formatPound(value);
         case 'SEK': return formatKronor(value);
     }
-    return accounting.formatMoney(value, _.assign({symbol: currency, format: '%s %v'}, config));
+    return accounting.formatMoney(value, Object.assign({symbol: currency, format: '%s %v'}, config));
 }
 
 /**

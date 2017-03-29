@@ -1,9 +1,9 @@
 import $ from 'jquery';
-import _ from 'lodash';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Autocomplete from 'react-autocomplete';
 import classNames from 'classnames';
+import {getAttrs} from '../helpers';
 
 import 'bootstrap-datepicker';
 
@@ -27,7 +27,7 @@ export class AbstractFormControl extends React.Component {
     }
 
     getAttrs() {
-        let attrs = _.omit(this.props, ..._.keys(this.constructor.propTypes));
+        const attrs = getAttrs(this.props, this.constructor);
         attrs.onChange = this.onChange;
         attrs.onBlur = this.onBlur;
         return attrs;
@@ -43,7 +43,7 @@ export class AbstractFormControl extends React.Component {
 
     dispatchEvent(event, type, ...extraArgs) {
         // args
-        let args = _.concat([event, this], extraArgs);
+        const args = [event, this].concat(extraArgs);
         // dispatch react synthetic event
         this.$el.trigger(type, args);
     }
@@ -59,7 +59,7 @@ AbstractFormControl.propTypes = {
 export class ReactInput extends AbstractFormControl {
 
     render() {
-        let attrs = this.getAttrs();
+        const attrs = this.getAttrs();
         return (
             <input type={this.props.type || 'text'}
                    value={this.props.value}
@@ -84,7 +84,7 @@ ReactInput.defaultProps = {
 export class ReactTextarea extends AbstractFormControl {
 
     render() {
-        let attrs = this.getAttrs();
+        const attrs = this.getAttrs();
         return (
             <textarea value={this.props.value}
                       {...attrs} />
@@ -105,7 +105,7 @@ ReactTextarea.defaultProps = {
 export class ReactSelect extends AbstractFormControl {
 
     render() {
-        let attrs = this.getAttrs();
+        const attrs = this.getAttrs();
         return (
             <select value={this.props.value}
                     {...attrs} >
@@ -141,7 +141,7 @@ export class ReactDatepicker extends ReactInput {
     componentDidMount() {
         // Datepicker instance
         if (!this.datepicker) {
-            let $el = $(ReactDOM.findDOMNode(this));
+            const $el = $(ReactDOM.findDOMNode(this));
             this.datepicker = $el.datepicker({
                 format: 'yyyy-mm-dd',
                 weekStart: 1,
@@ -191,7 +191,7 @@ export class ReactToggle extends ReactInput {
     componentDidMount() {
         // bootstrapToggle instance
         if (!this.toggle) {
-            let $el = $(ReactDOM.findDOMNode(this));
+            const $el = $(ReactDOM.findDOMNode(this));
             this.toggle = $el.bootstrapToggle({
                 on: 'Yes',
                 off: 'No',
@@ -227,11 +227,11 @@ export class ReactAutocomplete extends AbstractFormControl {
     }
 
     render() {
-        let p = this.props;
+        const p = this.props;
         // use default values
-        let defaultProps = this.constructor.defaultProps;
-        let wrapperProps = _.assign({}, defaultProps.wrapperProps, p.wrapperProps);
-        let inputProps = _.assign({}, defaultProps.inputProps, p.inputProps);
+        const defaultProps = this.constructor.defaultProps;
+        const wrapperProps = Object.assign({}, defaultProps.wrapperProps, p.wrapperProps);
+        const inputProps = Object.assign({}, defaultProps.inputProps, p.inputProps);
         // wrapper className
         if (wrapperProps.className && p.className) {
             wrapperProps.className += ' ' + p.className;
@@ -302,7 +302,7 @@ ReactAutocomplete.defaultProps = {
         return item.name;
     },
     renderItem: function(item, isHighlighted) {
-        let classes = classNames({'active': isHighlighted});
+        const classes = classNames({'active': isHighlighted});
         return (
             <li className={classes}
                  key={item.id}

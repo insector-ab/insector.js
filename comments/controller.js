@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import $ from 'jquery';
 import ModuleController from 'insectorjs/module/controller';
 import {JSONService} from 'insectorjs/service';
@@ -35,7 +34,7 @@ export default class CommentsController extends ModuleController {
             } else { // validation success
                 // post
                 let url = '/comments/';
-                let data = _.assign({nodeId: this.model.nodeId}, this.model.commentForm.inputValues);
+                let data = Object.assign({nodeId: this.model.nodeId}, this.model.commentForm.inputValues);
                 let ajaxPromise;
                 // FIX: Always false?
                 if (!ajaxPromise) {
@@ -103,7 +102,7 @@ export default class CommentsController extends ModuleController {
  */
 export let validators = {
 
-    nodeIdSet: function(value, input, context, ... args) {
+    nodeIdSet: function(value, input, context, ...args) {
         return context.model.has('nodeId');
     }
 

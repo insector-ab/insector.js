@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import {modelRegistry} from 'mozy';
+import {SET_SILENT} from 'mozy/model';
 
 /**
  * Extend prototype
@@ -124,4 +126,34 @@ export function isSymbol(value) {
         return value.toString().substr(0, 7) === 'Symbol(';
     } catch (err) {}
     return false;
+}
+
+/**
+ * defaultNewModelInstance
+ * @param {Object} props React.Component props
+ * @param {mozy.Model} ModelCls Constructor to instantiate
+ * @param {String} instanceKey Key to set on parent model
+ * @param {Object} data Constructor param
+ * @return {mozy.Model} Model instance
+ */
+export function defaultNewModelInstance(props, ModelCls, instanceKey, data = {}) {
+    // Standalone/debug
+    if (!props.parentModel) {
+        return new ModelCls(data, props);
+    }
+    // keep until registry supports more arguments than data
+    let m;
+    let d = props.parentModel.get(instanceKey, data);
+    if (!modelRegistry.has(d.uuid)) {
+        m = new ModelCls(d, props);
+        m.instanceKey = instanceKey;
+        modelRegistry.registerModel(m);
+    } else {
+        m = modelRegistry.get(d.uuid);
+        m.props = props;
+    }
+    // store module instance data on parent Model
+    props.parentModel.set(instanceKey, m.getModelData(), SET_SILENT);
+
+    return m;
 }

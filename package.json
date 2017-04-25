@@ -1,0 +1,29 @@
+{
+  "name": "insector.js",
+  "version": "0.1.0",
+  "description": "Stuff for javascript projects.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/insector-ab/insectorjs.git"
+  },
+  "author": "Insector AB <mail@insector.se>",
+  "bugs": {
+    "url": "https://github.com/insector-ab/insectorjs/issues"
+  },
+  "homepage": "https://github.com/insector-ab/insectorjs#readme",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-config-standard-react": "^4.2.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-node": "^4.2.2",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-react": "^6.9.0",
+    "eslint-plugin-standard": "^3.0.1"
+  }
+}

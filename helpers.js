@@ -1,33 +1,24 @@
 import _ from 'lodash';
-import toastr from 'toastr';
 import accounting from 'accounting';
-import {slugify, underscored} from 'underscore.string';
-
-// configure toastr
-toastr.options.closeButton = true;
-toastr.options.newestOnTop = true;
-// toastr.options.timeOut = 0;
-// toastr.options.extendedTimeOut = 0;
-// toastr.options.preventDuplicates = true;
-
+import {slugify} from 'underscore.string';
 
 /**
  * Format money
  */
 export function formatEuro(value, config = {}) {
-    return accounting.formatMoney(value, _.assign({symbol: '€', format: '%s %v', thousand: '.', decimal: ','}, config));
+    return accounting.formatMoney(value, Object.assign({symbol: '€', format: '%s %v', thousand: '.', decimal: ','}, config));
 }
 
 export function formatDollar(value, config = {}) {
-    return accounting.formatMoney(value, _.assign({symbol: '$', format: '%s %v', thousand: ',', decimal: '.'}, config));
+    return accounting.formatMoney(value, Object.assign({symbol: '$', format: '%s %v', thousand: ',', decimal: '.'}, config));
 }
 
 export function formatPound(value, config = {}) {
-    return accounting.formatMoney(value, _.assign({symbol: '£', format: '%s %v', thousand: ',', decimal: '.'}, config));
+    return accounting.formatMoney(value, Object.assign({symbol: '£', format: '%s %v', thousand: ',', decimal: '.'}, config));
 }
 
 export function formatKronor(value, config = {}) {
-    return accounting.formatMoney(value, _.assign({symbol: 'Kr', format: '%v %s', thousand: ' ', decimal: ','}, config));
+    return accounting.formatMoney(value, Object.assign({symbol: 'Kr', format: '%v %s', thousand: ' ', decimal: ','}, config));
 }
 
 export function formatMoney(value, currency, config = {}) {
@@ -37,36 +28,14 @@ export function formatMoney(value, currency, config = {}) {
         case 'GBP': return formatPound(value);
         case 'SEK': return formatKronor(value);
     }
-    return accounting.formatMoney(value, _.assign({symbol: currency, format: '%s %v'}, config));
+    return accounting.formatMoney(value, Object.assign({symbol: currency, format: '%s %v'}, config));
 }
 
 /**
- * System messages
+ * Return attributes present in props but not in denifed propTypes.
  */
-export function systemMessage(msg, header = 'System message') {
-    toastr.info(msg, header);
-}
-
-export function systemErrorMessage(msg, header = 'System message') {
-    toastr.error(msg, header, {timeOut: 0, extendedTimeOut: 0});
-}
-
-export function systemErrorHandler(jqXHR, textStatus) {
-    console.log('systemErrorHandler', jqXHR, textStatus);
-    let resp = jqXHR.responseJSON;
-    if (resp && resp.message) {
-        // Message starts with title?
-        let title = resp.message.toLowerCase().indexOf(resp.title.toLowerCase()) === 0 ? null : resp.title;
-        systemErrorMessage(resp.message, title);
-    } else { // Fallbacks
-        if (jqXHR.status === 404) {
-            systemErrorMessage('Page not found.');
-        } else if (jqXHR.status === 502) {
-            systemErrorMessage('The server is offline (temporary).');
-        } else {
-            systemErrorMessage('An unknown error occurred.');
-        }
-    }
+export function getAttrs(props, cls) {
+    return _.omit(props, ...Object.keys(cls.propTypes));
 }
 
 /*

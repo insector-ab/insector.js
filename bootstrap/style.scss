@@ -1,0 +1,16 @@
+// Variables
+@import "bootstrap/variables";
+@import "bootstrap/mixins";
+@import "bootstrap/component-animations";
+
+// Components
+@import "bootstrap/media";
+@import "bootstrap/modals";
+@import "bootstrap/close";
+
+.modal-close {
+	font-size: 30px;
+    line-height: 20px;
+    position: absolute;
+    right: 15px;
+}

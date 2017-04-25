@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import {ArgumentError} from 'guins/error';
-import classNames from 'classnames';
+import {modelRegistry} from 'mozy';
+import {SET_SILENT} from 'mozy/model';
 
 /**
  * Extend prototype
@@ -45,127 +45,75 @@ EventPhase.CAPTURE = true;
 EventPhase.BUBBLE = false;
 
 /**
- * addSymbolsToClass
+ * Define Constant Class methods
  */
-export function addSymbolsToClass(Cls, keyValues) {
-    // existing maps?
-    if (!Cls._symbolMap_) {
-        Cls._symbolMap_ = {};
-        Cls._valueMap_ = {};
-    }
-    // Create symbols and map
-    for (var key in keyValues) {
-        if (keyValues.hasOwnProperty(key)) {
-            Cls[key] = Symbol(); // ConstantCls.CONSTANT = Symbol()
-            Cls._symbolMap_[Cls[key]] = keyValues[key]; // symbolMap[ Symbol() ] = 'value'
-            Cls._valueMap_[keyValues[key]] = Cls[key]; // valueMap[ 'value' ] = Symbol()
-        }
-    }
-    // From value method
-    Cls.fromValue = function(value, defaultValue) {
-        if (Cls._valueMap_.hasOwnProperty(value)) {
-            return Cls._valueMap_[value];
-        }
-        if (typeof defaultValue !== 'undefined') {
-            return defaultValue;
-        }
-        throw new ArgumentError(Cls.name + ' symbol for value "' + value + '" not found.');
+function defineConstantsClassMethods(Cls) {
+    // Check if Cls has constant
+    Cls.has = function(constantName) {
+        return typeof this.__lookupGetter__(constantName) !== 'undefined';
     };
-    // To value
-    Cls.toValue = function(sym) {
-        if (Cls.has(sym)) {
-            return Cls._symbolMap_[sym];
-        }
-        throw new ArgumentError('Symbol not found on "' + Cls.name + '".');
+    // Check if Cls has constant value
+    Cls.hasValue = function(constantValue) {
+        return this.allValues.indexOf(constantValue) > -1;
     };
-    // Check if Cls has symbol
-    Cls.has = function(sym) {
-        return Cls._symbolMap_.hasOwnProperty(sym);
-    };
-    // 'allKeys' getter. List of defined symbol keys on Cls.
+    // 'allKeys' getter. List of defined constant keys on Cls.
     Object.defineProperty(Cls, 'allKeys', {
         get: function() {
-            return _.filter(_.keys(Cls), function(k) { return k.match(/^[A-Z0-9_]+$/); });
+            if (!this.hasOwnProperty('_allKeys_')) {
+                this['_allKeys_'] = _.filter(_.keys(Cls), function(k) { return k.match(/^[A-Z0-9_]+$/); });
+            }
+            return this['_allKeys_'];
+        }
+    });
+    // 'allValues' getter. List of defined constant values on Cls.
+    Object.defineProperty(Cls, 'allValues', {
+        get: function() {
+            if (!this.hasOwnProperty('_allValues_')) {
+                this['_allValues_'] = _.map(this.allKeys, key => {
+                    return this[key];
+                });
+            }
+            return this['_allValues_'];
         }
     });
 }
 
 /**
- * importSymbolsToClass
+ * addConstantsToClass
+ */
+export function addConstantsToClass(Cls, keyValues) {
+    // Create constants
+    for (var key in keyValues) {
+        if (keyValues.hasOwnProperty(key)) {
+            Object.defineProperty(Cls, key, {
+                value: keyValues[key],
+                writable: false,
+                enumerable: true,
+                configurable: false
+            });
+        }
+    }
+    // If no class methods defined
+    if (!Cls.hasOwnProperty('has')) {
+        defineConstantsClassMethods(Cls);
+    }
+}
+
+/**
+ * importConstantsToClass
  * @param  {Class} Cls              [description]
  * @param  {Class} FromCls          [description]
  * @param  {List of strings} keys   [description]
  */
-export function importSymbolsToClass(Cls, FromCls, keys) {
-    // existing maps?
-    if (!Cls._symbolMap_) {
-        Cls._symbolMap_ = {};
-        Cls._valueMap_ = {};
-    }
-    for (let key, val, sym, i = 0, il = keys.length; i < il; i++) {
+export function importConstantsToClass(Cls, FromCls, keys) {
+    for (let key, i = 0, il = keys.length; i < il; i++) {
         key = keys[i];
-        sym = FromCls[key];
-        Cls[key] = sym; // Set ref to FromCls.CONSTANT (same Symbol)
-        Cls._symbolMap_[sym] = FromCls._symbolMap_[sym]; // Copy value from FromCls
-        val = Cls._symbolMap_[sym];
-        Cls._valueMap_[val] = sym;
+        Cls[key] = FromCls[key];
     }
-}
-
-/**
- * getHiddenClasses
- * @param  {String} size    ['xs','sm' or 'md']
- * @return {classNames}
- */
-export function getHiddenClasses(size) {
-    let classes = [];
-    if (size === 'xs' || size === 'sm' || size === 'md') {
-        classes.push('hidden-xs');
+    // If no class methods defined
+    if (!Cls.hasOwnProperty('has')) {
+        defineConstantsClassMethods(Cls);
     }
-    if (size === 'sm' || size === 'md') {
-        classes.push('hidden-sm');
-    }
-    if (size === 'md') {
-        classes.push('hidden-md');
-    }
-    return classNames(... classes);
-}
-
-/**
- * getVisibleClasses
- * @param  {String} size    ['sm','md' or 'lg']
- * @param  {String} display ['block','inline' or 'inline-block']
- * @return {classNames}
- */
-export function getVisibleClasses(size, display) {
-    let suffix = display ? ('-' + display) : '';
-    let classes = [];
-    if (size === 'lg' || size === 'md' || size === 'sm') {
-        classes.push('visible-lg' + suffix);
-    }
-    if (size === 'md' || size === 'sm') {
-        classes.push('visible-md' + suffix);
-    }
-    if (size === 'sm') {
-        classes.push('visible-sm' + suffix);
-    }
-    return classNames(... classes);
-}
-
-/**
- * getV
- * @param  {Object} sizeObj {xs: True, md: var === somVal} keys: xs,sm,md,lg
- * @param  {String} defaults String with four 1's or 0's, e.g. '1101'
- * @return {String} String with 'v' and four 1's or 0's, e.g. 'v1101'
- */
-export function getV(sizeObj, defaults = '1111') {
-    let defVals = defaults.split('');
-    return 'v' + ['xs', 'sm', 'md', 'lg'].map((size, idx) => {
-        if (!sizeObj.hasOwnProperty(size)) {
-            return defVals[idx];
-        }
-        return sizeObj[size] ? '1' : '0';
-    }).join(''); // eg. v1001 => xs & lg visible
 }
 
 /**
@@ -178,4 +126,34 @@ export function isSymbol(value) {
         return value.toString().substr(0, 7) === 'Symbol(';
     } catch (err) {}
     return false;
+}
+
+/**
+ * defaultNewModelInstance
+ * @param {Object} props React.Component props
+ * @param {mozy.Model} ModelCls Constructor to instantiate
+ * @param {String} instanceKey Key to set on parent model
+ * @param {Object} data Constructor param
+ * @return {mozy.Model} Model instance
+ */
+export function defaultNewModelInstance(props, ModelCls, instanceKey, data = {}) {
+    // Standalone/debug
+    if (!props.parentModel) {
+        return new ModelCls(data, props);
+    }
+    // keep until registry supports more arguments than data
+    let m;
+    let d = props.parentModel.get(instanceKey, data);
+    if (!modelRegistry.has(d.uuid)) {
+        m = new ModelCls(d, props);
+        m.instanceKey = instanceKey;
+        modelRegistry.registerModel(m);
+    } else {
+        m = modelRegistry.get(d.uuid);
+        m.props = props;
+    }
+    // store module instance data on parent Model
+    props.parentModel.set(instanceKey, m.getModelData(), SET_SILENT);
+
+    return m;
 }

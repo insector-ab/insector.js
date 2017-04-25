@@ -2,8 +2,6 @@ import _ from 'lodash';
 import React from 'react';
 import assert from 'assert';
 
-import {SetterFlag, modelRegistry} from 'guins/model';
-
 import ReactView from './view';
 
 /**
@@ -11,8 +9,8 @@ import ReactView from './view';
  */
 export default class ReactModule extends ReactView {
 
-    constructor(props, modelListenerProps) {
-        super(props, modelListenerProps);
+    constructor(props) {
+        super(props);
         // Model
         let model = this._newModelInstance(props);
         // Controller
@@ -20,20 +18,7 @@ export default class ReactModule extends ReactView {
     }
 
     get model() {
-        return this.controller.model;
-    }
-    set model(value) {
-        if (value !== this.controller.model) {
-            // console.log('ReactModule.model setting', value);
-            // Remove listeners from current model
-            this._removeEventListeners();
-            // Set new model
-            this.controller.model = value;
-            // Add listeners to new model
-            this._addEventListeners();
-            // notify
-            this.model.dispatchChange('model');
-        }
+        return this.controller && this.controller.model;
     }
 
     get controller() {
@@ -50,7 +35,6 @@ export default class ReactModule extends ReactView {
     }
 
     componentWillMount() {
-        super.componentWillMount();
         // controller event handler
         this.controller.componentWillMount();
     }
@@ -68,53 +52,25 @@ export default class ReactModule extends ReactView {
         // controller event handler
         this.controller.componentWillUnmount();
         // Unset view in controller
-        this.controller.component = null;
+        this.controller.component = undefined;
         // Super (calls _removeEventListeners)
         super.componentWillUnmount();
     }
 
     componentWillReceiveProps(nextProps) {
-        // setting new props on model
-        this.model.props = nextProps;
         // controller handles new props
         this.controller.componentWillReceiveProps(nextProps);
+        // setting new props on model
+        this.model.props = nextProps;
     }
 
-    componentDidUpdate() {
-        super.componentDidUpdate();
-        this.controller.componentDidUpdate();
+    componentDidUpdate(prevProps, prevState) {
+        super.componentDidUpdate(prevProps, prevState);
+        this.controller.componentDidUpdate(prevProps, prevState);
     }
 
     _newModelInstance(props) {
         // Abstract
-    }
-
-    _defaultNewModelInstance(props, ModelCls, instanceKey, data = {}) {
-        // Standalone/debug
-        if (!props.parentModel) {
-            return new ModelCls(data, props);
-        }
-        // Restore or create instance
-        // let m = modelRegistry.getInstance( props.parentModel.get(instanceKey, data), ModelCls );
-        // keep until registry supports more arguments than data
-        let m;
-        let d = props.parentModel.get(instanceKey, data);
-        if (!modelRegistry.isRegistered(d.uuid)) {
-            m = new ModelCls(d, props);
-            m.instanceKey = instanceKey;
-            modelRegistry.registerInstance(m);
-        } else {
-            m = modelRegistry.get(d.uuid);
-            m.props = props;
-        }
-        // If not same data instance, update.
-        if (m.data !== d) {
-            m.data = d;
-        }
-        // store module instance data on parent Model
-        props.parentModel.set(instanceKey, m.data, SetterFlag.SILENT);
-
-        return m;
     }
 
     _newControllerInstance(model, props) {

@@ -2,22 +2,16 @@ import $ from 'jquery';
 import _ from 'lodash';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {PropertyChangeEvent} from 'guins/event';
-import {ExtendableError} from 'guins/error';
 
 /**
  * ReactView
  */
 export default class ReactView extends React.Component {
 
-    constructor(props, modelListenerProps) {
+    constructor(props) {
         super(props);
         // Unique client id
         this.cid = this._getUniqueClientID();
-        // Model event properties handler cares about
-        this._modelListenerProps = this._getModelListenerProps(modelListenerProps);
-        // Bind
-        this.onModelChange = this.onModelChange.bind(this);
     }
 
     get model() {
@@ -30,78 +24,121 @@ export default class ReactView extends React.Component {
         return null;
     }
 
-    get el() {
+    get componentEl() {
         return ReactDOM.findDOMNode(this);
     }
 
-    get $el() {
-        return $(this.el);
+    events() {
+        return {};
     }
 
     $(selector) {
-        return this.$el.find(selector);
-    }
-
-    render() {
-        return (
-            <div />
-        );
+        return $(this.componentEl).find(selector);
     }
 
     dispose() {
         this._dispose();
+        this._removeEventListeners();
         this._deleteReferences();
     }
 
     componentWillReceiveProps(nextProps) {
         // console.log('componentWillReceiveProps', this.constructor.name, this.cid);
-        // Remove listeners from current model
-        this._removeEventListeners();
-        // Add to new model
-        this._addEventListeners(nextProps.model);
-    }
-
-    componentWillMount() {
-        console.log(this.constructor.name, 'componentWillMount()');
+        if (nextProps.model && nextProps.model !== this.model) {
+            // Remove listeners from current model
+            this._removeEventListeners();
+            // Add to new model
+            this._addEventListeners(nextProps.model);
+        }
     }
 
     componentDidMount() {
-        console.log(this.constructor.name, 'componentDidMount()');
+        // console.log(this.constructor.name, 'componentDidMount()');
         this._addEventListeners();
     }
 
     componentWillUnmount() {
-        this._removeEventListeners();
+        // console.log(this.constructor.name, 'componentWillUnmount()');
+        this.dispose();
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
         // console.log(this.constructor.name, 'componentDidUpdate()', this.model.cid);
     }
 
-    onModelChange(event) {
-        // console.log('onModelChange', event.property, this.constructor.name, this.cid);
-        if (this._modelListenerProps) {
-            // If boolean true, react to all events
-            if (this._modelListenerProps === true) {
-                this.setState({});
-            } else if (this._modelListenerProps.indexOf(event.property) !== -1 || event.property === undefined) { // If list of properties, check list. If undefined prop, update.
-                this.setState({});
+    _delegateEvents(target) {
+        target = target || this.model;
+        const events = this._getResolvedEvents();
+        // Events found, delegate
+        if (events) {
+            // Events, but no target found, throw error.
+            if (!target) {
+                throw new Error('Could not delegate controller events. No target model.');
             }
+            // Undelegate
+            this._undelegateEvents();
+            // Delegate
+            Object.keys(events).forEach(key => {
+                target.addListener(key, events[key]);
+            });
+            // Save target
+            this._delegatedTarget = target;
         }
+        // Return
+        return this;
+    }
+
+    _undelegateEvents(target) {
+        target = target || this._delegatedTarget || this.model;
+        // Undelegate
+        if (this._resolvedEvents) {
+            Object.keys(this._resolvedEvents).forEach(key => {
+                target.removeListener(key, this._resolvedEvents[key]);
+            });
+        }
+        // Return
+        return this;
+    }
+
+    _getResolvedEvents() {
+        if (!this._resolvedEvents) {
+            const events = _.result(this, 'events');
+            if (!events) {
+                return;
+            }
+            this._resolvedEvents = {};
+            Object.keys(events).forEach(key => {
+                this._resolvedEvents[key] = this._getEventHandler(key, events);
+            });
+        }
+        return this._resolvedEvents;
+    }
+
+    _getEventHandler(key, events) {
+        events = events || _.result(this, 'events');
+        let handler = events[key];
+        if (!_.isFunction(handler)) {
+            handler = this[ events[key] ];
+        }
+        if (!handler) {
+            throw new Error('Could not find handler for event "' + key + '".');
+        }
+        return handler.bind(this);
+    }
+
+    // FIX: split up _addEventListeners into addModelEventListeners & addViewEventListeners
+    // run _addModelEventListeners in componentWillMount
+    // run _addViewEventListeners in componentDidMount
+    _addEventListeners(model) {
+        this._delegateEvents(model);
+    }
+
+    _removeEventListeners() {
+        this._undelegateEvents();
     }
 
     _getUniqueClientID() {
         return _.uniqueId('view');
-    }
-
-    _getModelListenerProps(value) {
-        if (value === true) {
-            return true;
-        }
-        if (_.isEmpty(value)) {
-            return false;
-        }
-        return value;
     }
 
     _dispose() {
@@ -109,42 +146,17 @@ export default class ReactView extends React.Component {
     }
 
     _deleteReferences() {
+        delete this.cid;
         delete this._model;
-        delete this.onModelChange;
-    }
-
-    // FIX: split up _addEventListeners into addModelEventListeners & addViewEventListeners
-    // run _addModelEventListeners in componentWillMount
-    // run _addViewEventListeners in componentDidMount
-    _addEventListeners(model) {
-        model = model || this.model;
-        if (this._modelListenerProps) {
-            if (!model) {
-                throw new ReactViewError('modelListenerProps was specified but model is missing.', {
-                    view: this.constructor.name,
-                    modelListenerProps: this._modelListenerProps,
-                    model: model
-                });
-            }
-            model.addListener(PropertyChangeEvent.PROPERTY_CHANGE, this.onModelChange);
-        }
-    }
-
-    _removeEventListeners() {
-        if (this._modelListenerProps) {
-            this.model.removeListener(PropertyChangeEvent.PROPERTY_CHANGE, this.onModelChange);
-        }
+        delete this._delegatedTarget;
+        // Resolved event handlers
+        Object.keys(this._resolvedEvents || {}).forEach(key => {
+            delete this._resolvedEvents[key];
+        });
+        delete this._resolvedEvents;
     }
 
 }
 ReactView.propTypes = {
     model: React.PropTypes.object
 };
-
-class ReactViewError extends ExtendableError {
-
-    constructor(message, data) {
-        super([message, JSON.stringify(data)].join('\n'));
-    }
-
-}

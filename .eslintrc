@@ -1,13 +1,14 @@
 {
-    'parser': 'babel-eslint',
-    'extends': ['standard', 'standard-react'],
-    'rules': {
-        'indent': [2, 4, { 'SwitchCase': 1 }],
-        'space-before-function-paren': [2, 'never'],
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module"
+    },
+    "plugins": [],
+    "extends": "standard",
+    "rules": {
+        "indent": [2, 4, {"SwitchCase": 1}],
         "semi": [2, "always"],
-        "jsx-quotes": ["error", "prefer-double"],
-        "react/jsx-indent": [2, 4],
-        "react/jsx-indent-props": [0, 4],
-        "react/jsx-boolean-value": 0
+        "space-before-function-paren": [2, "never"],
+        "padded-blocks": [2, "never"]
     }
 }

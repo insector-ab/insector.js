@@ -252,4 +252,3 @@ Graph.addNodes = function(graph, nodes) {
 Graph.addEdges = function(graph, edges) {
     graph.addEdges(edges);
 };
-

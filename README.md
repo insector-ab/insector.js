@@ -1,2 +1,2 @@
 # insector.js
-Bag of stuff for js-projects.
+Stuff for javascript projects.

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import _ from 'lodash';
+import isFunction from 'lodash.isfunction';
 import ReactController from 'insectorjs/react/controller';
 
 /**
@@ -23,7 +23,7 @@ export default class ModuleController extends ReactController {
             if (!this._initializePromise) {
                 let $promise = this.initialize();
 
-                if (!$promise || !_.isFunction($promise.done)) {
+                if (!$promise || !isFunction($promise.done)) {
                     throw new Error('ModuleController.initialize() should always return a promise');
                 }
                 this._initializePromise = $promise;

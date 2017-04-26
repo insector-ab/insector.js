@@ -1,5 +1,6 @@
 import $ from 'jquery';
-import _ from 'lodash';
+import defaults from 'lodash.defaults';
+import uniqueId from 'lodash.uniqueid';
 import path from 'path';
 
 /**
@@ -9,7 +10,7 @@ export class XHRService {
 
     constructor(baseUrl = '/', defaultAjaxParams) {
         // public
-        this.cid = _.uniqueId('service');
+        this.cid = uniqueId('service');
         this._baseUrl = baseUrl;
         this._defaultAjaxParams = defaultAjaxParams || {};
         this._jqXHRs = {};
@@ -64,8 +65,8 @@ export class XHRService {
         return path.join(this.baseUrl, relativeUrl);
     }
 
-    _getAjaxParams(... ajaxParamObjs) {
-        return _.defaults(... ajaxParamObjs, this.defaultAjaxParams);
+    _getAjaxParams(...ajaxParamObjs) {
+        return defaults(...ajaxParamObjs, this.defaultAjaxParams);
     }
 
     _deleteReferences() {
@@ -102,7 +103,7 @@ XHRService.at = XHRService.get;
 export class JSONService extends XHRService {
 
     constructor(baseUrl = '/', defaultAjaxParams) {
-        super(baseUrl, _.defaults(defaultAjaxParams, {
+        super(baseUrl, defaults(defaultAjaxParams, {
             dataType: 'json',
             contentType: 'application/json; charset=UTF-8',
             processData: false
@@ -134,12 +135,12 @@ export class JSONService extends XHRService {
             method,
             params,
             jsonrpc: this.version,
-            id: _.uniqueId('rpc')
+            id: uniqueId('rpc')
         };
     }
 
-    _getAjaxParams(... ajaxParamObjs) {
-        let params = super._getAjaxParams(... ajaxParamObjs);
+    _getAjaxParams(...ajaxParamObjs) {
+        let params = super._getAjaxParams(...ajaxParamObjs);
         // if POST or PUT, stringify json data
         if (params.hasOwnProperty('data') && ['POST', 'PUT'].indexOf(params.method) !== -1) {
             params.data = JSON.stringify(params.data);

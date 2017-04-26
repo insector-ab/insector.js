@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import find from 'lodash.find';
+import lodashSortBy from 'lodash.sortby';
 import {Model, modelIdentities} from 'mozy';
 
 /**
@@ -118,7 +119,7 @@ export class Graph extends Model {
             this.relationMap[parentKey] = {'childEdges': [], 'parentEdges': []};
         }
         // unique
-        if (!_.find(this.relationMap[parentKey].childEdges, target)) {
+        if (!find(this.relationMap[parentKey].childEdges, target)) {
             this.relationMap[parentKey].childEdges.push(edge);
         }
 
@@ -128,7 +129,7 @@ export class Graph extends Model {
             this.relationMap[childKey] = {'childEdges': [], 'parentEdges': []};
         }
         // unique
-        if (!_.find(this.relationMap[childKey].parentEdges, target)) {
+        if (!find(this.relationMap[childKey].parentEdges, target)) {
             this.relationMap[childKey].parentEdges.push(edge);
         }
     }
@@ -200,7 +201,7 @@ export class Graph extends Model {
         }
         // sort
         if (sortBy) {
-            return _.sortBy(result, sortBy);
+            return lodashSortBy(result, sortBy);
         }
         return result;
     }

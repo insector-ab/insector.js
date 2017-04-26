@@ -1,9 +1,9 @@
-import _ from 'lodash';
 import React from 'react';
 import classNames from 'classnames';
 import {Model} from 'mozy';
-import ReactModule from 'insectorjs/react/module';
-import {NodeModel} from 'insectorjs/node/model';
+import ReactModule from '../react/module';
+import {NodeModel} from '../node/model';
+import {getAttrs} from '../helpers';
 import {CommentsModel} from './model';
 import CommentsController from './controller';
 import {CommentList, NewCommentForm} from './components';
@@ -18,7 +18,7 @@ export default class CommentsModule extends ReactModule {
     }
 
     render() {
-        let attrs = _.omit(this.props, ... _.keys(CommentsModule.propTypes));
+        let attrs = getAttrs(this.props, CommentsModule);
         attrs.className = classNames(
             'comments',
             attrs.className || '',

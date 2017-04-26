@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import page from 'page';
-import {EventPhase} from 'insectorjs/utils';
-import ModuleController from 'insectorjs/module/controller';
+import {EventPhase} from '../utils';
+import ModuleController from '../module/controller';
 import AppEvent from './event';
 
 /**

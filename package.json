@@ -1,6 +1,6 @@
 {
   "name": "insector.js",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Stuff for javascript projects.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -18,7 +18,7 @@
   "devDependencies": {
     "eslint": "^3.19.0",
     "eslint-config-standard": "^10.2.1",
-    "eslint-config-standard-react": "^4.2.0",
+    "eslint-config-standard-react": "^5.0.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-node": "^4.2.2",
     "eslint-plugin-promise": "^3.5.0",

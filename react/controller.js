@@ -1,5 +1,8 @@
 import $ from 'jquery';
-import _ from 'lodash';
+import isFunction from 'lodash.isfunction';
+import isObject from 'lodash.isobject';
+import uniqueId from 'lodash.uniqueid';
+import result from 'lodash.result';
 import ReactDOM from 'react-dom';
 
 /**
@@ -9,7 +12,7 @@ export default class ReactController {
 
     constructor(model, component) {
         // public
-        this.cid = _.uniqueId('controller');
+        this.cid = uniqueId('controller');
         // private
         this._model = model;
         this._component = component;
@@ -134,7 +137,7 @@ export default class ReactController {
 
     delegateEvents(targetEl) {
         targetEl = targetEl || this.componentEl;
-        let events = _.result(this, 'events');
+        let events = result(this, 'events');
         let key;
         // Events, but no target found, throw error.
         if (events && !targetEl) {
@@ -149,12 +152,12 @@ export default class ReactController {
             for (key in events) {
                 if (!events.hasOwnProperty(key)) { continue; }
                 method = events[key];
-                if (!_.isFunction(method)) { method = this[ events[key] ]; }
+                if (!isFunction(method)) { method = this[ events[key] ]; }
                 if (!method) { continue; }
                 match = key.match(/^(\S+)\s*(.*)$/);
                 eventName = match[1];
                 selector = match[2];
-                method = _.bind(method, this);
+                method = method.bind(this);
                 eventName += '.delegateEvents' + this.cid;
                 if (selector === '') {
                     $(targetEl).on(eventName, method);
@@ -202,7 +205,7 @@ export default class ReactController {
         this._removeViewEventListeners();
         // Check subcontrollers on this, recursively
         for (let attr in this) {
-            if (_.isObject(this[attr]) && this[attr].hasOwnProperty('dispose')) {
+            if (isObject(this[attr]) && this[attr].hasOwnProperty('dispose')) {
                 this[attr].dispose();
             }
         }

@@ -1,5 +1,10 @@
 import $ from 'jquery';
-import _ from 'lodash';
+import isPlainObject from 'lodash.isplainobject';
+import isFunction from 'lodash.isfunction';
+import isUndefined from 'lodash.isundefined';
+import result from 'lodash.result';
+import fromPairs from 'lodash.frompairs';
+import findIndex from 'lodash.findindex';
 import {Model, modelIdentities, modelRegistry} from 'mozy';
 
 /**
@@ -17,7 +22,7 @@ export class AbstractFormModel extends Model {
      */
     _validate(value, validations, model, context, customValidators) {
         // to array
-        if (validations && !_.isArray(validations)) {
+        if (validations && !Array.isArray(validations)) {
             validations = [validations];
         }
         // resolve when validation complete
@@ -29,7 +34,7 @@ export class AbstractFormModel extends Model {
             let validationKey, validationMethod, validationArgs;
             // chained validation, keeps validating until no more keys are found
             let validateNext = () => {
-                if (_.isPlainObject(validations[i])) { // plain object
+                if (isPlainObject(validations[i])) { // plain object
                     // expects object {key: 'validation key', args: [1, 2, 3]}
                     validationKey = validations[i].key;
                     validationArgs = validations[i].args || [];
@@ -79,7 +84,7 @@ export class AbstractFormModel extends Model {
     _doValidate(value, validationMethod, model, context, ...validationArgs) {
         let $deferred = $.Deferred();
         // no validation, resolve
-        if (!_.isFunction(validationMethod)) {
+        if (!isFunction(validationMethod)) {
             $deferred.resolve(true, model);
             return $deferred;
         }
@@ -151,7 +156,7 @@ export class FormModel extends AbstractFormModel {
     }
 
     get inputValues() {
-        return _.fromPairs(this.inputs.map((input) => [input.name, input.value]));
+        return fromPairs(this.inputs.map((input) => [input.name, input.value]));
     }
 
     get isValid() {
@@ -171,11 +176,11 @@ export class FormModel extends AbstractFormModel {
     }
 
     hasInput(name) {
-        return !!_.findIndex(this.inputs.items, {name: name});
+        return !!findIndex(this.inputs.items, {name: name});
     }
 
     getInput(name) {
-        let inputIndex = _.findIndex(this.inputs.items, {name: name});
+        let inputIndex = findIndex(this.inputs.items, {name: name});
         if (inputIndex === -1) {
             throw new Error('FormInputModel not found for: ' + name);
         }
@@ -214,7 +219,7 @@ export class FormModel extends AbstractFormModel {
 
     getInputsValidationString() {
         return this.inputs.map((item) => {
-            let valstr = item.name + (_.isUndefined(item.validatedValue) ? '' : ':' + item.validatedValue);
+            let valstr = item.name + (isUndefined(item.validatedValue) ? '' : ':' + item.validatedValue);
             return valstr;
         }).join(',');
     }
@@ -285,7 +290,7 @@ export class FormInputModel extends AbstractFormModel {
     }
 
     get value() {
-        return this.get('value', _.result(this, 'defaultValue'));
+        return this.get('value', result(this, 'defaultValue'));
     }
     set value(value) {
         this.unset('isValidated');
@@ -330,7 +335,7 @@ FormInputModel.identity = 'form.FormInputModel';
 modelIdentities.set(FormModel.identity, FormModel);
 modelIdentities.set(FormInputModel.identity, FormInputModel);
 
-export let defaultValidators = {
+export const defaultValidators = {
 
     required: function(value, input, context, ...args) {
         if (!value) {
@@ -349,7 +354,7 @@ export let defaultValidators = {
     },
 
     minChars: function(value, input, context, ...args) {
-        let limit = args[0];
+        const limit = args[0];
         if (value && value.length < limit) {
             input.errorCode = 'minChars';
             return false;

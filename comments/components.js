@@ -1,12 +1,13 @@
 import $ from 'jquery';
-import _ from 'lodash';
+import find from 'lodash.find';
 import classNames from 'classnames';
 import moment from 'moment';
 import autosize from 'jquery-autosize';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {ReactTextarea} from 'insectorjs/form/controls';
-import {FormModel} from 'insectorjs/form/model';
+import {ReactTextarea} from '../form/controls';
+import {FormModel} from '../form/model';
+import {getAttrs} from '../helpers';
 
 /**
  * CommentList
@@ -17,14 +18,14 @@ class CommentList extends React.Component {
         let comments = this.props.comments;
         if (this.props.limit && this.props.limit > 0) {
             let i = comments.length - this.props.limit;
-            comments = _.slice(comments, i >= 0 ? i : 0, comments.length);
+            comments = comments.slice((i < 0 ? 0 : i), comments.length);
         }
         let users = this.props.users;
         return (
             <div className="list-group m-b-0 comment-list">
                 {comments.map((item, i) => {
                     // FIX: Create usersMap (in WebtoolsModel?)
-                    let user = _.find(users, {id: item.created_by_id});
+                    let user = find(users, {id: item.created_by_id});
                     return (
                         <Comment key={item.id}
                                  id={item.id}
@@ -104,7 +105,7 @@ Comment.propTypes = {
 class NewCommentForm extends React.Component {
 
     render() {
-        const attrs = _.omit(this.props, 'children', 'formModel', 'placeholder');
+        const attrs = getAttrs(this.props, NewCommentForm);
         attrs.className = classNames('container-fluid', attrs.className);
         const comment = this.props.formModel.getInput('comment');
         return (

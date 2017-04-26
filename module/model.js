@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import clone from 'lodash.clone';
 import Model, {UNSET_IF_FALSE} from 'mozy/model';
 
 /**
@@ -10,7 +10,7 @@ export default class ModuleModel extends Model {
     constructor(data, props) {
         super(data, props);
         // ref to module props
-        this._props = _.clone(props);
+        this._props = clone(props);
     }
 
     get props() {

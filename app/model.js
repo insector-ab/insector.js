@@ -1,6 +1,6 @@
-import ModuleModel from 'insectorjs/module/model';
-import {mixin} from 'insectorjs/utils';
-import {ActiveView} from 'insectorjs/mixins';
+import ModuleModel from '../module/model';
+import {mixin} from '../utils';
+import {ActiveView} from '../mixins';
 
 /**
  * AppModel

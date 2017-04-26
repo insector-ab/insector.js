@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import ModuleController from 'insectorjs/module/controller';
-import {JSONService} from 'insectorjs/service';
+import ModuleController from '../module/controller';
+import {JSONService} from '../service';
 import {CommentEvent} from './event';
 
 /**

@@ -1,5 +1,4 @@
-import _ from 'lodash';
-import React from 'react';
+import uniqueId from 'lodash.uniqueid';
 import assert from 'assert';
 
 import ReactView from './view';
@@ -78,7 +77,7 @@ export default class ReactModule extends ReactView {
     }
 
     _getUniqueClientID() {
-        return _.uniqueId('module');
+        return uniqueId('module');
     }
 
     _dispose() {

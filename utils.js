@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import filter from 'lodash.filter';
 import {modelRegistry} from 'mozy';
 import {SET_SILENT} from 'mozy/model';
 
@@ -60,7 +60,7 @@ function defineConstantsClassMethods(Cls) {
     Object.defineProperty(Cls, 'allKeys', {
         get: function() {
             if (!this.hasOwnProperty('_allKeys_')) {
-                this['_allKeys_'] = _.filter(_.keys(Cls), function(k) { return k.match(/^[A-Z0-9_]+$/); });
+                this['_allKeys_'] = filter(Object.keys(Cls), function(k) { return k.match(/^[A-Z0-9_]+$/); });
             }
             return this['_allKeys_'];
         }
@@ -69,7 +69,7 @@ function defineConstantsClassMethods(Cls) {
     Object.defineProperty(Cls, 'allValues', {
         get: function() {
             if (!this.hasOwnProperty('_allValues_')) {
-                this['_allValues_'] = _.map(this.allKeys, key => {
+                this['_allValues_'] = this.allKeys.map(key => {
                     return this[key];
                 });
             }

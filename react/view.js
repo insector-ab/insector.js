@@ -1,5 +1,8 @@
 import $ from 'jquery';
-import _ from 'lodash';
+import isObject from 'lodash.isobject';
+import isFunction from 'lodash.isfunction';
+import uniqueId from 'lodash.uniqueid';
+import result from 'lodash.result';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -15,7 +18,7 @@ export default class ReactView extends React.Component {
     }
 
     get model() {
-        if (_.isObject(this.props) && this.props.hasOwnProperty('model')) {
+        if (isObject(this.props) && this.props.hasOwnProperty('model')) {
             return this.props.model;
         }
         if (this.hasOwnProperty('_model')) {
@@ -102,7 +105,7 @@ export default class ReactView extends React.Component {
 
     _getResolvedEvents() {
         if (!this._resolvedEvents) {
-            const events = _.result(this, 'events');
+            const events = result(this, 'events');
             if (!events) {
                 return;
             }
@@ -115,9 +118,9 @@ export default class ReactView extends React.Component {
     }
 
     _getEventHandler(key, events) {
-        events = events || _.result(this, 'events');
+        events = events || result(this, 'events');
         let handler = events[key];
-        if (!_.isFunction(handler)) {
+        if (!isFunction(handler)) {
             handler = this[ events[key] ];
         }
         if (!handler) {
@@ -138,7 +141,7 @@ export default class ReactView extends React.Component {
     }
 
     _getUniqueClientID() {
-        return _.uniqueId('view');
+        return uniqueId('view');
     }
 
     _dispose() {

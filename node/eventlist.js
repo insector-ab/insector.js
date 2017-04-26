@@ -1,10 +1,10 @@
-import _ from 'lodash';
 import React from 'react';
 import {truncate} from 'underscore.string';
 import classNames from 'classnames';
 
-import {NodeModel} from 'insectorjs/node/model';
-import {Mappable} from 'insectorjs/proptypes';
+import {NodeModel} from '../node/model';
+import {Mappable} from '../proptypes';
+import {getAttrs} from '../helpers';
 
 /**
  * EventList
@@ -12,7 +12,7 @@ import {Mappable} from 'insectorjs/proptypes';
 export class EventList extends React.Component {
 
     render() {
-        let attrs = _.omit(this.props, 'events');
+        let attrs = getAttrs(this.props, EventList);
         attrs.className = classNames('event-list', attrs.className || '');
         return (
             <div {... attrs}>
@@ -222,7 +222,7 @@ EventListItemBottom.propTypes = {
 export class EventListItemTime extends React.Component {
 
     render() {
-        let attrs = _.omit(this.props, 'createdAt');
+        let attrs = getAttrs(this.props, EventListItemTime);
         attrs.className = classNames('event-list-item-time', attrs.className || '');
         return (
             <span {... attrs}>

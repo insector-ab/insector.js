@@ -7,13 +7,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/insector-ab/insectorjs.git"
+    "url": "git+https://github.com/insector-ab/insector.js.git"
   },
   "author": "Insector AB <mail@insector.se>",
   "bugs": {
-    "url": "https://github.com/insector-ab/insectorjs/issues"
+    "url": "https://github.com/insector-ab/insector.js/issues"
   },
-  "homepage": "https://github.com/insector-ab/insectorjs#readme",
+  "homepage": "https://github.com/insector-ab/insector.js#readme",
   "license": "MIT",
   "devDependencies": {
     "eslint": "^3.19.0",

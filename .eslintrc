@@ -13,6 +13,7 @@
         "space-before-function-paren": "off",
         "padded-blocks": "off",
         "import/no-webpack-loader-syntax": "off",
-        "react/jsx-uses-vars": "error"
+        "react/jsx-uses-vars": 1,
+        "react/jsx-uses-react": 1
     }
 }

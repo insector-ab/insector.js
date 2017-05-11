@@ -4,7 +4,8 @@
 		{
 			"path": ".",
 			"folder_exclude_patterns": [
-				"insector.js/node_modules"
+				"*/node_modules",
+				"insector.js/packages/*/lib"
 			]
 		}
 	]

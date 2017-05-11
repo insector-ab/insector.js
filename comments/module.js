@@ -87,9 +87,9 @@ export default class CommentsModule extends ReactModule {
 
 }
 CommentsModule.propTypes = {
-    parentModel: React.PropTypes.instanceOf(Model),
-    nodeId: React.PropTypes.number,
-    currentUser: React.PropTypes.instanceOf(NodeModel),
-    users: React.PropTypes.array,
-    placeholder: React.PropTypes.string
+    parentModel: PropTypes.instanceOf(Model),
+    nodeId: PropTypes.number,
+    currentUser: PropTypes.instanceOf(NodeModel),
+    users: PropTypes.array,
+    placeholder: PropTypes.string
 };

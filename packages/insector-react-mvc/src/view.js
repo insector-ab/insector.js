@@ -14,7 +14,7 @@ export default class ReactView extends React.Component {
     constructor(props) {
         super(props);
         // Unique client id
-        this.cid = this._getUniqueClientID();
+        this.cid = uniqueId('view');
     }
 
     get model() {
@@ -36,8 +36,8 @@ export default class ReactView extends React.Component {
     }
 
     dispose() {
+        this.removeEventListeners();
         this._dispose();
-        this._removeEventListeners();
         this._deleteReferences();
     }
 
@@ -45,22 +45,31 @@ export default class ReactView extends React.Component {
         // console.log('componentWillReceiveProps', this.constructor.name, this.cid);
         if (nextProps.model && nextProps.model !== this.model) {
             // Remove listeners from current model
-            this._removeEventListeners();
+            this.removeEventListeners();
             // Add to new model
-            this._addEventListeners(nextProps.model);
+            this.addEventListeners(nextProps.model);
         }
     }
 
     componentDidMount() {
         // Add listeners
-        this._addEventListeners();
+        this.addEventListeners();
     }
 
     componentWillUnmount() {
         // Dispose
         this.dispose();
-        // Super
-        super.componentWillUnmount();
+    }
+
+    // FIX: split up _addEventListeners into addModelEventListeners & addViewEventListeners
+    // run _addModelEventListeners in componentWillMount
+    // run _addViewEventListeners in componentDidMount
+    addEventListeners(model) {
+        this._delegateEvents(model);
+    }
+
+    removeEventListeners() {
+        this._undelegateEvents();
     }
 
     _delegateEvents(target) {
@@ -121,21 +130,6 @@ export default class ReactView extends React.Component {
             throw new Error('Could not find handler for event "' + key + '".');
         }
         return handler.bind(this);
-    }
-
-    // FIX: split up _addEventListeners into addModelEventListeners & addViewEventListeners
-    // run _addModelEventListeners in componentWillMount
-    // run _addViewEventListeners in componentDidMount
-    _addEventListeners(model) {
-        this._delegateEvents(model);
-    }
-
-    _removeEventListeners() {
-        this._undelegateEvents();
-    }
-
-    _getUniqueClientID() {
-        return uniqueId('view');
     }
 
     _dispose() {

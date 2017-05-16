@@ -1,9 +1,6 @@
 import React from 'react';
+import isFunction from 'lodash.isfunction';
 import uniqueId from 'lodash.uniqueid';
-
-// Privates
-let _model,
-    _controller;
 
 /**
  * ModuleView
@@ -12,14 +9,21 @@ export default class ModuleView extends React.Component {
 
     constructor(props) {
         super(props);
+        // Unique client id
+        this.cid = uniqueId('moduleview');
         // Model
-        _model = this._newModelInstance(props);
+        this._model = this._newModelInstance(props);
         // Controller
-        _controller = this._newControllerInstance(_model, props);
+        this._controller = this._newControllerInstance(this._model, props);
+        // Initialize promise
+        this._initializePromise = undefined;
+        // Binds
+        this.onInitializeDone = this.onInitializeDone.bind(this);
+        this.onInitializeFail = this.onInitializeFail.bind(this);
     }
 
     get model() {
-        return _model;
+        return this._model;
     }
 
     get view() {
@@ -30,7 +34,7 @@ export default class ModuleView extends React.Component {
     }
 
     get controller() {
-        return _controller;
+        return this._controller;
     }
 
     render() {
@@ -38,31 +42,65 @@ export default class ModuleView extends React.Component {
     }
 
     componentWillMount() {
-        // controller event handler
-        this.controller.componentWillMount();
+        // Initialize
+        if (!this.model.initialized) {
+            if (!this._initializePromise) {
+                let $promise = this.controller.initialize();
+
+                if (!$promise || !isFunction($promise.done)) {
+                    throw new Error('ModuleController.initialize() should always return a promise');
+                }
+                this._initializePromise = $promise;
+                this._initializePromise.fail(this.onInitializeFail);
+            }
+        }
     }
 
     componentDidMount() {
         // Set view in controller
-        this.controller.targetComponent = this.view;
-        // controller event handler
-        this.controller.componentDidMount();
+        this.controller.view = this.refs.view;
+        // initializing, launches when done
+        if (this._initializePromise) {
+            this._initializePromise.done(this.onInitializeDone);
+        // Initialized, launch directly
+        } else if (this.model.initialized) {
+            this.controller.launch();
+        // Error
+        } else {
+            throw new Error('ModuleView.componentDidMount() No this._initializePromise found and model not initialized, module will not launch.');
+        }
+        // Add event listeners
+        this.addEventListeners();
     }
 
     componentWillUnmount() {
-        // controller event handler
-        this.controller.componentWillUnmount();
-        // Unset view in controller
-        this.controller.targetComponent = undefined;
+        // Remove event listeners
+        this.removeEventListeners();
     }
 
-    componentWillReceiveProps(nextProps) {
-        // controller handles new props
-        this.controller.componentWillReceiveProps(nextProps);
+    onInitializeDone(data, textStatus, jqXHR) {
+        this._initializePromise = undefined;
+        // Update model
+        if (this.model) {
+            this.model.initialized = true;
+        }
+        // Launch
+        this.controller.launch();
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        // Abstract
+    onInitializeFail(promise, textStatus, statusTitle) {
+        // ABSTRACT
+    }
+
+    addEventListeners() {
+        console.log('addEventListeners', this.view);
+        // Delegate events to Module DOM element
+        this.controller.delegateEvents(this.view.element);
+    }
+
+    removeEventListeners() {
+        // Undelegate events from Module DOM element
+        this.controller.undelegateEvents();
     }
 
     _newModelInstance(props) {
@@ -71,10 +109,6 @@ export default class ModuleView extends React.Component {
 
     _newControllerInstance(model, props) {
         // Abstract
-    }
-
-    _getUniqueClientID() {
-        return uniqueId('module');
     }
 
     _dispose() {
@@ -94,18 +128,10 @@ export default class ModuleView extends React.Component {
         super._deleteReferences();
         // delete refs
         delete this._controller;
-    }
-
-    _addEventListeners(model) {
-        super._addEventListeners(model);
-        // Delegate events to Module DOM element
-        this.controller.delegateEvents(this.element);
-    }
-
-    _removeEventListeners() {
-        super._removeEventListeners();
-        // Undelegate events from Module DOM element
-        this.controller.undelegateEvents();
+        delete this._initializePromise;
+        // Binds
+        delete this.onInitializeDone;
+        delete this.onInitializeFail;
     }
 
 }

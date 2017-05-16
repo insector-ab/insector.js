@@ -9,12 +9,12 @@ import result from 'lodash.result';
  */
 export default class ReactController {
 
-    constructor(model, targetComponent) {
+    constructor(model, view) {
         // public
         this.cid = uniqueId('controller');
         // private
         this._model = model;
-        this._targetComponent = targetComponent;
+        this._view = view;
         this._delegatedEl = undefined;
     }
 
@@ -36,16 +36,15 @@ export default class ReactController {
         }
     }
 
-    get targetComponent() {
-        return this._targetComponent;
+    get view() {
+        return this._view;
     }
-    set targetComponent(value) {
-        this._targetComponent = value;
+    set view(value) {
+        this._view = value;
     }
 
     get element() {
-        console.log('ReactController.element', this.targetComponent.constructor);
-        return ReactDOM.findDOMNode(this.targetComponent);
+        return ReactDOM.findDOMNode(this.view);
     }
 
     dispatchDOMEvent(event, target) {
@@ -99,8 +98,8 @@ export default class ReactController {
     }
 
     dispose() {
-        this._removeModelEventListeners();
-        this._removeViewEventListeners();
+        this.removeModelEventListeners();
+        this.removeViewEventListeners();
         // delete refs
         this._deleteReferences();
     }

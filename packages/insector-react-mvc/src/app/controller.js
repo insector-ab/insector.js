@@ -80,7 +80,6 @@ export default class AppController extends ModuleController {
     }
 
     onRouteTo(event, appEvent) {
-        console.log('onRouteTo', appEvent.route);
         // Open in new window?
         if (appEvent.inNewWindow) {
             window.open(appEvent.route);
@@ -92,7 +91,7 @@ export default class AppController extends ModuleController {
 
     onUpdateDocumentTitle(event, appEvent) {
         setTimeout(() => {
-            console.log('onUpdateDocumentTitle (delayed 100 ms)', appEvent.title);
+            // console.log('onUpdateDocumentTitle (delayed 100 ms)', appEvent.title);
             this.setDocumentTitle(appEvent.title);
         }, 100);
     }
@@ -107,20 +106,20 @@ export default class AppController extends ModuleController {
     }
 
     onAjaxStart(event) {
-        console.log('onAjaxStart', event);
+        // console.log('onAjaxStart', event);
         this.model.isFetching = true;
     }
 
     onAjaxError(...args) {
-        console.log('onAjaxError', args);
+        // console.log('onAjaxError', args);
     }
 
     onAjaxSuccess(event, jqXHR, ajaxOptions, data) {
-        console.log('onAjaxSuccess', data);
+        // console.log('onAjaxSuccess', data);
     }
 
     onAjaxStop(event) {
-        console.log('onAjaxStop', event);
+        // console.log('onAjaxStop', event);
         this.model.isFetching = false;
     }
 

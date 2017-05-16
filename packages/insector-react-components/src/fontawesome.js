@@ -52,7 +52,7 @@ export function FANavItem(props) {
     attrs.title = attrs.title || props.text;
     return (
         <li {... attrs}>
-            <a href={props.href || '#'} tabIndex="0">
+            <a href={props.href || '#'} className="page-route" tabIndex="0">
                 {props.faIcon &&
                     <span className={classNames('fa', 'fa-fw', props.faIcon)} />
                 }

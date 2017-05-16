@@ -105,7 +105,7 @@ DefaultDeleteModal.propTypes = {
  * DeleteModal
  */
 export function DeleteModal(props) {
-    const attrs = getAttrs(this.props, DeleteModal);
+    const attrs = getAttrs(props, DeleteModal);
     return (
         <ConfirmModal {...attrs}>
             {props.children}

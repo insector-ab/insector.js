@@ -1,6 +1,7 @@
 {
-  "name": "insector",
-  "version": "0.1.2",
+  "name": "insector.js",
+  "description": "Stuff for javascript projects.",
+  "version": "0.1.2.1",
   "private": true,
   "license": "MIT",
   "scripts": {

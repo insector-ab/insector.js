@@ -93,7 +93,7 @@ export default class ModuleView extends React.Component {
     }
 
     addEventListeners() {
-        console.log('addEventListeners', this.view);
+        // console.log('addEventListeners', this.view);
         // Delegate events to Module DOM element
         this.controller.delegateEvents(this.view.element);
     }

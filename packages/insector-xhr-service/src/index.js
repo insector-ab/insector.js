@@ -53,7 +53,7 @@ export class XHRService {
     }
 
     ajax(url, ajaxParams = {}) {
-        console.log(ajaxParams.method, url, ajaxParams.data);
+        // console.log(ajaxParams.method, url, ajaxParams.data);
         return $.ajax(url, ajaxParams);
     }
 

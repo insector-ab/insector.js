@@ -1,6 +1,6 @@
 import {modelRegistry, modelIdentities} from 'mozy';
-import {FormModel} from 'insectorjs/form/model';
-import ModuleModel from 'insectorjs/module/model';
+import {FormModel} from '../form/model';
+import ModuleModel from '../module/model';
 
 /**
  * CommentsModel

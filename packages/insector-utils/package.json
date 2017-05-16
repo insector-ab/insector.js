@@ -1,0 +1,13 @@
+{
+  "name": "insector-utils",
+  "version": "0.1.0",
+  "description": "Various util functions.",
+  "main": "lib/index.js",
+  "author": "Martin Söderholm",
+  "license": "MIT",
+  "repository": "https://github.com/insector-ab/insector.js/tree/master/packages/insector-utils",
+  "dependencies": {
+    "lodash.filter": "^4.6.0",
+    "lodash.omit": "^4.5.0"
+  }
+}

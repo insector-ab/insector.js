@@ -1,0 +1,17 @@
+{
+  "name": "insector-node-model",
+  "version": "0.1.0",
+  "description": "Node model (mozy.Model) and accompanying Graph, Factory and ModelRegistry.",
+  "main": "lib/index.js",
+  "author": "Martin Söderholm",
+  "license": "MIT",
+  "repository": "https://github.com/insector-ab/insector.js/tree/master/packages/insector-node-model",
+  "dependencies": {
+    "lodash.find": "^4.6.0",
+    "lodash.sortby": "^4.7.0"
+  },
+  "peerDependencies": {
+    "insector-utils": "0.1.x",
+    "mozy": "0.1.x"
+  }
+}

@@ -1,12 +1,12 @@
 import $ from 'jquery';
-import _ from 'lodash';
+import find from 'lodash.find';
 import classNames from 'classnames';
-import moment from 'moment';
 import autosize from 'jquery-autosize';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {ReactTextarea} from 'insectorjs/form/controls';
-import {FormModel} from 'insectorjs/form/model';
+import {ReactTextarea} from '../form/controls';
+import {FormModel} from '../form/model';
+import {getAttrs} from '../helpers';
 
 /**
  * CommentList
@@ -17,14 +17,14 @@ class CommentList extends React.Component {
         let comments = this.props.comments;
         if (this.props.limit && this.props.limit > 0) {
             let i = comments.length - this.props.limit;
-            comments = _.slice(comments, i >= 0 ? i : 0, comments.length);
+            comments = comments.slice((i < 0 ? 0 : i), comments.length);
         }
         let users = this.props.users;
         return (
             <div className="list-group m-b-0 comment-list">
                 {comments.map((item, i) => {
                     // FIX: Create usersMap (in WebtoolsModel?)
-                    let user = _.find(users, {id: item.created_by_id});
+                    let user = find(users, {id: item.created_by_id});
                     return (
                         <Comment key={item.id}
                                  id={item.id}
@@ -42,11 +42,11 @@ class CommentList extends React.Component {
 
 }
 CommentList.propTypes = {
-    comments: React.PropTypes.array,
-    users: React.PropTypes.array,
-    limit: React.PropTypes.number,
-    newCommentId: React.PropTypes.number,
-    currentUserId: React.PropTypes.number
+    comments: PropTypes.array,
+    users: PropTypes.array,
+    limit: PropTypes.number,
+    newCommentId: PropTypes.number,
+    currentUserId: PropTypes.number
 };
 
 /**
@@ -79,7 +79,7 @@ class Comment extends React.Component {
                     </div>
                     <div className="small comment-list-item-bottom">
                         <span className="comment-list-item-time">
-                            <span className="fa fa-clock-o" /> {moment(this.props.createdAt).calendar()}
+                            <span className="fa fa-clock-o" /> {this.props.createdAt}
                         </span>
                     </div>
                 </div>
@@ -89,13 +89,13 @@ class Comment extends React.Component {
 
 }
 Comment.propTypes = {
-    id: React.PropTypes.number,
-    text: React.PropTypes.string,
-    createdAt: React.PropTypes.string,
-    userFullName: React.PropTypes.string,
-    userId: React.PropTypes.number,
-    isNew: React.PropTypes.bool,
-    canDelete: React.PropTypes.bool
+    id: PropTypes.number,
+    text: PropTypes.string,
+    createdAt: PropTypes.string,
+    userFullName: PropTypes.string,
+    userId: PropTypes.number,
+    isNew: PropTypes.bool,
+    canDelete: PropTypes.bool
 };
 
 /**
@@ -104,7 +104,7 @@ Comment.propTypes = {
 class NewCommentForm extends React.Component {
 
     render() {
-        const attrs = _.omit(this.props, 'children', 'formModel', 'placeholder');
+        const attrs = getAttrs(this.props, NewCommentForm);
         attrs.className = classNames('container-fluid', attrs.className);
         const comment = this.props.formModel.getInput('comment');
         return (
@@ -140,8 +140,8 @@ class NewCommentForm extends React.Component {
 
 }
 NewCommentForm.propTypes = {
-    formModel: React.PropTypes.instanceOf(FormModel),
-    placeholder: React.PropTypes.string
+    formModel: PropTypes.instanceOf(FormModel),
+    placeholder: PropTypes.string
 };
 NewCommentForm.defaultProps = {
     placeholder: 'Write a comment…'

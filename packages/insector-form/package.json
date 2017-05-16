@@ -1,0 +1,25 @@
+{
+  "name": "insector-form",
+  "version": "0.1.0",
+  "description": "Form models and form React components.",
+  "main": "lib/index.js",
+  "author": "Martin Söderholm",
+  "license": "MIT",
+  "repository": "https://github.com/insector-ab/insector.js/tree/master/packages/insector-form",
+  "dependencies": {
+    "classnames": "^2.2.5",
+    "lodash.findindex": "^4.6.0",
+    "lodash.frompairs": "^4.0.1",
+    "lodash.isfunction": "^3.0.8",
+    "lodash.isplainobject": "^4.0.6",
+    "lodash.isundefined": "^3.0.1",
+    "lodash.result": "^4.5.2"
+  },
+  "peerDependencies": {
+    "jquery": "2.x",
+    "react": "15.x",
+    "react-dom": "15.x",
+    "insector-utils": "0.1.x",
+    "mozy": "0.1.x"
+  }
+}

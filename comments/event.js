@@ -1,17 +1,6 @@
-import Event from '../event';
 
-/**
- * CommentEvent
- */
-export class CommentEvent extends Event {
-
-    // Check if event affects the number of nodes (increases or decreases)
-    affectsCount() {
-        return this.updateType === UpdateType.CREATED || this.updateType === UpdateType.DELETED;
-    }
-
-}
-CommentEvent.COMMENT_UPDATED = 'CommentEvent_COMMENT_UPDATED';
+// Private attr
+const ATTR_TYPE = Symbol('CommentEvent.type');
 
 /**
  * UpdateType
@@ -22,36 +11,58 @@ UpdateType.SAVED = 'UpdateType_SAVED';
 UpdateType.DELETED = 'UpdateType_DELETED';
 
 /**
- * newCreatedEvent
- * @param  {Integer} nodeId
- * @return {CommentEvent}
+ * CommentEvent
  */
-CommentEvent.newCreatedEvent = function(nodeId) {
-    let e = new CommentEvent(CommentEvent.COMMENT_UPDATED);
-    e.nodeId = nodeId;
-    e.updateType = UpdateType.CREATED;
-    return e;
-};
+export default class CommentEvent {
 
-/**
- * newSavedEvent
- * @param  {Integer} nodeId
- * @return {CommentEvent}
- */
-CommentEvent.newSavedEvent = function(nodeId) {
-    let e = new CommentEvent(CommentEvent.COMMENT_UPDATED);
-    e.nodeId = nodeId;
-    e.updateType = UpdateType.SAVED;
-    return e;
-};
-/**
- * newDeletedEvent
- * @param  {Integer} nodeId
- * @return {CommentEvent}
- */
-CommentEvent.newDeletedEvent = function(nodeId) {
-    let e = new CommentEvent(CommentEvent.COMMENT_UPDATED);
-    e.nodeId = nodeId;
-    e.updateType = UpdateType.DELETED;
-    return e;
-};
+    constructor(type) {
+        this[ATTR_TYPE] = type;
+    }
+
+    get type() {
+        return this[ATTR_TYPE];
+    }
+    /**
+     * Check if event affects the number of nodes (increases or decreases).
+     * @return {Boolean}
+     */
+    affectsCount() {
+        return this.updateType === UpdateType.CREATED || this.updateType === UpdateType.DELETED;
+    }
+    /**
+     * newCreatedEvent
+     * @param  {Integer} nodeId
+     * @return {CommentEvent}
+     */
+    static newCreatedEvent(nodeId) {
+        let e = new CommentEvent(CommentEvent.COMMENT_UPDATED);
+        e.nodeId = nodeId;
+        e.updateType = UpdateType.CREATED;
+        return e;
+    }
+    /**
+     * newSavedEvent
+     * @param  {Integer} nodeId
+     * @return {CommentEvent}
+     */
+    static newSavedEvent(nodeId) {
+        let e = new CommentEvent(CommentEvent.COMMENT_UPDATED);
+        e.nodeId = nodeId;
+        e.updateType = UpdateType.SAVED;
+        return e;
+    }
+    /**
+     * newDeletedEvent
+     * @param  {Integer} nodeId
+     * @return {CommentEvent}
+     */
+    static newDeletedEvent(nodeId) {
+        let e = new CommentEvent(CommentEvent.COMMENT_UPDATED);
+        e.nodeId = nodeId;
+        e.updateType = UpdateType.DELETED;
+        return e;
+    }
+
+}
+
+CommentEvent.COMMENT_UPDATED = 'CommentEvent_COMMENT_UPDATED';

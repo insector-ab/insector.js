@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import ModuleController from 'insectorjs/module/controller';
-import {JSONService} from 'insectorjs/service';
-import {CommentEvent} from './event';
+import ModuleController from '../module/controller';
+import {JSONService} from '../service';
+import CommentEvent from './event';
 
 /**
  * CommentsController
@@ -100,7 +100,7 @@ export default class CommentsController extends ModuleController {
 /**
  * custom form validators
  */
-export let validators = {
+export const validators = {
 
     nodeIdSet: function(value, input, context, ...args) {
         return context.model.has('nodeId');

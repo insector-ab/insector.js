@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
@@ -30,17 +31,30 @@ export class AbstractFormControl extends React.Component {
     }
 
     onChange(event) {
-        this.dispatchCustomEvent('react.change', event);
+        this.dispatchEvent(event, 'react.change');
+        // this.dispatchCustomEvent('react.change', event);
     }
 
     onBlur(event) {
-        this.dispatchCustomEvent('react.blur', event);
+        this.dispatchEvent(event, 'react.blur');
+        // this.dispatchCustomEvent('react.blur', event);
     }
 
-    dispatchCustomEvent(type, data) {
-        const e = new window.CustomEvent(type, {detail: data});
-        this.element.dispatchEvent(e);
+    dispatchEvent(event, type, ...extraArgs) {
+        // args
+        const args = [event, this].concat(extraArgs);
+        // dispatch react synthetic event
+        $(this.element).trigger(type, args);
     }
+
+    // dispatchCustomEvent(type, data) {
+    //     const e = new window.CustomEvent(type, {
+    //         bubbles: true,
+    //         cancelable: true,
+    //         detail: data
+    //     });
+    //     this.element.dispatchEvent(e);
+    // }
 
 }
 AbstractFormControl.propTypes = {

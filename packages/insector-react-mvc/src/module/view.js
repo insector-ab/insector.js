@@ -41,6 +41,11 @@ export default class ModuleView extends React.Component {
         return <div ref="view" />;
     }
 
+    dispose() {
+        this._dispose();
+        this._deleteReferences();
+    }
+
     componentWillMount() {
         // Initialize
         if (!this.model.initialized) {
@@ -58,7 +63,10 @@ export default class ModuleView extends React.Component {
 
     componentDidMount() {
         // Set view in controller
-        this.controller.view = this.refs.view;
+        this.controller.view = this.view;
+        // Add view event listeners
+        this.controller.addViewEventListeners(this.view.element);
+
         // initializing, launches when done
         if (this._initializePromise) {
             this._initializePromise.done(this.onInitializeDone);
@@ -69,13 +77,11 @@ export default class ModuleView extends React.Component {
         } else {
             throw new Error('ModuleView.componentDidMount() No this._initializePromise found and model not initialized, module will not launch.');
         }
-        // Add event listeners
-        this.addEventListeners();
     }
 
     componentWillUnmount() {
-        // Remove event listeners
-        this.removeEventListeners();
+        // Dispose (Removes controller event listeners)
+        this.dispose();
     }
 
     onInitializeDone(data, textStatus, jqXHR) {
@@ -90,17 +96,6 @@ export default class ModuleView extends React.Component {
 
     onInitializeFail(promise, textStatus, statusTitle) {
         // ABSTRACT
-    }
-
-    addEventListeners() {
-        // console.log('addEventListeners', this.view);
-        // Delegate events to Module DOM element
-        this.controller.delegateEvents(this.view.element);
-    }
-
-    removeEventListeners() {
-        // Undelegate events from Module DOM element
-        this.controller.undelegateEvents();
     }
 
     _newModelInstance(props) {
@@ -120,13 +115,13 @@ export default class ModuleView extends React.Component {
         if (this.model.hasOwnProperty('dispose')) {
             this.model.dispose();
         }
-        // Dispose super
-        super._dispose();
     }
 
     _deleteReferences() {
         super._deleteReferences();
         // delete refs
+        delete this.cid;
+        delete this._model;
         delete this._controller;
         delete this._initializePromise;
         // Binds

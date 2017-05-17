@@ -28,11 +28,13 @@ export default class ReactController {
     set model(value) {
         if (value !== this._model) {
             // Remove listeners from current model
-            this._removeModelEventListeners();
+            this.removeModelEventListeners();
             // Set new model
             this._model = value;
             // Add listeners to new model
-            this._addModelEventListeners();
+            if (value) {
+                this.addModelEventListeners(value);
+            }
         }
     }
 
@@ -40,11 +42,23 @@ export default class ReactController {
         return this._view;
     }
     set view(value) {
-        this._view = value;
+        if (value !== this.view) {
+            // remove view listners
+            this.removeViewEventListeners();
+            // Set new
+            this._view = value;
+        }
     }
 
     get element() {
         return ReactDOM.findDOMNode(this.view);
+    }
+
+    dispose() {
+        this.removeViewEventListeners();
+        this.removeModelEventListeners();
+        this._dispose();
+        this._deleteReferences();
     }
 
     dispatchDOMEvent(event, target) {
@@ -93,15 +107,9 @@ export default class ReactController {
     undelegateEvents() {
         if (this._delegatedEl) {
             $(this._delegatedEl).off('.delegateEvents' + this.cid);
+            delete this._delegatedEl;
         }
         return this;
-    }
-
-    dispose() {
-        this.removeModelEventListeners();
-        this.removeViewEventListeners();
-        // delete refs
-        this._deleteReferences();
     }
 
     addModelEventListeners(model) {
@@ -120,9 +128,14 @@ export default class ReactController {
         this.undelegateEvents();
     }
 
+    _dispose() {
+        // Abstract
+    }
+
     _deleteReferences() {
+        delete this.cid;
         delete this._model;
-        delete this._component;
+        delete this._view;
         delete this._delegatedEl;
     }
 

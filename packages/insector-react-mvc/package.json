@@ -1,6 +1,6 @@
 {
   "name": "insector-react-mvc",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MVC using React components and Backbone-ish event delegation.",
   "main": "lib/index.js",
   "author": "Martin Söderholm",

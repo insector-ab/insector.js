@@ -24,7 +24,6 @@ export default class ReactView extends React.Component {
         if (this.hasOwnProperty('_model')) {
             return this._model;
         }
-        return null;
     }
 
     get element() {
@@ -43,11 +42,14 @@ export default class ReactView extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         // console.log('componentWillReceiveProps', this.constructor.name, this.cid);
-        if (nextProps.model && nextProps.model !== this.model) {
+        if (nextProps.model !== this.model) {
             // Remove listeners from current model
             this.removeEventListeners();
-            // Add to new model
-            this.addEventListeners(nextProps.model);
+            // If new model
+            if (nextProps.model) {
+                // Add to new model
+                this.addEventListeners(nextProps.model);
+            }
         }
     }
 
@@ -61,11 +63,8 @@ export default class ReactView extends React.Component {
         this.dispose();
     }
 
-    // FIX: split up _addEventListeners into addModelEventListeners & addViewEventListeners
-    // run _addModelEventListeners in componentWillMount
-    // run _addViewEventListeners in componentDidMount
     addEventListeners(model) {
-        this._delegateEvents(model);
+        this._delegateEvents(model || this.model);
     }
 
     removeEventListeners() {

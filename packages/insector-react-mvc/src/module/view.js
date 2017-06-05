@@ -50,7 +50,7 @@ export default class ModuleView extends React.Component {
         // Initialize
         if (!this.model.initialized) {
             if (!this._initializePromise) {
-                let $promise = this.controller.initialize();
+                let $promise = this.controller.initialize(this.props);
 
                 if (!$promise || !isFunction($promise.done)) {
                     throw new Error('ModuleController.initialize() should always return a promise');
@@ -91,7 +91,7 @@ export default class ModuleView extends React.Component {
             this.model.initialized = true;
         }
         // Launch
-        this.controller.launch();
+        this.controller.launch(this.props);
     }
 
     onInitializeFail(promise, textStatus, statusTitle) {
@@ -118,7 +118,6 @@ export default class ModuleView extends React.Component {
     }
 
     _deleteReferences() {
-        super._deleteReferences();
         // delete refs
         delete this.cid;
         delete this._model;

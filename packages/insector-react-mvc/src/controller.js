@@ -44,7 +44,9 @@ export default class ReactController {
     set view(value) {
         if (value !== this.view) {
             // remove view listners
-            this.removeViewEventListeners();
+            if (this.view) {
+                this.removeViewEventListeners();
+            }
             // Set new
             this._view = value;
         }

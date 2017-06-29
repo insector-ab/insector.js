@@ -129,7 +129,6 @@ export default class AppController extends ModuleController {
     }
 
     _checkRouting(classname, event) {
-        // console.log('_checkRouting', event);
         const $targetEl = $(event.target);
         const $linkEl = $targetEl.closest('a');
         const $pageRouteEl = $targetEl.closest(classname);
@@ -174,12 +173,13 @@ export default class AppController extends ModuleController {
         throw new Error('Abstract method AppController._defineRoutes not implemented.');
     }
 
-    _addViewEventListeners() {
-        super._addViewEventListeners();
+    addViewEventListeners(targetEl) {
+        super.addViewEventListeners(targetEl);
+        targetEl = targetEl || this.element;
         // Add click handlers in capture phase
-        this.element.addEventListener('click', this.onClick, true);
-        this.element.addEventListener('dblclick', this.onDblClick, true);
-        this.element.addEventListener('keydown', this.onKeyDown, true);
+        targetEl.addEventListener('click', this.onClick, true);
+        targetEl.addEventListener('dblclick', this.onDblClick, true);
+        targetEl.addEventListener('keydown', this.onKeyDown, true);
         // Window events
         $(window).on('popstate', this.onWindowPopState);
         $(window).on('error', this.onWindowError);
@@ -190,8 +190,8 @@ export default class AppController extends ModuleController {
         $(document).on('ajaxStop', this.onAjaxStop);
     }
 
-    _removeViewEventListeners() {
-        super._removeViewEventListeners();
+    removeViewEventListeners() {
+        super.removeViewEventListeners();
         // Remove click handlers in capture phase
         this.element.removeEventListener('click', this.onClick, true);
         this.element.removeEventListener('dblclick', this.onDblClick, true);

@@ -1,11 +1,10 @@
 import React from 'react';
-import isFunction from 'lodash.isfunction';
 import uniqueId from 'lodash.uniqueid';
 
 /**
- * ModuleView
+ * MVCContainer
  */
-export default class ModuleView extends React.Component {
+export default class MVCContainer extends React.Component {
 
     constructor(props) {
         super(props);
@@ -18,8 +17,8 @@ export default class ModuleView extends React.Component {
         // Initialize promise
         this._initializePromise = undefined;
         // Binds
-        this.onInitializeDone = this.onInitializeDone.bind(this);
-        this.onInitializeFail = this.onInitializeFail.bind(this);
+        this.onInitializeFulfilled = this.onInitializeFulfilled.bind(this);
+        this.onInitializeRejected = this.onInitializeRejected.bind(this);
     }
 
     get model() {
@@ -28,7 +27,7 @@ export default class ModuleView extends React.Component {
 
     get view() {
         if (!this.refs.hasOwnProperty('view')) {
-            throw new Error('No ref attribute in ' + this.constructor.name + '.render: <Module ref="view" />.');
+            throw new Error('No ref attribute in ' + this.constructor.name + '.render: <MVCContainer ref="view" />.');
         }
         return this.refs.view;
     }
@@ -48,16 +47,10 @@ export default class ModuleView extends React.Component {
 
     componentWillMount() {
         // Initialize
-        if (!this.model.initialized) {
-            if (!this._initializePromise) {
-                let $promise = this.controller.initialize(this.props);
-
-                if (!$promise || !isFunction($promise.done)) {
-                    throw new Error('ModuleController.initialize() should always return a promise');
-                }
-                this._initializePromise = $promise;
-                this._initializePromise.fail(this.onInitializeFail);
-            }
+        if (!this.model.initialized && !this._initializePromise) {
+            this._initializePromise = this.controller.initialize(this.props)
+                                                     .then(this.onInitializeFulfilled,
+                                                           this.onInitializeRejected);
         }
     }
 
@@ -66,16 +59,12 @@ export default class ModuleView extends React.Component {
         this.controller.view = this.view;
         // Add view event listeners
         this.controller.addViewEventListeners(this.view.element);
-
-        // initializing, launches when done
-        if (this._initializePromise) {
-            this._initializePromise.done(this.onInitializeDone);
         // Initialized, launch directly
-        } else if (this.model.initialized) {
+        if (this.model.initialized) {
             this.controller.launch();
-        // Error
-        } else {
-            throw new Error('ModuleView.componentDidMount() No this._initializePromise found and model not initialized, module will not launch.');
+        // Error if no promise
+        } else if (!this._initializePromise) {
+            throw new Error('MVCContainer.componentDidMount(): No this._initializePromise found and model not initialized, so controller will not launch.');
         }
     }
 
@@ -84,7 +73,7 @@ export default class ModuleView extends React.Component {
         this.dispose();
     }
 
-    onInitializeDone(data, textStatus, jqXHR) {
+    onInitializeFulfilled() {
         this._initializePromise = undefined;
         // Update model
         if (this.model) {
@@ -94,8 +83,8 @@ export default class ModuleView extends React.Component {
         this.controller.launch(this.props);
     }
 
-    onInitializeFail(promise, textStatus, statusTitle) {
-        // ABSTRACT
+    onInitializeRejected() {
+        throw new Error(this.constructor.name + ' initialize was rejected.');
     }
 
     _newModelInstance(props) {
@@ -124,8 +113,8 @@ export default class ModuleView extends React.Component {
         delete this._controller;
         delete this._initializePromise;
         // Binds
-        delete this.onInitializeDone;
-        delete this.onInitializeFail;
+        delete this.onInitializeFulfilled;
+        delete this.onInitializeRejected;
     }
 
 }

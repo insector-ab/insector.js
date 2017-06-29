@@ -1,11 +1,11 @@
 import $ from 'jquery';
-import ModuleController from '../module/controller';
+import ReactController from '../controller';
 import AppEvent from './event';
 
 /**
  * AppController
  */
-export default class AppController extends ModuleController {
+export default class AppController extends ReactController {
 
     constructor(model) {
         super(model);

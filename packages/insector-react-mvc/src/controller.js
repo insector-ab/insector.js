@@ -56,6 +56,19 @@ export default class ReactController {
         return ReactDOM.findDOMNode(this.view);
     }
 
+    // Called when component will mount and ModuleModel is not initialized
+    // intialize should always return a promise
+    // Override and do stuff
+    initialize(props) {
+        return Promise.resolve();
+    }
+
+    // Called when component is mounted and initialized promise is resolved
+    // Override and do stuff
+    launch(props) {
+        // ABSTRACT
+    }
+
     dispose() {
         this.removeViewEventListeners();
         this.removeModelEventListeners();

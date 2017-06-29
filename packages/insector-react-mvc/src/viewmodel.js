@@ -2,10 +2,16 @@ import {modelRegistry} from 'mozy';
 import Model, {UNSET_IF_FALSE, SET_SILENT} from 'mozy/model';
 
 /**
- * ModuleModel, for use with
+ * ViewModel, for use with
  * ReactModule (/react/module.js)
  */
-export default class ModuleModel extends Model {
+export default class ViewModel extends Model {
+
+    constructor(...args) {
+        super(...args);
+        // Fetching flag
+        this._isFetching = false;
+    }
 
     get instanceKey() {
         return this.get('instanceKey');
@@ -21,14 +27,42 @@ export default class ModuleModel extends Model {
         this.set('initialized', value, UNSET_IF_FALSE);
     }
 
+    get isFetching() {
+        return this._isFetching;
+    }
+    set isFetching(value) {
+        if (value !== this._isFetching) {
+            this._isFetching = value;
+            this.dispatchChange('isFetching');
+        }
+    }
+
+    get activeView() {
+        return this.get('activeView');
+    }
+    set activeView(value) {
+        this.set('activeView', value, UNSET_IF_FALSE);
+    }
+
+    get activeViewProps() {
+        return this.get('activeViewProps');
+    }
+    set activeViewProps(value) {
+        this.set('activeViewProps', value, UNSET_IF_FALSE);
+    }
+
+    get previousActiveView() {
+        return this._previousData['activeView'];
+    }
+
     /**
-     * getSubModuleModel
+     * getSubViewModel
      * @param {mozy.Model} ModelCls Constructor to instantiate
      * @param {String} instanceKey Key to set on parent model
      * @param {Object} data Constructor param
      * @return {mozy.Model} Model instance
      */
-    getSubModuleModel(ModelCls, instanceKey, data = {}) {
+    getSubViewModel(ModelCls, instanceKey, data = {}) {
         // Get data
         const d = this.get(instanceKey, data);
         // Get model

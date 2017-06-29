@@ -14,11 +14,7 @@ export default class AppController extends ModuleController {
         this.onDblClick = this.onDblClick.bind(this);
         this.onKeyDown = this.onKeyDown.bind(this);
         this.onWindowPopState = this.onWindowPopState.bind(this);
-        // Ajax events
-        this.onAjaxStart = this.onAjaxStart.bind(this);
-        this.onAjaxError = this.onAjaxError.bind(this);
-        this.onAjaxSuccess = this.onAjaxSuccess.bind(this);
-        this.onAjaxStop = this.onAjaxStop.bind(this);
+        this.onWindowError = this.onWindowError.bind(this);
     }
 
     events() {
@@ -97,30 +93,11 @@ export default class AppController extends ModuleController {
     }
 
     onWindowPopState(event) {
-        // Hide any open modals
-        $(this.element).find('.modal').modal('hide');
+        // Abstract
     }
 
     onWindowError(event) {
         // Abstract
-    }
-
-    onAjaxStart(event) {
-        // console.log('onAjaxStart', event);
-        this.model.isFetching = true;
-    }
-
-    onAjaxError(...args) {
-        // console.log('onAjaxError', args);
-    }
-
-    onAjaxSuccess(event, jqXHR, ajaxOptions, data) {
-        // console.log('onAjaxSuccess', data);
-    }
-
-    onAjaxStop(event) {
-        // console.log('onAjaxStop', event);
-        this.model.isFetching = false;
     }
 
     // Always return promise
@@ -181,13 +158,8 @@ export default class AppController extends ModuleController {
         targetEl.addEventListener('dblclick', this.onDblClick, true);
         targetEl.addEventListener('keydown', this.onKeyDown, true);
         // Window events
-        $(window).on('popstate', this.onWindowPopState);
-        $(window).on('error', this.onWindowError);
-        // Global ajax events
-        $(document).on('ajaxStart', this.onAjaxStart);
-        $(document).on('ajaxError', this.onAjaxError);
-        $(document).on('ajaxSuccess', this.onAjaxSuccess);
-        $(document).on('ajaxStop', this.onAjaxStop);
+        window.addEventListener('popstate', this.onWindowPopState);
+        window.addEventListener('error', this.onWindowError);
     }
 
     removeViewEventListeners() {
@@ -197,13 +169,8 @@ export default class AppController extends ModuleController {
         this.element.removeEventListener('dblclick', this.onDblClick, true);
         this.element.removeEventListener('keydown', this.onKeyDown, true);
         // Window events
-        $(window).off('popstate', this.onWindowPopState);
-        $(window).off('error', this.onWindowError);
-        // Global ajax events
-        $(document).off('ajaxStart', this.onAjaxStart);
-        $(document).off('ajaxError', this.onAjaxError);
-        $(document).off('ajaxSuccess', this.onAjaxSuccess);
-        $(document).off('ajaxStop', this.onAjaxStop);
+        window.removeEventListener('popstate', this.onWindowPopState);
+        window.removeEventListener('error', this.onWindowError);
     }
 
     _deleteReferences() {

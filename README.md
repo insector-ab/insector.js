@@ -18,4 +18,5 @@ Clone repo.
 ```sh
 cd insector.js
 npm install
+npm run watch
 ```

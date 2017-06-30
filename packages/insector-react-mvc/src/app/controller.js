@@ -107,30 +107,39 @@ export default class AppController extends ReactController {
 
     _checkRouting(classname, event) {
         const $targetEl = $(event.target);
-        const $linkEl = $targetEl.closest('a');
-        const $pageRouteEl = $targetEl.closest(classname);
-        // Check .page-route click
-        if ($pageRouteEl.length) {
-            if ($pageRouteEl.attr('disabled') === 'disabled') {
+        let $linkEl = $targetEl.closest(classname);
+        // el not found by classname
+        if (!$linkEl.length) {
+            $linkEl = $targetEl.closest('a');
+            // If link with href="#" prevent default
+            if ($linkEl.length && $linkEl.attr('href') === '#') {
                 event.preventDefault();
-            } else {
-                return this._pageRouteHandler($pageRouteEl, event);
             }
-        // If link with href="#" prevent default
-        } else if ($linkEl.length && $linkEl.attr('href') === '#') {
-            event.preventDefault();
+        // Check .page-route, .dbl-page-route click
+        } else {
+            return this._pageRouteHandler($linkEl, event);
         }
         return false;
     }
 
     _pageRouteHandler($el, event) {
-        // href
+        // disabled
+        if ($el.attr('disabled') === 'disabled') {
+            event.preventDefault();
+            return false;
+        }
         const href = $el.attr('href') || $el.attr('data-href');
+        // skip if hashtag href
+        if (href === '#') {
+            event.preventDefault();
+            return false;
+        }
         // open in new window?
         const isTargetBlankLink = $el.is('a') && $el.attr('target') === '_blank';
         if (isTargetBlankLink) {
             return false;
         }
+        // open in new window?
         const metaKeyOnNonLink = (event.metaKey || $el.attr('data-target') === '_blank') && !$el.is('a');
         if (metaKeyOnNonLink) {
             window.open(href);

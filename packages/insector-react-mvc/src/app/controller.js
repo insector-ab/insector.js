@@ -163,7 +163,7 @@ export default class AppController extends ReactController {
         super.addViewEventListeners(targetEl);
         targetEl = targetEl || this.element;
         // Add click handlers in capture phase
-        targetEl.addEventListener('click', this.onClick, true);
+        targetEl.addEventListener('click', this.onClick, false);
         targetEl.addEventListener('dblclick', this.onDblClick, true);
         targetEl.addEventListener('keydown', this.onKeyDown, true);
         // Window events
@@ -174,7 +174,7 @@ export default class AppController extends ReactController {
     removeViewEventListeners() {
         super.removeViewEventListeners();
         // Remove click handlers in capture phase
-        this.element.removeEventListener('click', this.onClick, true);
+        this.element.removeEventListener('click', this.onClick, false);
         this.element.removeEventListener('dblclick', this.onDblClick, true);
         this.element.removeEventListener('keydown', this.onKeyDown, true);
         // Window events

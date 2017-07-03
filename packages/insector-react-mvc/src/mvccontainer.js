@@ -97,11 +97,11 @@ export default class MVCContainer extends React.Component {
 
     _dispose() {
         // Dispose controller
-        if (this.controller.hasOwnProperty('dispose')) {
+        if (typeof this.controller.dispose === 'function') {
             this.controller.dispose();
         }
         // Dispose model
-        if (this.model.hasOwnProperty('dispose')) {
+        if (typeof this.model.dispose === 'function') {
             this.model.dispose();
         }
     }

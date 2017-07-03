@@ -37,21 +37,29 @@ export default class ViewModel extends Model {
     }
 
     get activeView() {
-        return this.get('activeView');
-    }
-    set activeView(value) {
-        this.set('activeView', value, UNSET_IF_FALSE);
-    }
-
-    get activeViewProps() {
-        return this.get('activeViewProps');
-    }
-    set activeViewProps(value) {
-        this.set('activeViewProps', value, UNSET_IF_FALSE);
+        return this.activeViews && this.activeViews[0];
     }
 
     get previousActiveView() {
-        return this._previousData['activeView'];
+        const prev = this.getPrevious('activeViews') || [];
+        return prev[0];
+    }
+
+    get activeViews() {
+        return this.get('activeViews');
+    }
+    set activeViews(value) {
+        this.set('activeViews', value, UNSET_IF_FALSE);
+        if (this.hasChanged('activeViews')) {
+            this.dispatchChange('activeView', this.activeView, this.previousActiveView);
+        }
+    }
+
+    get activeViewProps() {
+        return this.get('activeViewProps', {});
+    }
+    set activeViewProps(value) {
+        this.set('activeViewProps', value, UNSET_IF_FALSE);
     }
 
     /**

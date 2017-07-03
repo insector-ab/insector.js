@@ -1,4 +1,3 @@
-import {modelRegistry} from 'mozy';
 import Model, {UNSET_IF_FALSE, SET_SILENT} from 'mozy/model';
 
 /**
@@ -66,7 +65,7 @@ export default class ViewModel extends Model {
         // Get data
         const d = this.get(instanceKey, data);
         // Get model
-        const m = modelRegistry.getModel(d, ModelCls);
+        const m = new ModelCls(d);
         // Set instance key
         m.instanceKey = instanceKey;
         // store module instance data on parent Model

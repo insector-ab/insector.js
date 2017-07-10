@@ -11,9 +11,9 @@ export default class MVCContainer extends React.Component {
         // Unique client id
         this.cid = uniqueId('moduleview');
         // Model
-        this._model = this._newModelInstance(props);
+        const model = this._newModelInstance(props);
         // Controller
-        this._controller = this._newControllerInstance(this._model, props);
+        this._controller = this._newControllerInstance(model, props);
         // Initialize promise
         this._initializePromise = undefined;
         // Binds
@@ -22,7 +22,7 @@ export default class MVCContainer extends React.Component {
     }
 
     get model() {
-        return this._model;
+        return this.controller.model;
     }
 
     get view() {
@@ -40,6 +40,19 @@ export default class MVCContainer extends React.Component {
         return <div ref="view" />;
     }
 
+    get needsInitializing() {
+        return !(this.model.initialized || this._initializePromise);
+    }
+
+    doInitialize(props) {
+        if (this._initializePromise) {
+            throw new Error('doInitialize called while initializing.');
+        }
+        this._initializePromise = this.controller.initialize(props)
+                                                 .then(this.onInitializeFulfilled,
+                                                       this.onInitializeRejected);
+    }
+
     dispose() {
         this._dispose();
         this._deleteReferences();
@@ -47,10 +60,8 @@ export default class MVCContainer extends React.Component {
 
     componentWillMount() {
         // Initialize
-        if (!this.model.initialized && !this._initializePromise) {
-            this._initializePromise = this.controller.initialize(this.props)
-                                                     .then(this.onInitializeFulfilled,
-                                                           this.onInitializeRejected);
+        if (this.needsInitializing) {
+            this.doInitialize(this.props);
         }
     }
 
@@ -95,21 +106,30 @@ export default class MVCContainer extends React.Component {
         // Abstract
     }
 
-    _dispose() {
-        // Dispose controller
-        if (typeof this.controller.dispose === 'function') {
-            this.controller.dispose();
+    _replaceModelAndInitialize(props) {
+        // Set new model
+        this.controller.model = this._newModelInstance(props);
+        // Initialize
+        console.log(this.constructor.name + '._replaceModelAndInitialize', this.needsInitializing);
+        if (this.needsInitializing) {
+            this.doInitialize(props);
         }
+    }
+
+    _dispose() {
         // Dispose model
         if (typeof this.model.dispose === 'function') {
             this.model.dispose();
+        }
+        // Dispose controller
+        if (typeof this.controller.dispose === 'function') {
+            this.controller.dispose();
         }
     }
 
     _deleteReferences() {
         // delete refs
         delete this.cid;
-        delete this._model;
         delete this._controller;
         delete this._initializePromise;
         // Binds

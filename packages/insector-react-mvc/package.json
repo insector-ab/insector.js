@@ -7,6 +7,7 @@
   "license": "MIT",
   "repository": "https://github.com/insector-ab/insector.js/tree/master/packages/insector-react-mvc",
   "dependencies": {
+    "lodash.isequal": "^4.5.0",
     "lodash.isfunction": "^3.0.8",
     "lodash.isobject": "^3.0.2",
     "lodash.result": "^4.5.2",

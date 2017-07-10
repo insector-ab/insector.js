@@ -10,9 +10,6 @@ export default class AppController extends ReactController {
     constructor(model) {
         super(model);
         // Bind
-        this.onClick = this.onClick.bind(this);
-        this.onDblClick = this.onDblClick.bind(this);
-        this.onKeyDown = this.onKeyDown.bind(this);
         this.onWindowPopState = this.onWindowPopState.bind(this);
         this.onWindowError = this.onWindowError.bind(this);
     }
@@ -52,23 +49,6 @@ export default class AppController extends ReactController {
         document.title = String(title);
     }
 
-    onClick(event) {
-        return this._checkRouting('.page-route', event);
-    }
-
-    onDblClick(event) {
-        return this._checkRouting('.dbl-page-route', event);
-    }
-
-    onKeyDown(event) {
-        switch (event.which) {
-            case 13: // enter-key
-                this._checkRouting('.page-route', event);
-                this._checkRouting('.dbl-page-route', event);
-                break;
-        }
-    }
-
     onInitializeFail(promise, textStatus, statusTitle) {
         // FIX
         // Try launch anyway
@@ -105,56 +85,6 @@ export default class AppController extends ReactController {
         return $.Deferred().resolve().promise();
     }
 
-    _checkRouting(classname, event) {
-        const $targetEl = $(event.target);
-        let $linkEl = $targetEl.closest(classname);
-        // el not found by classname
-        if (!$linkEl.length) {
-            $linkEl = $targetEl.closest('a');
-            // If link with href="#" prevent default
-            if ($linkEl.length && $linkEl.attr('href') === '#') {
-                event.preventDefault();
-            }
-        // Check .page-route, .dbl-page-route click
-        } else {
-            return this._pageRouteHandler($linkEl, event);
-        }
-        return false;
-    }
-
-    _pageRouteHandler($el, event) {
-        // disabled
-        if ($el.attr('disabled') === 'disabled') {
-            event.preventDefault();
-            return false;
-        }
-        const href = $el.attr('href') || $el.attr('data-href');
-        // skip if hashtag href
-        if (href === '#') {
-            event.preventDefault();
-            return false;
-        }
-        // open in new window?
-        const isTargetBlankLink = $el.is('a') && $el.attr('target') === '_blank';
-        if (isTargetBlankLink) {
-            return false;
-        }
-        // open in new window?
-        const metaKeyOnNonLink = (event.metaKey || $el.attr('data-target') === '_blank') && !$el.is('a');
-        if (metaKeyOnNonLink) {
-            window.open(href);
-            return false;
-        }
-        if (event.metaKey) {
-            return;
-        }
-        // Stop event
-        event.preventDefault();
-        // Route
-        this.routeTo(href);
-        return false;
-    }
-
     _defineRoutes() {
         throw new Error('Abstract method AppController._defineRoutes not implemented.');
     }
@@ -162,10 +92,6 @@ export default class AppController extends ReactController {
     addViewEventListeners(targetEl) {
         super.addViewEventListeners(targetEl);
         targetEl = targetEl || this.element;
-        // Add click handlers in capture phase
-        targetEl.addEventListener('click', this.onClick, false);
-        targetEl.addEventListener('dblclick', this.onDblClick, true);
-        targetEl.addEventListener('keydown', this.onKeyDown, true);
         // Window events
         window.addEventListener('popstate', this.onWindowPopState);
         window.addEventListener('error', this.onWindowError);
@@ -173,10 +99,6 @@ export default class AppController extends ReactController {
 
     removeViewEventListeners() {
         super.removeViewEventListeners();
-        // Remove click handlers in capture phase
-        this.element.removeEventListener('click', this.onClick, false);
-        this.element.removeEventListener('dblclick', this.onDblClick, true);
-        this.element.removeEventListener('keydown', this.onKeyDown, true);
         // Window events
         window.removeEventListener('popstate', this.onWindowPopState);
         window.removeEventListener('error', this.onWindowError);
@@ -184,9 +106,6 @@ export default class AppController extends ReactController {
 
     _deleteReferences() {
         super._deleteReferences();
-        delete this.onClick;
-        delete this.onDblClick;
-        delete this.onKeyDown;
         delete this.onRouteTo;
         delete this.onUpdateDocumentTitle;
         delete this.onWindowPopState;

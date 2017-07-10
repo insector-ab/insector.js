@@ -50,9 +50,7 @@ export default class ViewModel extends Model {
     }
     set activeViews(value) {
         this.set('activeViews', value, UNSET_IF_FALSE);
-        if (this.hasChanged('activeViews')) {
-            this.dispatchChange('activeView', this.activeView, this.previousActiveView);
-        }
+        this.dispatchChange('activeView', this.activeView, this.previousActiveView);
     }
 
     get activeViewProps() {

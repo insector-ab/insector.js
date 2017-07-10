@@ -48,7 +48,7 @@ FAButton.defaultProps = {
  */
 export function FANavItem(props) {
     const attrs = getAttrs(props, FANavItem);
-    attrs.className = classNames({'active': props.active}, attrs.className);
+    attrs.className = classNames('nav-item', {'active': props.active}, attrs.className);
     attrs.title = attrs.title || props.text;
     return (
         <li {... attrs}>

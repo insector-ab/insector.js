@@ -50,16 +50,16 @@ export default class NodeModel extends Model {
         return this.set('description', value);
     }
 
-    get createdById() {
-        return this.get('created_by_id');
+    get createdByUuid() {
+        return this.get('created_by_uuid');
     }
 
     get createdAt() {
         return this.get('created_at');
     }
 
-    get modifiedById() {
-        return this.get('modified_by_id');
+    get modifiedByUuid() {
+        return this.get('modified_by_uuid');
     }
 
     get modifiedAt() {

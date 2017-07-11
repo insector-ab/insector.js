@@ -106,16 +106,6 @@ export default class MVCContainer extends React.Component {
         // Abstract
     }
 
-    _replaceModelAndInitialize(props) {
-        // Set new model
-        this.controller.model = this._newModelInstance(props);
-        // Initialize
-        console.log(this.constructor.name + '._replaceModelAndInitialize', this.needsInitializing);
-        if (this.needsInitializing) {
-            this.doInitialize(props);
-        }
-    }
-
     _dispose() {
         // Dispose model
         if (typeof this.model.dispose === 'function') {

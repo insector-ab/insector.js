@@ -30,5 +30,5 @@ export default class AppEvent {
 
 }
 
-AppEvent.ROUTE_TO = 'routeto.insector.app';
-AppEvent.UPDATE_DOCUMENT_TITLE = 'updatedocumenttitle.insector.app';
+AppEvent.ROUTE_TO = 'routeto.insector';
+AppEvent.UPDATE_DOCUMENT_TITLE = 'updatedocumenttitle.insector';

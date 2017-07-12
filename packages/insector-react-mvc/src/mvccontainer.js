@@ -94,8 +94,8 @@ export default class MVCContainer extends React.Component {
         this.controller.launch(this.props);
     }
 
-    onInitializeRejected() {
-        throw new Error(this.constructor.name + ' initialize was rejected.');
+    onInitializeRejected(reason) {
+        throw new Error(`${this.constructor.name} initialize was rejected. Reason: "${reason}"`);
     }
 
     _newModelInstance(props) {

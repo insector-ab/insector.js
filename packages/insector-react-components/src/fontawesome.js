@@ -48,29 +48,42 @@ FAButton.defaultProps = {
  */
 export function FANavItem(props) {
     const attrs = getAttrs(props, FANavItem);
-    attrs.className = classNames('nav-item', {'active': props.active}, attrs.className);
-    attrs.title = attrs.title || props.text;
     return (
-        <li {... attrs}>
-            <a href={props.href || '#'} className="page-route" tabIndex="0">
-                {props.faIcon &&
-                    <span className={classNames('fa', 'fa-fw', props.faIcon)} />
-                }
-                <span className="text">{props.text}</span>
-                {props.children}
-            </a>
+        <li className={classNames('nav-item', {'active': props.active})}>
+            <FALink {...attrs}>{props.children}</FALink>
         </li>
     );
 }
 FANavItem.propTypes = {
     active: PropTypes.bool,
-    href: PropTypes.string,
+    children: PropTypes.node
+};
+
+/**
+ * FALink
+ */
+export function FALink(props) {
+    const attrs = getAttrs(props, FALink);
+    attrs.title = attrs.title || props.text;
+    return (
+        <a {...attrs}>
+            {props.faIcon &&
+                <span className={classNames('fa', 'fa-fw', props.faIcon)} />
+            }
+            {props.text &&
+                <span className="text">{props.text}</span>
+            }
+            {props.children}
+        </a>
+    );
+}
+FALink.propTypes = {
     faIcon: PropTypes.string,
     text: PropTypes.string,
     children: PropTypes.node
 };
-FANavItem.defaultProps = {
-    text: 'FANavItem'
+FALink.defaultProps = {
+    href: '#'
 };
 
 /**

@@ -14,8 +14,9 @@ export function FAButton(props) {
     attrs.className = classNames(
         'btn',
         (props.active ? props.btnActiveClassName : props.btnClassName),
+        {disabled: props.hasOwnProperty('disabled') && props.disabled},
         {active: props.active},
-        attrs.className || ''
+        attrs.className
     );
     const iconCls = classNames('fa', props.faClassName || '', props.faIcon);
     return (
@@ -48,14 +49,17 @@ FAButton.defaultProps = {
  */
 export function FANavItem(props) {
     const attrs = getAttrs(props, FANavItem);
+    attrs.disabled = props.disabled;
     return (
-        <li className={classNames('nav-item', {'active': props.active})}>
+        <li className={classNames('nav-item', {'active': props.active}, {'disabled': props.disabled})}
+            disabled={props.disabled}>
             <FALink {...attrs}>{props.children}</FALink>
         </li>
     );
 }
 FANavItem.propTypes = {
     active: PropTypes.bool,
+    disabled: PropTypes.bool,
     children: PropTypes.node
 };
 

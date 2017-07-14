@@ -59,6 +59,8 @@ export default class MVCContainer extends React.Component {
     }
 
     componentWillMount() {
+        // Add model event listeners
+        this.controller.addModelEventListeners(this.model);
         // Initialize
         if (this.needsInitializing) {
             this.doInitialize(this.props);

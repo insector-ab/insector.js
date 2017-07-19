@@ -135,7 +135,7 @@ export default class FormModel extends AbstractFormModel {
     }
 
     addInput(formInput) {
-        this.inputs.add(formInput);
+        this.inputs.push(formInput);
         this.dispatchChange('inputs');
         return this;
     }
@@ -148,7 +148,9 @@ export default class FormModel extends AbstractFormModel {
     }
 
     get inputs() {
-        return modelRegistry.getModelList(this.rawInputs, this.cid + '.inputs');
+        return this.rawInputs.map(item => {
+            return modelRegistry.getModel(item);
+        });
     }
 
     get rawInputs() {
@@ -176,15 +178,15 @@ export default class FormModel extends AbstractFormModel {
     }
 
     hasInput(name) {
-        return !!findIndex(this.inputs.items, {name: name});
+        return !!findIndex(this.inputs, {name: name});
     }
 
     getInput(name) {
-        let inputIndex = findIndex(this.inputs.items, {name: name});
+        let inputIndex = findIndex(this.inputs, {name: name});
         if (inputIndex === -1) {
             throw new Error('FormInputModel not found for: ' + name);
         }
-        return this.inputs.at(inputIndex);
+        return this.inputs[inputIndex];
     }
 
     getInputValue(name) {

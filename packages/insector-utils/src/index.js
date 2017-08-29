@@ -94,3 +94,16 @@ export function importConstantsToClass(Cls, FromCls, keys) {
 export function getAttrs(props, cls) {
     return omit(props, ...Object.keys(cls.propTypes));
 }
+
+/**
+ * Remove origin from url string.
+ */
+export function trimOrigin(url) {
+    // origin, e.g. "https://www.wingframe.com"
+    const origin = window.location.origin;
+    // If first part of string is origin, return next part
+    if (url.substring(0, origin.length) === origin) {
+        return url.substr(origin.length);
+    }
+    return url;
+}

@@ -72,7 +72,7 @@ export function FALink(props) {
     return (
         <a {...attrs}>
             {props.faIcon &&
-                <span className={classNames('fa', 'fa-fw', props.faIcon)} />
+                <span className={classNames('fa', props.faIcon)} />
             }
             {props.text &&
                 <span className="text">{props.text}</span>
@@ -180,7 +180,7 @@ export function FATreeNode(props) {
     elements.push(<span key={'title'}>{title}</span>);
     // Link?
     if (props.href) {
-        elements = [(<a key={'a'} className={classNames('title', 'page-route')} href={props.href}>{elements}</a>)];
+        elements = [(<a key={'a'} className="title" href={props.href}>{elements}</a>)];
     } else {
         elements = [(<div key={'div'} className="title">{elements}</div>)];
     }

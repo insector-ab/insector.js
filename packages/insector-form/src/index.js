@@ -11,6 +11,8 @@ import {FormGroup,
         FormCheckbox,
         FormSelect} from './components';
 
+import ControlEvent from './event';
+
 // Exports
 
 export { FormModel };
@@ -25,3 +27,5 @@ export { FormTextInput };
 export { FormPasswordInput };
 export { FormCheckbox };
 export { FormSelect };
+
+export { ControlEvent };

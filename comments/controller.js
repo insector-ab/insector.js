@@ -1,4 +1,6 @@
 import $ from 'jquery';
+import ControlEvent from 'insector-form';
+
 import ModuleController from '../module/controller';
 import {JSONService} from '../service';
 import CommentEvent from './event';
@@ -10,7 +12,7 @@ export default class CommentsController extends ModuleController {
 
     events() {
         return {
-            'react.change textarea': 'onTextareaChange',
+            [`${ControlEvent.CHANGE} textarea`]: 'onTextareaChange',
             'click .btn-show-new-comment': 'onShowNewCommentClick',
             'click .btn-save-comment': 'onSaveCommentClick',
             'click .btn-delete-comment': 'onDeleteClick',

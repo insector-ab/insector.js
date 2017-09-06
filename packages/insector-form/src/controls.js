@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 // import classNames from 'classnames';
 import {getAttrs} from 'insector-utils';
 
-// import 'bootstrap-datepicker';
+import ControlEvent from './event';
 
 /**
  * AbstractFormControl
@@ -31,20 +31,20 @@ export class AbstractFormControl extends React.Component {
     }
 
     onChange(event) {
-        this.dispatchEvent(event, 'react.change');
-        // this.dispatchCustomEvent('react.change', event);
+        this.dispatchEvent(ControlEvent.createChangeEvent(event));
+        // this.dispatchCustomEvent('controlchange', event);
     }
 
     onBlur(event) {
-        this.dispatchEvent(event, 'react.blur');
+        this.dispatchEvent(ControlEvent.createBlurEvent(event));
         // this.dispatchCustomEvent('react.blur', event);
     }
 
-    dispatchEvent(event, type, ...extraArgs) {
+    dispatchEvent(event, ...extraArgs) {
         // args
         const args = [event, this].concat(extraArgs);
         // dispatch react synthetic event
-        $(this.element).trigger(type, args);
+        $(this.element).trigger(event.type, args);
     }
 
     // dispatchCustomEvent(type, data) {
@@ -267,7 +267,7 @@ ReactSelect.defaultProps = {
 //     }
 
 //     onChange(event, value) {
-//         this.dispatchEvent(event, 'react.change');
+//         this.dispatchEvent(event, 'controlchange');
 //     }
 
 // }

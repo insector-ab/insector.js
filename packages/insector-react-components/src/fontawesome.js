@@ -45,6 +45,38 @@ FAButton.defaultProps = {
 };
 
 /**
+ * FAListItem
+ */
+export function FAListItem(props) {
+    const attrs = getAttrs(props, FAListItem);
+    attrs.className = classNames(
+        'list-item',
+        {'active': props.active},
+        {'disabled': props.disabled},
+        attrs.className
+    );
+    attrs.disabled = props.disabled;
+    return (
+        <li {...attrs}>
+            {props.faIcon &&
+                <span className={classNames('fa', props.faIcon)} />
+            }
+            {props.text &&
+                <span className="text">{props.text}</span>
+            }
+            {props.children}
+        </li>
+    );
+}
+FAListItem.propTypes = {
+    text: PropTypes.string,
+    faIcon: PropTypes.string,
+    active: PropTypes.bool,
+    disabled: PropTypes.bool,
+    children: PropTypes.node
+};
+
+/**
  * FANavItem
  */
 export function FANavItem(props) {

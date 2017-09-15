@@ -1,4 +1,4 @@
-import FormModel from './model';
+import FormModel, {FormInputModel} from './model';
 
 import {ReactInput,
         ReactTextarea,
@@ -16,6 +16,7 @@ import ControlEvent from './event';
 // Exports
 
 export { FormModel };
+export { FormInputModel };
 
 export { ReactInput };
 export { ReactTextarea };

@@ -362,6 +362,14 @@ export const defaultValidators = {
             return false;
         }
         return true;
+    },
+
+    float: function(value, input, context, ...args) {
+        if (value && /\D+/.test(value)) {
+            input.errorCode = 'NaN';
+            return false;
+        }
+        return true;
     }
 
 };

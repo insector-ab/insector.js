@@ -82,6 +82,10 @@ export default class NodeModel extends Model {
         return !this.isPersisted && this._modified === undefined;
     }
 
+    get isDeleted() {
+        return this.nodeState === NodeState.DELETED;
+    }
+
     isModifiedBefore(datetime) {
         return this.modifiedAt && this.modifiedAt.isBefore(datetime);
     }

@@ -22,7 +22,7 @@ export default class MVCContainer extends React.Component {
     }
 
     get model() {
-        return this.controller.model;
+        return this.controller && this.controller.model;
     }
 
     get view() {
@@ -93,7 +93,9 @@ export default class MVCContainer extends React.Component {
             this.model.initialized = true;
         }
         // Launch
-        this.controller.launch(this.props);
+        if (this.controller) {
+            this.controller.launch(this.props);
+        }
     }
 
     onInitializeRejected(reason) {

@@ -5,8 +5,8 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "build": "npm run build-form & npm run build-node-model & npm run build-react-components & npm run build-react-mvc & npm run build-utils & npm run build-xhr-service",
-    "watch": "npm run watch-form & npm run watch-node-model & npm run watch-react-components & npm run watch-react-mvc & npm run watch-utils & npm run watch-xhr-service",
+    "build": "npm run build-form & npm run build-node-model & npm run build-react-components & npm run build-react-mvc & npm run build-utils & npm run build-xhr-service & npm run build-comments",
+    "watch": "npm run watch-form & npm run watch-node-model & npm run watch-react-components & npm run watch-react-mvc & npm run watch-utils & npm run watch-xhr-service & npm run watch-comments",
     "build-form": "babel packages/insector-form/src --out-dir packages/insector-form/lib",
     "watch-form": "babel packages/insector-form/src --watch --out-dir packages/insector-form/lib",
     "build-node-model": "babel packages/insector-node-model/src --out-dir packages/insector-node-model/lib",
@@ -19,6 +19,8 @@
     "watch-utils": "babel packages/insector-utils/src --watch --out-dir packages/insector-utils/lib",
     "build-xhr-service": "babel packages/insector-xhr-service/src --out-dir packages/insector-xhr-service/lib",
     "watch-xhr-service": "babel packages/insector-xhr-service/src --watch --out-dir packages/insector-xhr-service/lib",
+    "build-comments": "babel packages/insector-comments/src --out-dir packages/insector-comments/lib",
+    "watch-comments": "babel packages/insector-comments/src --watch --out-dir packages/insector-comments/lib",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint packages/*/src/**.js"
   },

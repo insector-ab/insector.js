@@ -10,6 +10,7 @@
 * [insector-xhr-service](https://github.com/insector-ab/insector.js/tree/master/packages/insector-xhr-service)
 * [insector-node-model](https://github.com/insector-ab/insector.js/tree/master/packages/insector-node-model)
 * [insector-form](https://github.com/insector-ab/insector.js/tree/master/packages/insector-form)
+* [insector-comments](https://github.com/insector-ab/insector.js/tree/master/packages/insector-comments)
 
 ## Develop
 

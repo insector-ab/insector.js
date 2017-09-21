@@ -74,20 +74,12 @@ export default class NodeModel extends Model {
         return this.has('created_at');
     }
 
-    get isModified() {
-        return this.modified && (this.modified.isAfter(this.modifiedAt) || !this.isPersisted);
-    }
-
-    get isNew() {
-        return !this.isPersisted && this._modified === undefined;
-    }
-
     get isDeleted() {
         return this.nodeState === NodeState.DELETED;
     }
 
-    isModifiedBefore(datetime) {
-        return this.modifiedAt && this.modifiedAt.isBefore(datetime);
+    get isNew() {
+        return !this.isPersisted && this._modified === undefined;
     }
 
     _getDefaults() {

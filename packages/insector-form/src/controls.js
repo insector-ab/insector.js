@@ -2,6 +2,7 @@ import $ from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import Textarea from 'react-textarea-autosize';
 // import Autocomplete from 'react-autocomplete';
 // import classNames from 'classnames';
 import {getAttrs} from 'insector-utils';
@@ -93,6 +94,13 @@ export class ReactTextarea extends AbstractFormControl {
 
     render() {
         const attrs = this.getAttrs();
+        // auto size
+        if (this.props.autoSize) {
+            return (
+                <Textarea value={this.props.value}
+                          {...attrs} />
+            );
+        }
         return (
             <textarea value={this.props.value}
                       {...attrs} />
@@ -101,10 +109,12 @@ export class ReactTextarea extends AbstractFormControl {
 
 }
 ReactTextarea.propTypes = {
-    value: PropTypes.string
+    value: PropTypes.string,
+    autoSize: PropTypes.bool
 };
 ReactTextarea.defaultProps = {
-    value: ''
+    value: '',
+    autoSize: false
 };
 
 /**

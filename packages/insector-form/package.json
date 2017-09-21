@@ -20,6 +20,7 @@
     "react": "15.x",
     "react-dom": "15.x",
     "insector-utils": "0.1.x",
-    "mozy": "0.1.x"
+    "mozy": "0.1.x",
+    "react-textarea-autosize": "5.1.x"
   }
 }

@@ -365,7 +365,7 @@ export const defaultValidators = {
     },
 
     number: function(value, input, context, ...args) {
-        if (value && !/^\d+\.\d+$/.test(value)) {
+        if (value && !/^-?\d+(\.\d+)?$/.test(value)) {
             input.errorCode = 'NaN';
             return false;
         }

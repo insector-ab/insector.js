@@ -107,3 +107,16 @@ export function trimOrigin(url) {
     }
     return url;
 }
+
+/**
+ * Add callback for "document ready" state
+ */
+export function documentReady(callback) {
+    // If not loading, callback()
+    if (document.readyState !== 'loading') {
+        callback();
+    // else, add listener
+    } else {
+        document.addEventListener('DOMContentLoaded', callback);
+    }
+}

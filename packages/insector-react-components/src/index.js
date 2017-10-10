@@ -1,9 +1,12 @@
 import createWrapperComponent from './create-wrapper-component';
-import {FAButton,
-        FAListItem,
-        FANavItem,
-        FALink,
-        FAMediaItem} from './fontawesome';
+import {
+    FAButton,
+    FAListItem,
+    FANavItem,
+    FALink,
+    FALabel,
+    FAMediaItem
+} from './fontawesome';
 
 // Exports
 export { createWrapperComponent };
@@ -11,4 +14,5 @@ export { FAButton };
 export { FAListItem };
 export { FANavItem };
 export { FALink };
+export { FALabel };
 export { FAMediaItem };

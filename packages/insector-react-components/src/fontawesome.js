@@ -123,6 +123,26 @@ FALink.defaultProps = {
 };
 
 /**
+ * FALabel
+ */
+export function FALabel(props) {
+    const attrs = getAttrs(props, FALabel);
+    attrs.className = classNames('label', attrs.className);
+    return (
+        <span {...attrs}>
+            <span className={`fa ${props.faIcon}`} />
+            {props.text}
+            {props.children}
+        </span>
+    );
+}
+FALabel.propTypes = {
+    text: PropTypes.string,
+    faIcon: PropTypes.string,
+    children: PropTypes.node
+};
+
+/**
  * FAMediaItem
  */
 export function FAMediaItem(props) {

@@ -14,7 +14,8 @@
     "lodash.isplainobject": "^4.0.6",
     "lodash.isundefined": "^3.0.1",
     "lodash.result": "^4.5.2",
-    "react-textarea-autosize": "^5.1.0"
+    "react-textarea-autosize": "^5.1.0",
+    "uuid-validate": "0.0.2"
   },
   "peerDependencies": {
     "jquery": "2.x",

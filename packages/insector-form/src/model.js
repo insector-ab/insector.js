@@ -6,6 +6,7 @@ import result from 'lodash.result';
 import fromPairs from 'lodash.frompairs';
 import findIndex from 'lodash.findindex';
 import {Model, modelIdentities, modelRegistry} from 'mozy';
+import uuidValidate from 'uuid-validate';
 
 /**
  * AbstractFormModel
@@ -367,6 +368,14 @@ export const defaultValidators = {
     number: function(value, input, context, ...args) {
         if (value && !/^-?\d+(\.\d+)?$/.test(value)) {
             input.errorCode = 'NaN';
+            return false;
+        }
+        return true;
+    },
+
+    uuid: function(value, input, context, ...args) {
+        if (!uuidValidate(value, 4)) {
+            input.errorCode = 'invalidFormat';
             return false;
         }
         return true;

@@ -192,10 +192,10 @@ export default class FormModel extends AbstractFormModel {
         }).join(',');
     }
 
-    reset(data, flags = 0) {
+    reset(flags = 0) {
         // Just reset inputs
         this.inputs.forEach(input => {
-            input.reset();
+            input.reset(flags);
         });
     }
 
@@ -277,11 +277,11 @@ export class FormInputModel extends AbstractFormModel {
             });
     }
 
-    reset() {
-        this.unset('value');
-        this.unset('isValidated');
-        this.unset('validatedValue');
-        this.unset('errorCode');
+    reset(flags = 0) {
+        this.unset('value', flags);
+        this.unset('isValidated', flags);
+        this.unset('validatedValue', flags);
+        this.unset('errorCode', flags);
     }
 
     _getDefaults() {

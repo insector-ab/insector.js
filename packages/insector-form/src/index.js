@@ -1,15 +1,20 @@
 import FormModel, {FormInputModel} from './model';
 
-import {ReactInput,
-        ReactTextarea,
-        ReactSelect} from './controls';
+import {
+    ReactInput,
+    ReactTextarea,
+    ReactSelect
+} from './controls';
 
-import {FormGroup,
-        CheckboxGroup,
-        FormTextInput,
-        FormPasswordInput,
-        FormCheckbox,
-        FormSelect} from './components';
+import {
+    FormGroup,
+    CheckboxGroup,
+    FormTextInput,
+    FormPasswordInput,
+    FormCheckbox,
+    FormSelect,
+    FormTextarea
+} from './components';
 
 import ControlEvent from './event';
 
@@ -28,5 +33,6 @@ export { FormTextInput };
 export { FormPasswordInput };
 export { FormCheckbox };
 export { FormSelect };
+export { FormTextarea };
 
 export { ControlEvent };

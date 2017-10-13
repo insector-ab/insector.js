@@ -2,7 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {getAttrs} from 'insector-utils';
-import {ReactInput, ReactSelect} from './controls';
+import {
+    ReactInput,
+    ReactSelect,
+    ReactTextarea
+} from './controls';
 
 /**
  * FormGroup
@@ -104,5 +108,19 @@ export function FormSelect(props) {
     );
 }
 FormSelect.propTypes = {
+    children: PropTypes.node
+};
+
+/**
+ * FormTextarea
+ */
+export function FormTextarea(props) {
+    const attrs = getAttrs(props, FormTextarea);
+    attrs.className = classNames('form-control', attrs.className || '');
+    return (
+        <ReactTextarea {... attrs} />
+    );
+}
+FormTextarea.propTypes = {
     children: PropTypes.node
 };

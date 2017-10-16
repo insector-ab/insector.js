@@ -185,6 +185,9 @@
 .fw-100 { font-weight: 100 !important; }
 
 /* Font size */
+.fs-050 { font-size: 50% !important; }
+.fs-060 { font-size: 60% !important; }
+.fs-070 { font-size: 70% !important; }
 .fs-080 { font-size: 80% !important; }
 .fs-090 { font-size: 90% !important; }
 .fs-100 { font-size: 100% !important; }
@@ -198,16 +201,19 @@
 .flex,
 .flex-row,
 .flex-col {
-    display: flex;
-    .flex-grow-1 { flex-grow: 1; }
-    .flex-grow-2 { flex-grow: 2; }
-    .flex-grow-3 { flex-grow: 3; }
-    .flex-grow-4 { flex-grow: 4; }
-    .flex-grow-5 { flex-grow: 5; }
-    .flex-grow-6 { flex-grow: 6; }
-    .flex-grow-7 { flex-grow: 7; }
-    .flex-grow-8 { flex-grow: 8; }
-    .flex-grow-9 { flex-grow: 9; }
+    display: flex !important;
+    .flex-grow-1 { flex-grow: 1 !important; }
+    .flex-grow-2 { flex-grow: 2 !important; }
+    .flex-grow-3 { flex-grow: 3 !important; }
+    .flex-grow-4 { flex-grow: 4 !important; }
+    .flex-grow-5 { flex-grow: 5 !important; }
+    .flex-grow-6 { flex-grow: 6 !important; }
+    .flex-grow-7 { flex-grow: 7 !important; }
+    .flex-grow-8 { flex-grow: 8 !important; }
+    .flex-grow-9 { flex-grow: 9 !important; }
+}
+.flex-eq > * {
+    flex: 1 1 100px;
 }
 .flex-row {
     flex-direction: row !important;

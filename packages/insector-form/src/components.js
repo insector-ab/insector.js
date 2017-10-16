@@ -2,107 +2,120 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {getAttrs} from 'insector-utils';
-import {ReactInput, ReactSelect} from './controls';
-
-/**
- * FormGroup
- */
-export function FormGroup(props) {
-    const attrs = getAttrs(props, FormGroup);
-    attrs.className = classNames('form-group', attrs.className);
-    const leftColClasses = classNames('col-md-' + props.labelSize, 'control-label');
-    const rightColClasses = classNames('col-md-' + (12 - props.labelSize));
-    return (
-        <div {...attrs}>
-            <label className={leftColClasses} htmlFor={props.labelFor}>{props.label}</label>
-            <div className={rightColClasses}>
-                {props.children}
-            </div>
-        </div>
-    );
-}
-FormGroup.propTypes = {
-    label: PropTypes.string,
-    labelSize: PropTypes.number,
-    labelFor: PropTypes.string,
-    children: PropTypes.node
-};
-FormGroup.defaultProps = {
-    labelSize: 3
-};
-
-/**
- * CheckboxGroup
- */
-export function CheckboxGroup(props) {
-    const attrs = getAttrs(props, CheckboxGroup);
-    attrs.className = classNames('checkbox', attrs.className || '');
-    return (
-        <div {... attrs}>
-            <label>
-                {props.children}
-                {props.label}
-            </label>
-        </div>
-    );
-}
-CheckboxGroup.propTypes = {
-    label: PropTypes.string,
-    children: PropTypes.node
-};
-
-// ------------- React inputs ------------- //
 
 /**
  * FormTextInput
  */
-export function FormTextInput(props) {
-    const attrs = getAttrs(props, FormTextInput);
-    attrs.className = classNames('form-control', attrs.className || '');
-    return (
-        <ReactInput type="text"
-                    {... attrs} />
-    );
+export class FormTextInput extends React.Component {
+
+    constructor(props, ...args) {
+        super(props, ...args);
+        this.state = {};
+        this.onChange = this.onChange.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.state.value !== nextProps.value) {
+            this.setState({value: nextProps.value});
+        }
+    }
+
+    onChange(event) {
+        if (this.props.onChange) {
+            this.props.onChange(event);
+        }
+        this.setState({value: event.target.value});
+    }
+
+    render() {
+        const attrs = getAttrs(this.props, FormTextInput);
+        attrs.className = classNames('form-control', attrs.className);
+        return (
+            <input
+                type="text"
+                value={this.props.value}
+                {...attrs}
+                {...this.state}
+                onChange={this.onChange}
+            />
+        );
+    }
+
 }
-FormTextInput.propTypes = {};
+FormTextInput.propTypes = {
+    value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+    ])
+};
+FormTextInput.defaultProps = {
+    value: ''
+};
 
 /**
  * FormPasswordInput
  */
 export function FormPasswordInput(props) {
     const attrs = getAttrs(props, FormPasswordInput);
-    attrs.className = classNames('form-control', attrs.className || '');
+    attrs.className = classNames('form-control', attrs.className);
     return (
-        <ReactInput type="password"
-                    {... attrs} />
+        <input
+            type="password"
+            value={props.value}
+            {...attrs}
+        />
     );
 }
-FormPasswordInput.propTypes = {};
+FormPasswordInput.propTypes = {
+    value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+    ])
+};
+FormTextInput.defaultProps = {
+    value: ''
+};
 
 /**
  * FormCheckbox
  */
 export function FormCheckbox(props) {
     const attrs = getAttrs(props, FormCheckbox);
+    attrs.className = classNames('checkbox', attrs.className);
     return (
-        <ReactInput type="checkbox"
-                    {... attrs} />
+        <div {...attrs}>
+            <label>
+                <input type="checkbox" checked={props.checked} /> {props.text}
+            </label>
+        </div>
     );
 }
-FormCheckbox.propTypes = {};
+FormCheckbox.propTypes = {
+    checked: PropTypes.bool
+};
 
 /**
  * FormSelect
  */
 export function FormSelect(props) {
     const attrs = getAttrs(props, FormSelect);
-    attrs.className = classNames('form-control', attrs.className || '');
+    attrs.className = classNames('form-control', attrs.className);
     return (
-        <ReactSelect {... attrs} >
+        <select
+            value={props.value}
+            {...attrs}
+        >
             {props.children}
-        </ReactSelect>
+        </select>
     );
 }
 FormSelect.propTypes = {
+    value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+    ]),
     children: PropTypes.node
+};
+FormSelect.defaultProps = {
+    value: ''
 };

@@ -1,32 +1,40 @@
 import FormModel, {FormInputModel} from './model';
 
-import {ReactInput,
-        ReactTextarea,
-        ReactSelect} from './controls';
+import FormViewModel from './viewmodel';
 
-import {FormGroup,
-        CheckboxGroup,
-        FormTextInput,
-        FormPasswordInput,
-        FormCheckbox,
-        FormSelect} from './components';
+import {
+    ReactInput,
+    ReactTextarea,
+    ReactSelect
+} from './controls';
+
+import {
+    FormTextInput,
+    FormPasswordInput,
+    FormCheckbox,
+    FormSelect
+} from './components';
 
 import ControlEvent from './event';
+
+import {ValidationStatus} from './constants';
 
 // Exports
 
 export { FormModel };
 export { FormInputModel };
 
+export { FormViewModel };
+
 export { ReactInput };
 export { ReactTextarea };
 export { ReactSelect };
 
-export { FormGroup };
-export { CheckboxGroup };
 export { FormTextInput };
 export { FormPasswordInput };
 export { FormCheckbox };
 export { FormSelect };
 
 export { ControlEvent };
+
+export { ValidationStatus };

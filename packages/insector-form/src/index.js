@@ -3,16 +3,11 @@ import FormModel, {FormInputModel} from './model';
 import FormViewModel from './viewmodel';
 
 import {
-    ReactInput,
-    ReactTextarea,
-    ReactSelect
-} from './controls';
-
-import {
     FormTextInput,
     FormPasswordInput,
     FormCheckbox,
-    FormSelect
+    FormSelect,
+    FormTextarea
 } from './components';
 
 import {ValidationStatus} from './constants';
@@ -24,13 +19,10 @@ export { FormInputModel };
 
 export { FormViewModel };
 
-export { ReactInput };
-export { ReactTextarea };
-export { ReactSelect };
-
 export { FormTextInput };
 export { FormPasswordInput };
 export { FormCheckbox };
 export { FormSelect };
+export { FormTextarea };
 
 export { ValidationStatus };

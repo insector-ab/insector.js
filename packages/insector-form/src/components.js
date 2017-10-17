@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import Textarea from 'react-textarea-autosize';
 import {getAttrs} from 'insector-utils';
 
 /**
@@ -101,4 +102,27 @@ FormSelect.propTypes = {
 };
 FormSelect.defaultProps = {
     value: ''
+};
+
+/**
+ * FormTextarea
+ */
+export function FormTextarea(props) {
+    const attrs = getAttrs(props, FormTextarea);
+    attrs.className = classNames('form-control', attrs.className);
+    const CompCls = props.autoSize ? Textarea : 'textarea';
+    return (
+        <CompCls
+            value={props.value}
+            {...attrs}
+        />
+    );
+}
+FormTextarea.propTypes = {
+    value: PropTypes.string,
+    autoSize: PropTypes.bool
+};
+FormTextarea.defaultProps = {
+    value: '',
+    autoSize: false
 };

@@ -32,7 +32,6 @@ export class FormTextInput extends React.Component {
         attrs.className = classNames('form-control', attrs.className);
         return (
             <input
-                type="text"
                 value={this.props.value}
                 {...attrs}
                 {...this.state}
@@ -49,32 +48,16 @@ FormTextInput.propTypes = {
     ])
 };
 FormTextInput.defaultProps = {
-    value: ''
+    value: '',
+    type: 'text'
 };
 
 /**
  * FormPasswordInput
  */
 export function FormPasswordInput(props) {
-    const attrs = getAttrs(props, FormPasswordInput);
-    attrs.className = classNames('form-control', attrs.className);
-    return (
-        <input
-            type="password"
-            value={props.value}
-            {...attrs}
-        />
-    );
+    return <FormTextInput {...props} type="password" />;
 }
-FormPasswordInput.propTypes = {
-    value: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number
-    ])
-};
-FormTextInput.defaultProps = {
-    value: ''
-};
 
 /**
  * FormCheckbox

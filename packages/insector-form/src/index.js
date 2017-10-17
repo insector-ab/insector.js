@@ -15,8 +15,6 @@ import {
     FormSelect
 } from './components';
 
-import ControlEvent from './event';
-
 import {ValidationStatus} from './constants';
 
 // Exports
@@ -34,7 +32,5 @@ export { FormTextInput };
 export { FormPasswordInput };
 export { FormCheckbox };
 export { FormSelect };
-
-export { ControlEvent };
 
 export { ValidationStatus };

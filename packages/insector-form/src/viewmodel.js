@@ -18,6 +18,9 @@ export default class FormViewModel extends Model {
     }
 
     setValidation(key, value) {
+        if (typeof key === 'undefined') {
+            throw new TypeError('setValidation "key" undefined.');
+        }
         this.set(`validation:${key}`, value, SET_SILENT);
         if (this.hasChanged(`validation:${key}`)) {
             this.dispatchChange('validation');

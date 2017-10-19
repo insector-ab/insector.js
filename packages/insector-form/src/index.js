@@ -1,6 +1,10 @@
 import FormModel, {FormInputModel} from './model';
 
-import FormViewModel from './viewmodel';
+import FormViewModel, {
+    FormStatus,
+    ValidationStatus,
+    ValidationError
+} from './viewmodel';
 
 import {
     FormTextInput,
@@ -9,8 +13,6 @@ import {
     FormSelect,
     FormTextarea
 } from './components';
-
-import {ValidationStatus} from './constants';
 
 // Exports
 
@@ -25,4 +27,7 @@ export { FormCheckbox };
 export { FormSelect };
 export { FormTextarea };
 
+export {FormStatus};
+
 export { ValidationStatus };
+export { ValidationError };

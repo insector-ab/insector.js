@@ -1,8 +1,11 @@
 import Model, {
     identities as modelIdentities,
-    SET_SILENT
+    SET_SILENT,
+    SOFT_UPDATE
 } from 'mozy/model';
-import {ValidationStatus} from './constants';
+
+import {addConstantsToClass} from 'insector-utils';
+import ExtendableError from 'es6-error';
 
 /**
  * FormViewModel
@@ -54,10 +57,36 @@ export default class FormViewModel extends Model {
         };
     }
 
+    isChecking(key) {
+        if (this.hasValidation(key)) {
+            return this.getValidationStatus(key) === ValidationStatus.CHECKING;
+        };
+    }
+
     isCheckingFailed(key) {
         if (this.hasValidation(key)) {
             return this.getValidationStatus(key) === ValidationStatus.CHECKING_FAILED;
         };
+    }
+
+    isSubmittable(key) {
+        return !!this.isValid(key) && this.isReady(key) && !this.isComplete(key) && !this.isSubmitted(key);
+    }
+
+    /**
+     * FormStatus getters
+     */
+    isReady(key) {
+        return this.get(key) === FormStatus.READY;
+    }
+    isSubmitted(key) {
+        return this.get(key) === FormStatus.SUBMITTED;
+    }
+    isFailed(key) {
+        return this.get(key) === FormStatus.FAILED;
+    }
+    isComplete(key) {
+        return this.get(key) === FormStatus.COMPLETE;
     }
 
     getError(key) {
@@ -69,6 +98,12 @@ export default class FormViewModel extends Model {
     getErrorMessage(key) {
         if (this.hasError(key)) {
             return this.get(`validation:${key}`, {}).error.message;
+        }
+    }
+
+    getErrorCode(key) {
+        if (this.hasError(key)) {
+            return this.get(`validation:${key}`, {}).error.code;
         }
     }
 
@@ -84,6 +119,11 @@ export default class FormViewModel extends Model {
         return this.getFeedback(key) !== ValidationStatus.NONE;
     }
 
+    reset(data, flags = 0) {
+        // override flags, always SOFT_UPDATE
+        super.reset(data, SOFT_UPDATE);
+    }
+
     _getDefaults() {
         let d = super._getDefaults();
         d.identity = FormViewModel.identity;
@@ -96,3 +136,42 @@ FormViewModel.identity = 'insector.form.FormViewModel';
 // ****** Identity & Registry *****
 
 modelIdentities.set(FormViewModel.identity, FormViewModel);
+
+/**
+ * FormStatus
+ */
+export class FormStatus {}
+addConstantsToClass(FormStatus, {
+    READY: 'ready',
+    SUBMITTED: 'submitted',
+    COMPLETE: 'complete',
+    FAILED: 'failed'
+});
+
+/**
+ * ValidationStatus
+ */
+export class ValidationStatus {}
+addConstantsToClass(ValidationStatus, {
+    NONE: 'none',
+    VALID: 'valid',
+    INVALID: 'invalid',
+    CHECKING: 'checking',
+    CHECKING_FAILED: 'checking_failed'
+});
+
+export class ValidationError extends ExtendableError {
+
+    constructor(message, code) {
+        super(message);
+        this.code = code;
+    }
+
+    get data() {
+        return {
+            code: this.code,
+            message: this.message
+        };
+    }
+
+}

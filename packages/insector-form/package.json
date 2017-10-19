@@ -8,6 +8,7 @@
   "repository": "https://github.com/insector-ab/insector.js/tree/master/packages/insector-form",
   "dependencies": {
     "classnames": "^2.2.5",
+    "es6-error": "^4.0.2",
     "lodash.findindex": "^4.6.0",
     "lodash.frompairs": "^4.0.1",
     "lodash.isfunction": "^3.0.8",

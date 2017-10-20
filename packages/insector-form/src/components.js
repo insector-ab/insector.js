@@ -87,6 +87,7 @@ export function FormSelect(props) {
     return (
         <select
             value={props.value}
+            onChange={e => e} // handler required by React for "controlled" components
             {...attrs}
         >
             {props.children}

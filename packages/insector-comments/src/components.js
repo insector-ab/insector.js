@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import {getAttrs} from 'insector-utils';
-import {FormModel, ReactTextarea} from 'insector-form';
+import {FormViewModel, FormTextarea} from 'insector-form';
+import {ReactView} from 'insector-react-mvc';
 
 /**
  * CommentList
@@ -23,13 +24,15 @@ export class CommentList extends React.Component {
                     // is last item in list new
                     const isNew = i === comments.length - 1 && Object.keys(this.refs).length > 0 && !this.refs.hasOwnProperty(item.uuid);
                     return (
-                        <Comment ref={item.uuid}
-                                 key={item.uuid}
-                                 comment={item}
-                                 getUserIconElement={this.props.getUserIconElement}
-                                 getCreatedByElement={this.props.getCreatedByElement}
-                                 canDeleteComment={this.props.canDeleteComment}
-                                 isNew={isNew} />
+                        <Comment
+                            ref={item.uuid}
+                            key={item.uuid}
+                            comment={item}
+                            getUserIconElement={this.props.getUserIconElement}
+                            getCreatedByElement={this.props.getCreatedByElement}
+                            canDeleteComment={this.props.canDeleteComment}
+                            isNew={isNew}
+                        />
                     );
                 })}
             </div>
@@ -61,9 +64,11 @@ class Comment extends React.Component {
                 </div>
                 <div className="media-body">
                     {this.props.canDeleteComment(comment) &&
-                        <button type="button"
-                                className="btn btn-xs btn-danger btn-transp btn-delete-comment"
-                                data-uuid={comment.uuid} >
+                        <button
+                            type="button"
+                            className="btn btn-xs btn-danger btn-transp btn-delete-comment"
+                            data-uuid={comment.uuid}
+                        >
                             <span className="fa fa-fw fa-trash" />
                         </button>
                     }
@@ -114,26 +119,35 @@ Comment.defaultProps = {
 /**
  * NewCommentForm
  */
-export class NewCommentForm extends React.Component {
+export class NewCommentForm extends ReactView {
+
+    events() {
+        return Object.assign(super.events(), {
+            'change text': 'onModelChange'
+        });
+    }
 
     render() {
         const attrs = getAttrs(this.props, NewCommentForm);
         attrs.className = classNames('container-fluid', 'comments-form', attrs.className);
-        const textInput = this.props.formModel.getInput('text');
         return (
             <div {... attrs}>
                 <div className="row">
                     <div className="col-xs-10 p-h-0">
-                        <ReactTextarea name="text"
-                                       rows="1"
-                                       className="autosize field-comment form-control"
-                                       placeholder={this.props.placeholder}
-                                       value={textInput.value}
-                                       autoSize={true} />
+                        <FormTextarea
+                            name="text"
+                            rows="1"
+                            className="autosize field-comment"
+                            placeholder={this.props.placeholder}
+                            value={this.props.model.get('text')}
+                            autoSize={true}
+                        />
                     </div>
                     <div className="col-xs-2 p-h-0">
-                        <button type="button"
-                                className="btn btn-block btn-default btn-save-comment">
+                        <button
+                            type="button"
+                            className="btn btn-block btn-default btn-save-comment"
+                        >
                             <span className="fa fa-fw fa-save" />
                             <span className="hidden-xs">Save</span>
                         </button>
@@ -143,9 +157,13 @@ export class NewCommentForm extends React.Component {
         );
     }
 
+    onModelChange() {
+        this.setState({});
+    }
+
 }
 NewCommentForm.propTypes = {
-    formModel: PropTypes.instanceOf(FormModel).isRequired,
+    model: PropTypes.instanceOf(FormViewModel).isRequired,
     placeholder: PropTypes.string
 };
 NewCommentForm.defaultProps = {

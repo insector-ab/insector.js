@@ -1,3 +1,4 @@
+import {UNSET_IF_FALSE} from 'mozy';
 import {ReactController} from 'insector-react-mvc';
 
 /**
@@ -18,9 +19,9 @@ export default class CommentsController extends ReactController {
     }
 
     onTextareaInput(event) {
-        const {name, value} = event.target;
-        this.model.commentForm.setInputValue(name, value);
-        this.model.dispatchChange('commentForm');
+        const {name, value} = event.originalEvent.target;
+        const form = this.model.commentForm;
+        form.set(name, value, UNSET_IF_FALSE);
     }
 
     onShowAllClick(event) {

@@ -13,7 +13,7 @@ import CommentsController from './controller';
  */
 export default class Comments extends MVCContainer {
 
-    get formModel() {
+    get formViewModel() {
         return this.model.commentForm;
     }
 

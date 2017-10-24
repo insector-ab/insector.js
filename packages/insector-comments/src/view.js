@@ -18,8 +18,7 @@ export default class CommentsView extends ReactView {
             'change showNewComment': 'onModelChange',
             'change showAll': 'onModelChange',
             'change limit': 'onModelChange',
-            'change comments': 'onModelChange',
-            'change commentForm': 'onModelChange'
+            'change comments': 'onModelChange'
         });
     }
 
@@ -61,7 +60,7 @@ export default class CommentsView extends ReactView {
                 }
 
                 {this.model.showNewComment &&
-                    <NewCommentForm formModel={this.model.commentForm}
+                    <NewCommentForm model={this.model.commentForm}
                                     placeholder={this.props.placeholder} />
                 }
 

@@ -1,11 +1,17 @@
-import {modelIdentities, modelRegistry} from 'mozy';
+import {ModelRegistry, modelFactory, modelIdentities} from 'mozy';
 import {ViewModel} from 'insector-react-mvc';
-import {FormModel} from 'insector-form';
+import {FormViewModel} from 'insector-form';
 
 /**
  * CommentsModel
  */
 export default class CommentsModel extends ViewModel {
+
+    constructor(data) {
+        super(data);
+        // local model registry
+        this._localRegistry = new ModelRegistry('uuid', modelFactory);
+    }
 
     get showNewComment() {
         return this.get('showNewComment');
@@ -22,7 +28,9 @@ export default class CommentsModel extends ViewModel {
     }
 
     get commentForm() {
-        return modelRegistry.getModel(this.get('commentForm'));
+        if (this.has('commentForm')) {
+            return this._localRegistry.getModel(this.get('commentForm'));
+        }
     }
 
     _getDefaults() {
@@ -30,15 +38,13 @@ export default class CommentsModel extends ViewModel {
         d.identity = CommentsModel.identity;
         d.showNewComment = false;
         d.showAll = false;
-        d.commentForm = (new FormModel({
-            inputs: [
-                {
-                    name: 'text',
-                    validation: ['required', {key: 'minChars', args: [1]}]
-                }
-            ]
-        })).getModelData();
+        d.commentForm = {identity: FormViewModel.identity};
         return d;
+    }
+
+    _deleteReferences() {
+        super._deleteReferences();
+        delete this._localRegistry;
     }
 
 }

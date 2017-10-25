@@ -22,11 +22,8 @@ export default class NodeModel extends Model {
         return this.get('id');
     }
 
-    get identity() {
-        if (this.has('discriminator')) {
-            return this.get('discriminator');
-        }
-        return super.identity;
+    get discriminator() {
+        return this.get('discriminator');
     }
 
     get nodeState() {

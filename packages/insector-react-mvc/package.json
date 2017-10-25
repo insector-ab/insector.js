@@ -18,6 +18,7 @@
     "react": "15.x - 16.x",
     "react-dom": "15.x - 16.x",
     "mozy": "0.1.x",
-    "insector-utils": "0.1.x"
+    "insector-utils": "0.1.x",
+    "prop-types": "^15.6.0"
   }
 }

@@ -1,5 +1,4 @@
 import omit from 'lodash.omit';
-import filter from 'lodash.filter';
 
 /**
  * mixin
@@ -32,7 +31,7 @@ function defineConstantsClassMethods(Cls) {
     Object.defineProperty(Cls, 'allKeys', {
         get: function() {
             if (!this.hasOwnProperty('_allKeys_')) {
-                this['_allKeys_'] = filter(Object.keys(Cls), function(k) { return k.match(/^[A-Z0-9_]+$/); });
+                this['_allKeys_'] = Object.keys(Cls).filter(k => k.match(/^[A-Z0-9_]+$/));
             }
             return this['_allKeys_'];
         }

@@ -7,8 +7,7 @@
   "license": "MIT",
   "repository": "https://github.com/insector-ab/insector.js/tree/master/packages/insector-comments",
   "dependencies": {
-    "classnames": "^2.2.5",
-    "prop-types": "^15.5.8"
+    "classnames": "^2.2.5"
   },
   "peerDependencies": {
     "react": "15.x - 16.x",
@@ -16,6 +15,7 @@
     "insector-utils": "0.1.x",
     "insector-form": "0.1.x",
     "insector-react-mvc": "0.1.x",
-    "mozy": "0.1.x"
+    "mozy": "0.1.x",
+    "prop-types": "^15.6.0"
   }
 }

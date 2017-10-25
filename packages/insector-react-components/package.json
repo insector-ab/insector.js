@@ -7,13 +7,13 @@
   "license": "MIT",
   "repository": "https://github.com/insector-ab/insector.js/tree/master/packages/insector-react-components",
   "dependencies": {
-    "classnames": "^2.2.5",
-    "prop-types": "^15.5.8"
+    "classnames": "^2.2.5"
   },
   "peerDependencies": {
     "jquery": "2.x",
     "react": "15.x - 16.x",
     "react-dom": "15.x - 16.x",
-    "insector-utils": "0.1.x"
+    "insector-utils": "0.1.x",
+    "prop-types": "^15.6.0"
   }
 }

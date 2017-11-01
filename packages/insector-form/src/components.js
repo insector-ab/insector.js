@@ -5,9 +5,9 @@ import Textarea from 'react-textarea-autosize';
 import {getAttrs} from 'insector-utils';
 
 /**
- * FormTextInput
+ * AbstractInput
  */
-export class FormTextInput extends React.Component {
+export class AbstractInput extends React.Component {
 
     constructor(props, ...args) {
         super(props, ...args);
@@ -27,6 +27,13 @@ export class FormTextInput extends React.Component {
         }
         this.setState({value: event.target.value});
     }
+
+}
+
+/**
+ * FormTextInput
+ */
+export class FormTextInput extends AbstractInput {
 
     render() {
         const attrs = getAttrs(this.props, FormTextInput);
@@ -81,18 +88,23 @@ FormCheckbox.propTypes = {
 /**
  * FormSelect
  */
-export function FormSelect(props) {
-    const attrs = getAttrs(props, FormSelect);
-    attrs.className = classNames('form-control', attrs.className);
-    return (
-        <select
-            value={props.value}
-            onChange={e => e} // handler required by React for "controlled" components
-            {...attrs}
-        >
-            {props.children}
-        </select>
-    );
+export class FormSelect extends AbstractInput {
+
+    render() {
+        const attrs = getAttrs(this.props, FormSelect);
+        attrs.className = classNames('form-control', attrs.className);
+        return (
+            <select
+                value={this.props.value}
+                {...attrs}
+                {...this.state}
+                onChange={this.onChange}
+            >
+                {this.props.children}
+            </select>
+        );
+    }
+
 }
 FormSelect.propTypes = {
     value: PropTypes.oneOfType([
@@ -108,16 +120,22 @@ FormSelect.defaultProps = {
 /**
  * FormTextarea
  */
-export function FormTextarea(props) {
-    const attrs = getAttrs(props, FormTextarea);
-    attrs.className = classNames('form-control', attrs.className);
-    const CompCls = props.autoSize ? Textarea : 'textarea';
-    return (
-        <CompCls
-            value={props.value}
-            {...attrs}
-        />
-    );
+export class FormTextarea extends AbstractInput {
+
+    render() {
+        const attrs = getAttrs(this.props, FormTextarea);
+        attrs.className = classNames('form-control', attrs.className);
+        const CompCls = this.props.autoSize ? Textarea : 'textarea';
+        return (
+            <CompCls
+                value={this.props.value}
+                {...attrs}
+                {...this.state}
+                onChange={this.onChange}
+            />
+        );
+    }
+
 }
 FormTextarea.propTypes = {
     value: PropTypes.string,

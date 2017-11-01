@@ -74,7 +74,7 @@ export default class MVCContainer extends React.Component {
         this.controller.addViewEventListeners(this.view.element);
         // Initialized, launch directly
         if (this.model.initialized) {
-            this.controller.launch();
+            this.controller.launch(this.props);
         // Error if no promise
         } else if (!this._initializePromise) {
             throw new Error('MVCContainer.componentDidMount(): No this._initializePromise found and model not initialized, so controller will not launch.');

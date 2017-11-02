@@ -12,6 +12,7 @@
     "path": "^0.12.7"
   },
   "peerDependencies": {
-    "jquery": "2.x"
+    "jquery": "2.x",
+    "insector-utils": "0.1.x"
   }
 }

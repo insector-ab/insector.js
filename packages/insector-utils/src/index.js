@@ -1,4 +1,20 @@
 import omit from 'lodash.omit';
+import UIController from './ui-controller';
+import {
+    getResolveFunction,
+    resolveRoutes,
+    resolveEventHandlers
+} from './resolve-handlers';
+
+/**
+ * Exports
+ */
+export { UIController };
+export {
+    getResolveFunction,
+    resolveRoutes,
+    resolveEventHandlers
+};
 
 /**
  * mixin

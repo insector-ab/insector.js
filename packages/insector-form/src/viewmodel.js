@@ -12,6 +12,13 @@ import ExtendableError from 'es6-error';
  */
 export default class FormViewModel extends Model {
 
+    get(property, defaultValue) {
+        if (!this.has(property) && typeof defaultValue === 'undefined') {
+            return super.get(`default:${property}`);
+        }
+        return super.get(property, defaultValue);
+    }
+
     unset(key, flags) {
         super.unset(key, flags);
         super.unset(`validation:${key}`, SET_SILENT);

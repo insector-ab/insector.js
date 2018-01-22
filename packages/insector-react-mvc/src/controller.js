@@ -44,7 +44,9 @@ export default class ReactController {
     set view(value) {
         if (value !== this.view) {
             // remove view listners
-            this.removeViewEventListeners();
+            if (this.view) {
+                this.removeViewEventListeners();
+            }
             // Set new
             this._view = value;
         }
@@ -52,6 +54,19 @@ export default class ReactController {
 
     get element() {
         return ReactDOM.findDOMNode(this.view);
+    }
+
+    // Called when component will mount and ModuleModel is not initialized
+    // intialize should always return a promise
+    // Override and do stuff
+    initialize(props) {
+        return Promise.resolve();
+    }
+
+    // Called when component is mounted and initialized promise is resolved
+    // Override and do stuff
+    launch(props) {
+        // ABSTRACT
     }
 
     dispose() {

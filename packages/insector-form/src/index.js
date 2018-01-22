@@ -1,27 +1,33 @@
-import FormModel from './model';
+import FormModel, {FormInputModel} from './model';
 
-import {ReactInput,
-        ReactTextarea,
-        ReactSelect} from './controls';
+import FormViewModel, {
+    FormStatus,
+    ValidationStatus,
+    ValidationError
+} from './viewmodel';
 
-import {FormGroup,
-        CheckboxGroup,
-        FormTextInput,
-        FormPasswordInput,
-        FormCheckbox,
-        FormSelect} from './components';
+import {
+    FormTextInput,
+    FormPasswordInput,
+    FormCheckbox,
+    FormSelect,
+    FormTextarea
+} from './components';
 
 // Exports
 
 export { FormModel };
+export { FormInputModel };
 
-export { ReactInput };
-export { ReactTextarea };
-export { ReactSelect };
+export { FormViewModel };
 
-export { FormGroup };
-export { CheckboxGroup };
 export { FormTextInput };
 export { FormPasswordInput };
 export { FormCheckbox };
 export { FormSelect };
+export { FormTextarea };
+
+export {FormStatus};
+
+export { ValidationStatus };
+export { ValidationError };

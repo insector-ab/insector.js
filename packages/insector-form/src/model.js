@@ -1,11 +1,10 @@
-import $ from 'jquery';
 import isPlainObject from 'lodash.isplainobject';
-import isFunction from 'lodash.isfunction';
 import isUndefined from 'lodash.isundefined';
 import result from 'lodash.result';
 import fromPairs from 'lodash.frompairs';
 import findIndex from 'lodash.findindex';
 import {Model, modelIdentities, modelRegistry} from 'mozy';
+import uuidValidate from 'uuid-validate';
 
 /**
  * AbstractFormModel
@@ -25,97 +24,48 @@ export class AbstractFormModel extends Model {
         if (validations && !Array.isArray(validations)) {
             validations = [validations];
         }
-        // resolve when validation complete
-        let $deferred = $.Deferred();
-        // run validation methods
-        if (validations) {
-            let i = 0;
-            let il = validations.length;
-            let validationKey, validationMethod, validationArgs;
-            // chained validation, keeps validating until no more keys are found
-            let validateNext = () => {
-                if (isPlainObject(validations[i])) { // plain object
-                    // expects object {key: 'validation key', args: [1, 2, 3]}
-                    validationKey = validations[i].key;
-                    validationArgs = validations[i].args || [];
-                } else { // else handle as string
-                    validationKey = validations[i];
-                    validationArgs = [];
-                }
-                validationMethod = this._getValidationMethod(validationKey, customValidators);
-                this._doValidate(value, validationMethod, model, context, ...validationArgs).done((result, model) => {
-                    // if valid
-                    if (result) {
-                        i++;
-                        // more to validate?
-                        if (i < il) {
-                            validateNext();
-                        } else { // validation done
-                            $deferred.resolve(true, model);
-                        }
-                    } else { // did not validate
-                        $deferred.resolve(false, model);
+        const validatorMethods = Object.assign({}, defaultValidators, customValidators || {});
+        return new Promise((resolve, reject) => {
+            // run validation methods
+            if (validations) {
+                let i = 0;
+                const il = validations.length;
+                let key, args;
+                // chained validation, keeps validating until no more keys are found
+                const validateNext = () => {
+                    if (isPlainObject(validations[i])) { // plain object
+                        // expects object {key: 'validation key', args: [1, 2, 3]}
+                        key = validations[i].key;
+                        args = validations[i].args || [];
+                    // else handle as string
+                    } else {
+                        key = validations[i];
+                        args = [];
                     }
-                });
-            };
-            // start validation
-            validateNext();
-        } else { // no validation set
-            $deferred.resolve(true, model);
-        }
-        return $deferred;
-    }
-
-    _getValidationMethod(validationKey, customValidators) {
-        let methods = Object.assign({}, defaultValidators, customValidators || {});
-        if (typeof methods[validationKey] !== 'function') {
-            throw new Error('Validation method not found for: "' + validationKey + '"');
-        }
-        return methods[validationKey];
-    }
-
-    /**
-     * validate
-     * @param  {[type]} value      [description]
-     * @param  {[type]} validation [description]
-     * @param  {[type]} context    [description]
-     * @return {[type]}            [description]
-     */
-    _doValidate(value, validationMethod, model, context, ...validationArgs) {
-        let $deferred = $.Deferred();
-        // no validation, resolve
-        if (!isFunction(validationMethod)) {
-            $deferred.resolve(true, model);
-            return $deferred;
-        }
-        // validate
-        let result = validationMethod(value, model, context, ...validationArgs);
-
-        // no XHR object, value validated, resolve
-        if (!this._isXHRObject(result)) {
-            $deferred.resolve(result, model);
-            return $deferred;
-        }
-
-        // result is ajax promise, wait until promise is done
-        result.done((data, textStatus, jqXHR) => {
-            if (!data.hasOwnProperty('result')) {
-                throw new Error('Remote validation method must return {result: result}');
+                    // validator method not found
+                    if (typeof validatorMethods[key] !== 'function') {
+                        throw new Error(`Validation method not found for: ${key}`);
+                    }
+                    // validate
+                    validatorMethods[key](value, model, context, ...args)
+                        .then(validatedValue => {
+                            i++;
+                            // no more to validate?
+                            i < il ? validateNext() : resolve(validatedValue);
+                        })
+                        // did not validate
+                        .catch(err => {
+                            reject(err);
+                        });
+                };
+                // start validation
+                validateNext();
+            // no validation set
+            } else {
+                resolve(value);
             }
-            $deferred.resolve(data.result, model);
         });
-        return $deferred;
     }
-
-    /**
-     * isXHRObject
-     * @param  {[type]}  value [description]
-     * @return {Boolean}       [description]
-     */
-    _isXHRObject(value) {
-        return typeof value === 'object' && typeof value.done === 'function' && typeof value.abort === 'function';
-    }
-
 }
 
 /**
@@ -135,7 +85,7 @@ export default class FormModel extends AbstractFormModel {
     }
 
     addInput(formInput) {
-        this.inputs.add(formInput);
+        this.inputs.push(formInput);
         this.dispatchChange('inputs');
         return this;
     }
@@ -147,8 +97,21 @@ export default class FormModel extends AbstractFormModel {
         this.set('validation', value);
     }
 
+    get formValidation() {
+        // add form default validation to array
+        let validation = ['form'];
+        if (Array.isArray(this.validation)) {
+            return validation.concat(this.validation);
+        } else if (this.validation) {
+            return validation.concat([this.validation]);
+        }
+        return validation;
+    }
+
     get inputs() {
-        return modelRegistry.getModelList(this.rawInputs, this.cid + '.inputs');
+        return this.rawInputs.map(item => {
+            return modelRegistry.getModel(item);
+        });
     }
 
     get rawInputs() {
@@ -176,15 +139,15 @@ export default class FormModel extends AbstractFormModel {
     }
 
     hasInput(name) {
-        return !!findIndex(this.inputs.items, {name: name});
+        return !!findIndex(this.inputs, {name: name});
     }
 
     getInput(name) {
-        let inputIndex = findIndex(this.inputs.items, {name: name});
+        let inputIndex = findIndex(this.inputs, {name: name});
         if (inputIndex === -1) {
             throw new Error('FormInputModel not found for: ' + name);
         }
-        return this.inputs.at(inputIndex);
+        return this.inputs[inputIndex];
     }
 
     getInputValue(name) {
@@ -196,25 +159,24 @@ export default class FormModel extends AbstractFormModel {
     }
 
     validate(context, customValidators) {
-        // inititate input validation
-        let deferreds = this.inputs.map((input) => {
-            return input.validate(context, customValidators);
+        return new Promise((resolve, reject) => {
+            // validate inputs
+            Promise.all(this.inputs.map(input => {
+                return input.validate(context, customValidators);
+            }))
+                // validate form
+                .then(() => {
+                    // run form validation
+                    this._validate(this, this.formValidation, this, context, customValidators)
+                        .then((validatedValue) => {
+                            this.validationString = validatedValue;
+                            resolve();
+                        })
+                        .catch(err => {
+                            reject(err);
+                        });
+                });
         });
-        // when inputs validated
-        let $deferred = $.Deferred();
-        $.when(...deferreds).done(() => {
-            // run form validation
-            this._validate(this, this.validation, this, context, customValidators).done((result, form) => {
-                let validationResult = this.isInputsValid && result;
-                // inputs valid & did validate, set validation string
-                if (validationResult) {
-                    this.validationString = this.getInputsValidationString();
-                }
-                // resolve
-                $deferred.resolve(validationResult, this);
-            });
-        });
-        return $deferred;
     }
 
     getInputsValidationString() {
@@ -230,10 +192,10 @@ export default class FormModel extends AbstractFormModel {
         }).join(',');
     }
 
-    reset(data, flags = 0) {
+    reset(flags = 0) {
         // Just reset inputs
         this.inputs.forEach(input => {
-            input.reset();
+            input.reset(flags);
         });
     }
 
@@ -302,22 +264,24 @@ export class FormInputModel extends AbstractFormModel {
     validate(context, customValidators) {
         // unset error code
         this.unset('errorCode');
-        let $deferred = this._validate(this.value, this.validation, this, context, customValidators);
-        $deferred.done((result, input) => {
-            // if valid, set validatedValue
-            if (result) {
-                this.set('validatedValue', input.value);
-            }
-            this.set('isValidated', true);
-        });
-        return $deferred;
+        // validate input
+        return this._validate(this.value, this.validation, this, context, customValidators)
+            .then((value) => {
+                this.set('validatedValue', value);
+                this.set('isValidated', true);
+            })
+            .catch(err => {
+                this.errorCode = err.message;
+                this.set('isValidated', true);
+
+            });
     }
 
-    reset() {
-        this.unset('value');
-        this.unset('isValidated');
-        this.unset('validatedValue');
-        this.unset('errorCode');
+    reset(flags = 0) {
+        this.unset('value', flags);
+        this.unset('isValidated', flags);
+        this.unset('validatedValue', flags);
+        this.unset('errorCode', flags);
     }
 
     _getDefaults() {
@@ -337,29 +301,60 @@ modelIdentities.set(FormInputModel.identity, FormInputModel);
 
 export const defaultValidators = {
 
+    form: function(form, input, context, ...args) {
+        return new Promise((resolve, reject) => {
+            // is inputs valid
+            if (!form.isInputsValid) {
+                reject(new Error('invalidInput'));
+            }
+            resolve(form.getInputsValidationString());
+        });
+    },
+
     required: function(value, input, context, ...args) {
-        if (!value) {
-            input.errorCode = 'required';
-            return false;
-        }
-        return true;
+        return new Promise((resolve, reject) => {
+            if (!value) {
+                reject(new Error('required'));
+            }
+            resolve(value);
+        });
     },
 
     email: function(value, input, context, ...args) {
-        if (value && !/.+@.+\..+/.test(value)) {
-            input.errorCode = 'invalidFormat';
-            return false;
-        }
-        return true;
+        return new Promise((resolve, reject) => {
+            if (value && !/.+@.+\..+/.test(value)) {
+                reject(new Error('invalidFormat'));
+            }
+            resolve(value);
+        });
     },
 
     minChars: function(value, input, context, ...args) {
-        const limit = args[0];
-        if (value && value.length < limit) {
-            input.errorCode = 'minChars';
-            return false;
-        }
-        return true;
+        return new Promise((resolve, reject) => {
+            const limit = args[0];
+            if (value && value.length < limit) {
+                reject(new Error('minChars'));
+            }
+            resolve(value);
+        });
+    },
+
+    number: function(value, input, context, ...args) {
+        return new Promise((resolve, reject) => {
+            if (value && !/^-?\d+(\.\d+)?$/.test(value)) {
+                reject(new Error('NaN'));
+            }
+            resolve(value);
+        });
+    },
+
+    uuid: function(value, input, context, ...args) {
+        return new Promise((resolve, reject) => {
+            if (!uuidValidate(value, 4)) {
+                reject(new Error('invalidFormat'));
+            }
+            resolve(value);
+        });
     }
 
 };

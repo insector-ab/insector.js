@@ -22,11 +22,8 @@ export default class NodeModel extends Model {
         return this.get('id');
     }
 
-    get identity() {
-        if (this.has('discriminator')) {
-            return this.get('discriminator');
-        }
-        return super.identity;
+    get discriminator() {
+        return this.get('discriminator');
     }
 
     get nodeState() {
@@ -50,16 +47,16 @@ export default class NodeModel extends Model {
         return this.set('description', value);
     }
 
-    get createdById() {
-        return this.get('created_by_id');
+    get createdByUuid() {
+        return this.get('created_by_uuid');
     }
 
     get createdAt() {
         return this.get('created_at');
     }
 
-    get modifiedById() {
-        return this.get('modified_by_id');
+    get modifiedByUuid() {
+        return this.get('modified_by_uuid');
     }
 
     get modifiedAt() {
@@ -74,16 +71,12 @@ export default class NodeModel extends Model {
         return this.has('created_at');
     }
 
-    get isModified() {
-        return this.modified && (this.modified.isAfter(this.modifiedAt) || !this.isPersisted);
+    get isDeleted() {
+        return this.nodeState === NodeState.DELETED;
     }
 
     get isNew() {
         return !this.isPersisted && this._modified === undefined;
-    }
-
-    isModifiedBefore(datetime) {
-        return this.modifiedAt && this.modifiedAt.isBefore(datetime);
     }
 
     _getDefaults() {
@@ -123,17 +116,23 @@ export const nodeRegistry = new ModelRegistry('uuid', nodeFactory);
 /**
  * getNodeRelationListHandler
  */
-export function getNodeRelationListHandler(nodeDataMap, nodeModelRegistry) {
-    return {
-        getModel: function(key) {
-            const data = nodeDataMap.get(key);
-            if (!data) {
-                throw new Error('Node data for key ' + key + 'not found.');
-            }
-            return nodeModelRegistry.getModel(data);
-        },
-        getItem: function(model) {
-            return model.uuid;
-        }
-    };
-}
+// export function getNodeRelationListHandler(nodeDataMap, nodeModelRegistry) {
+//     return {
+//         getModel: function(key) {
+//             const data = nodeDataMap.get(key);
+//             if (!data) {
+//                 throw new Error('Node data for key ' + key + 'not found.');
+//             }
+//             return nodeModelRegistry.getModel(data);
+//         },
+//         getItem: function(model) {
+//             return model.uuid;
+//         },
+//         findModel: function(key) {
+//             return nodeModelRegistry.get(key);
+//         },
+//         disposeModel: function(key) {
+//             return nodeModelRegistry.disposeModelByKey(key);
+//         }
+//     };
+// }

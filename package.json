@@ -1,12 +1,12 @@
 {
   "name": "insector.js",
   "description": "Stuff for javascript projects.",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "private": true,
   "license": "MIT",
   "scripts": {
-    "build": "npm run build-form & npm run build-node-model & npm run build-react-components & npm run build-react-mvc & npm run build-utils & npm run build-xhr-service",
-    "watch": "npm run watch-form & npm run watch-node-model & npm run watch-react-components & npm run watch-react-mvc & npm run watch-utils & npm run watch-xhr-service",
+    "build": "npm run build-form & npm run build-node-model & npm run build-react-components & npm run build-react-mvc & npm run build-utils & npm run build-xhr-service & npm run build-comments",
+    "watch": "npm run watch-form & npm run watch-node-model & npm run watch-react-components & npm run watch-react-mvc & npm run watch-utils & npm run watch-xhr-service & npm run watch-comments",
     "build-form": "babel packages/insector-form/src --out-dir packages/insector-form/lib",
     "watch-form": "babel packages/insector-form/src --watch --out-dir packages/insector-form/lib",
     "build-node-model": "babel packages/insector-node-model/src --out-dir packages/insector-node-model/lib",
@@ -19,6 +19,8 @@
     "watch-utils": "babel packages/insector-utils/src --watch --out-dir packages/insector-utils/lib",
     "build-xhr-service": "babel packages/insector-xhr-service/src --out-dir packages/insector-xhr-service/lib",
     "watch-xhr-service": "babel packages/insector-xhr-service/src --watch --out-dir packages/insector-xhr-service/lib",
+    "build-comments": "babel packages/insector-comments/src --out-dir packages/insector-comments/lib",
+    "watch-comments": "babel packages/insector-comments/src --watch --out-dir packages/insector-comments/lib",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint packages/*/src/**.js"
   },
@@ -31,16 +33,16 @@
     "url": "https://github.com/insector-ab/insector.js/issues"
   },
   "devDependencies": {
-    "babel-cli": "^6.24.1",
+    "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
-    "eslint": "^3.19.0",
+    "eslint": "^4.15.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-config-standard-react": "^5.0.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-node": "^4.2.2",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-react": "^7.0.1",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-react": "^7.5.1",
     "eslint-plugin-standard": "^3.0.1"
   }
 }

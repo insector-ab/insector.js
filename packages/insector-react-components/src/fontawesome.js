@@ -14,8 +14,9 @@ export function FAButton(props) {
     attrs.className = classNames(
         'btn',
         (props.active ? props.btnActiveClassName : props.btnClassName),
+        {disabled: props.hasOwnProperty('disabled') && props.disabled},
         {active: props.active},
-        attrs.className || ''
+        attrs.className
     );
     const iconCls = classNames('fa', props.faClassName || '', props.faIcon);
     return (
@@ -44,33 +45,101 @@ FAButton.defaultProps = {
 };
 
 /**
+ * FAListItem
+ */
+export function FAListItem(props) {
+    const attrs = getAttrs(props, FAListItem);
+    attrs.className = classNames(
+        'list-item',
+        {'active': props.active},
+        {'disabled': props.disabled},
+        attrs.className
+    );
+    attrs.disabled = props.disabled;
+    return (
+        <li {...attrs}>
+            {props.faIcon &&
+                <span className={classNames('fa', props.faIcon)} />
+            }
+            {props.text &&
+                <span className="text">{props.text}</span>
+            }
+            {props.children}
+        </li>
+    );
+}
+FAListItem.propTypes = {
+    text: PropTypes.string,
+    faIcon: PropTypes.string,
+    active: PropTypes.bool,
+    disabled: PropTypes.bool,
+    children: PropTypes.node
+};
+
+/**
  * FANavItem
  */
 export function FANavItem(props) {
     const attrs = getAttrs(props, FANavItem);
-    attrs.className = classNames({'active': props.active}, attrs.className);
-    attrs.title = attrs.title || props.text;
+    attrs.disabled = props.disabled;
     return (
-        <li {... attrs}>
-            <a href={props.href || '#'} className="page-route" tabIndex="0">
-                {props.faIcon &&
-                    <span className={classNames('fa', 'fa-fw', props.faIcon)} />
-                }
-                <span className="text">{props.text}</span>
-                {props.children}
-            </a>
+        <li className={classNames('nav-item', {'active': props.active}, {'disabled': props.disabled})}
+            disabled={props.disabled}>
+            <FALink {...attrs}>{props.children}</FALink>
         </li>
     );
 }
 FANavItem.propTypes = {
     active: PropTypes.bool,
-    href: PropTypes.string,
+    disabled: PropTypes.bool,
+    children: PropTypes.node
+};
+
+/**
+ * FALink
+ */
+export function FALink(props) {
+    const attrs = getAttrs(props, FALink);
+    attrs.title = attrs.title || props.text;
+    return (
+        <a {...attrs}>
+            {props.faIcon &&
+                <span className={classNames('fa', props.faIcon)} />
+            }
+            {props.text &&
+                <span className="text">{props.text}</span>
+            }
+            {props.children}
+        </a>
+    );
+}
+FALink.propTypes = {
     faIcon: PropTypes.string,
     text: PropTypes.string,
     children: PropTypes.node
 };
-FANavItem.defaultProps = {
-    text: 'FANavItem'
+FALink.defaultProps = {
+    href: '#'
+};
+
+/**
+ * FALabel
+ */
+export function FALabel(props) {
+    const attrs = getAttrs(props, FALabel);
+    attrs.className = classNames('label', attrs.className);
+    return (
+        <span {...attrs}>
+            <span className={`fa ${props.faIcon}`} />
+            {props.text}
+            {props.children}
+        </span>
+    );
+}
+FALabel.propTypes = {
+    text: PropTypes.string,
+    faIcon: PropTypes.string,
+    children: PropTypes.node
 };
 
 /**
@@ -163,7 +232,7 @@ export function FATreeNode(props) {
     elements.push(<span key={'title'}>{title}</span>);
     // Link?
     if (props.href) {
-        elements = [(<a key={'a'} className={classNames('title', 'page-route')} href={props.href}>{elements}</a>)];
+        elements = [(<a key={'a'} className="title" href={props.href}>{elements}</a>)];
     } else {
         elements = [(<div key={'div'} className="title">{elements}</div>)];
     }

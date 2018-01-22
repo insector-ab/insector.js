@@ -1,5 +1,20 @@
 import omit from 'lodash.omit';
-import filter from 'lodash.filter';
+import UIController from './ui-controller';
+import {
+    getResolveFunction,
+    resolveRoutes,
+    resolveEventHandlers
+} from './resolve-handlers';
+
+/**
+ * Exports
+ */
+export { UIController };
+export {
+    getResolveFunction,
+    resolveRoutes,
+    resolveEventHandlers
+};
 
 /**
  * mixin
@@ -32,7 +47,7 @@ function defineConstantsClassMethods(Cls) {
     Object.defineProperty(Cls, 'allKeys', {
         get: function() {
             if (!this.hasOwnProperty('_allKeys_')) {
-                this['_allKeys_'] = filter(Object.keys(Cls), function(k) { return k.match(/^[A-Z0-9_]+$/); });
+                this['_allKeys_'] = Object.keys(Cls).filter(k => k.match(/^[A-Z0-9_]+$/));
             }
             return this['_allKeys_'];
         }
@@ -93,4 +108,30 @@ export function importConstantsToClass(Cls, FromCls, keys) {
  */
 export function getAttrs(props, cls) {
     return omit(props, ...Object.keys(cls.propTypes));
+}
+
+/**
+ * Remove origin from url string.
+ */
+export function trimOrigin(url) {
+    // origin, e.g. "https://www.wingframe.com"
+    const origin = window.location.origin;
+    // If first part of string is origin, return next part
+    if (url.substring(0, origin.length) === origin) {
+        return url.substr(origin.length);
+    }
+    return url;
+}
+
+/**
+ * Add callback for "document ready" state
+ */
+export function documentReady(callback) {
+    // If not loading, callback()
+    if (document.readyState !== 'loading') {
+        callback();
+    // else, add listener
+    } else {
+        document.addEventListener('DOMContentLoaded', callback);
+    }
 }

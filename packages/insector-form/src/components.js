@@ -1,108 +1,147 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import Textarea from 'react-textarea-autosize';
 import {getAttrs} from 'insector-utils';
-import {ReactInput, ReactSelect} from './controls';
 
 /**
- * FormGroup
+ * AbstractInput
  */
-export function FormGroup(props) {
-    const attrs = getAttrs(props, FormGroup);
-    attrs.className = classNames('form-group', attrs.className);
-    const leftColClasses = classNames('col-md-' + props.labelSize, 'control-label');
-    const rightColClasses = classNames('col-md-' + (12 - props.labelSize));
-    return (
-        <div {...attrs}>
-            <label className={leftColClasses} htmlFor={props.labelFor}>{props.label}</label>
-            <div className={rightColClasses}>
-                {props.children}
-            </div>
-        </div>
-    );
-}
-FormGroup.propTypes = {
-    label: PropTypes.string,
-    labelSize: PropTypes.number,
-    labelFor: PropTypes.string,
-    children: PropTypes.node
-};
-FormGroup.defaultProps = {
-    labelSize: 3
-};
+export class AbstractInput extends React.Component {
 
-/**
- * CheckboxGroup
- */
-export function CheckboxGroup(props) {
-    const attrs = getAttrs(props, CheckboxGroup);
-    attrs.className = classNames('checkbox', attrs.className || '');
-    return (
-        <div {... attrs}>
-            <label>
-                {props.children}
-                {props.label}
-            </label>
-        </div>
-    );
-}
-CheckboxGroup.propTypes = {
-    label: PropTypes.string,
-    children: PropTypes.node
-};
+    constructor(props, ...args) {
+        super(props, ...args);
+        this.state = {};
+        this.onChange = this.onChange.bind(this);
+    }
 
-// ------------- React inputs ------------- //
+    componentWillReceiveProps(nextProps) {
+        if (this.state.value !== nextProps.value) {
+            this.setState({value: nextProps.value});
+        }
+    }
+
+    onChange(event) {
+        if (this.props.onChange) {
+            this.props.onChange(event);
+        }
+        this.setState({value: event.target.value});
+    }
+
+}
 
 /**
  * FormTextInput
  */
-export function FormTextInput(props) {
-    const attrs = getAttrs(props, FormTextInput);
-    attrs.className = classNames('form-control', attrs.className || '');
-    return (
-        <ReactInput type="text"
-                    {... attrs} />
-    );
+export class FormTextInput extends AbstractInput {
+
+    render() {
+        const attrs = getAttrs(this.props, FormTextInput);
+        attrs.className = classNames('form-control', attrs.className);
+        return (
+            <input
+                value={this.props.value}
+                {...attrs}
+                {...this.state}
+                onChange={this.onChange}
+            />
+        );
+    }
+
 }
-FormTextInput.propTypes = {};
+FormTextInput.propTypes = {
+    value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+    ])
+};
+FormTextInput.defaultProps = {
+    value: '',
+    type: 'text'
+};
 
 /**
  * FormPasswordInput
  */
 export function FormPasswordInput(props) {
-    const attrs = getAttrs(props, FormPasswordInput);
-    attrs.className = classNames('form-control', attrs.className || '');
-    return (
-        <ReactInput type="password"
-                    {... attrs} />
-    );
+    return <FormTextInput {...props} type="password" />;
 }
-FormPasswordInput.propTypes = {};
 
 /**
  * FormCheckbox
  */
 export function FormCheckbox(props) {
     const attrs = getAttrs(props, FormCheckbox);
+    attrs.className = classNames('checkbox', attrs.className);
     return (
-        <ReactInput type="checkbox"
-                    {... attrs} />
+        <div {...attrs}>
+            <label>
+                <input type="checkbox" checked={props.checked} /> {props.text}
+            </label>
+        </div>
     );
 }
-FormCheckbox.propTypes = {};
+FormCheckbox.propTypes = {
+    checked: PropTypes.bool
+};
 
 /**
  * FormSelect
  */
-export function FormSelect(props) {
-    const attrs = getAttrs(props, FormSelect);
-    attrs.className = classNames('form-control', attrs.className || '');
-    return (
-        <ReactSelect {... attrs} >
-            {props.children}
-        </ReactSelect>
-    );
+export class FormSelect extends AbstractInput {
+
+    render() {
+        const attrs = getAttrs(this.props, FormSelect);
+        attrs.className = classNames('form-control', attrs.className);
+        return (
+            <select
+                value={this.props.value}
+                {...attrs}
+                {...this.state}
+                onChange={this.onChange}
+            >
+                {this.props.children}
+            </select>
+        );
+    }
+
 }
 FormSelect.propTypes = {
+    value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+    ]),
     children: PropTypes.node
+};
+FormSelect.defaultProps = {
+    value: ''
+};
+
+/**
+ * FormTextarea
+ */
+export class FormTextarea extends AbstractInput {
+
+    render() {
+        const attrs = getAttrs(this.props, FormTextarea);
+        attrs.className = classNames('form-control', attrs.className);
+        const CompCls = this.props.autoSize ? Textarea : 'textarea';
+        return (
+            <CompCls
+                value={this.props.value}
+                {...attrs}
+                {...this.state}
+                onChange={this.onChange}
+            />
+        );
+    }
+
+}
+FormTextarea.propTypes = {
+    value: PropTypes.string,
+    autoSize: PropTypes.bool
+};
+FormTextarea.defaultProps = {
+    value: '',
+    autoSize: false
 };

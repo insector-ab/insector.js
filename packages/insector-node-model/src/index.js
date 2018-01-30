@@ -3,7 +3,6 @@ import NodeModel, {NodeState,
                    nodeIdentities,
                    nodeFactory,
                    nodeRegistry} from './model';
-                   // getNodeRelationListHandler} from './model';
 
 import Graph from './graph';
 
@@ -15,6 +14,5 @@ export { nodeGraph };
 export { nodeIdentities };
 export { nodeFactory };
 export { nodeRegistry };
-// export { getNodeRelationListHandler };
 
 export { Graph };

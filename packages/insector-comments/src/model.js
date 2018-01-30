@@ -10,7 +10,7 @@ export default class CommentsModel extends ViewModel {
     constructor(data) {
         super(data);
         // local model registry
-        this._localRegistry = new ModelRegistry('uuid', modelFactory);
+        this._localRegistry = new ModelRegistry(modelFactory);
     }
 
     get showNewComment() {

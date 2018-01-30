@@ -112,27 +112,4 @@ export const nodeFactory = new Factory(nodeIdentities, 'discriminator');
  * nodeRegistry
  * @type {ModelRegistry}
  */
-export const nodeRegistry = new ModelRegistry('uuid', nodeFactory);
-/**
- * getNodeRelationListHandler
- */
-// export function getNodeRelationListHandler(nodeDataMap, nodeModelRegistry) {
-//     return {
-//         getModel: function(key) {
-//             const data = nodeDataMap.get(key);
-//             if (!data) {
-//                 throw new Error('Node data for key ' + key + 'not found.');
-//             }
-//             return nodeModelRegistry.getModel(data);
-//         },
-//         getItem: function(model) {
-//             return model.uuid;
-//         },
-//         findModel: function(key) {
-//             return nodeModelRegistry.get(key);
-//         },
-//         disposeModel: function(key) {
-//             return nodeModelRegistry.disposeModelByKey(key);
-//         }
-//     };
-// }
+export const nodeRegistry = new ModelRegistry(nodeFactory);

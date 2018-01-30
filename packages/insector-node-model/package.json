@@ -12,6 +12,6 @@
   },
   "peerDependencies": {
     "insector-utils": "0.1.x",
-    "mozy": "0.1.x"
+    "mozy": "0.2.x"
   }
 }

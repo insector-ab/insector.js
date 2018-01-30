@@ -1,5 +1,3 @@
-import FormModel, {FormInputModel} from './model';
-
 import FormViewModel, {
     FormStatus,
     ValidationStatus,
@@ -15,9 +13,6 @@ import {
 } from './components';
 
 // Exports
-
-export { FormModel };
-export { FormInputModel };
 
 export { FormViewModel };
 

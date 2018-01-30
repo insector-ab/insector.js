@@ -126,11 +126,6 @@ export default class FormViewModel extends Model {
         return this.getFeedback(key) !== ValidationStatus.NONE;
     }
 
-    reset(data, flags = 0) {
-        // override flags, always SOFT_UPDATE
-        super.reset(data, SOFT_UPDATE);
-    }
-
     _getDefaults() {
         let d = super._getDefaults();
         d.identity = FormViewModel.identity;

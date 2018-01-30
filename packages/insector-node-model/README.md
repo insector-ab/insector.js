@@ -1,6 +1,6 @@
 # insector-node-model
 
-> Node model (mozy.Model) and accompanying Graph, Factory and ModelRegistry.
+> Node model (mozy.Model) and accompanying Graph, Factory and Registry.
 
 ## Install
 

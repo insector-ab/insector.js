@@ -1,4 +1,4 @@
-import Model, {UNSET_IF_FALSE} from 'mozy/model';
+import Model from 'mozy/model';
 
 /**
  * ViewModel, for use with
@@ -23,7 +23,7 @@ export default class ViewModel extends Model {
         return this.get('initialized', false);
     }
     set initialized(value) {
-        this.set('initialized', value, UNSET_IF_FALSE);
+        this.set('initialized', value, {unsetIfFalsey: true});
     }
 
     get isFetching() {

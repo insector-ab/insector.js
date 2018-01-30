@@ -1,7 +1,7 @@
 {
   "name": "insector-node-model",
   "version": "0.1.0",
-  "description": "Node model (mozy.Model) and accompanying Graph, Factory and ModelRegistry.",
+  "description": "Node model (mozy.Model) and accompanying Graph, Factory and Registry.",
   "main": "lib/index.js",
   "author": "Martin Söderholm",
   "license": "MIT",

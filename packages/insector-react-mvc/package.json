@@ -7,18 +7,16 @@
   "license": "MIT",
   "repository": "https://github.com/insector-ab/insector.js/tree/master/packages/insector-react-mvc",
   "dependencies": {
-    "lodash.isequal": "^4.5.0",
     "lodash.isfunction": "^3.0.8",
-    "lodash.isobject": "^3.0.2",
     "lodash.result": "^4.5.2",
-    "lodash.uniqueid": "^4.0.1"
+    "lodash.uniqueid": "^4.0.1",
+    "resolve-handlers": "^0.1.0"
   },
   "peerDependencies": {
     "jquery": "3.x",
     "react": "15.x - 16.x",
     "react-dom": "15.x - 16.x",
     "mozy": "0.2.x",
-    "insector-utils": "0.1.x",
     "prop-types": "^15.6.0"
   }
 }

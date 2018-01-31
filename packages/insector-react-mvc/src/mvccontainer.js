@@ -49,8 +49,10 @@ export default class MVCContainer extends React.Component {
             throw new Error('doInitialize called while initializing.');
         }
         this._initializePromise = this.controller.initialize(props)
-                                                 .then(this.onInitializeFulfilled,
-                                                       this.onInitializeRejected);
+            .then(
+                this.onInitializeFulfilled,
+                this.onInitializeRejected
+            );
     }
 
     dispose() {

@@ -1,8 +1,7 @@
 import Model from 'mozy/model';
 
 /**
- * ViewModel, for use with
- * ReactModule (/react/module.js)
+ * ViewModel
  */
 export default class ViewModel extends Model {
 

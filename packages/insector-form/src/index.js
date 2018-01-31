@@ -15,14 +15,12 @@ import {
 // Exports
 
 export { FormViewModel };
+export { FormStatus };
+export { ValidationStatus };
+export { ValidationError };
 
 export { FormTextInput };
 export { FormPasswordInput };
 export { FormCheckbox };
 export { FormSelect };
 export { FormTextarea };
-
-export {FormStatus};
-
-export { ValidationStatus };
-export { ValidationError };

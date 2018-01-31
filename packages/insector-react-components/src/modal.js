@@ -25,10 +25,12 @@ export function FormModal(props) {
                 {props.children}
             </ModalBody>
             <ModalFooter>
-                <DefaultModalButtons confirmButtonText={props.confirmButtonText}
-                                     confirmButtonStyle={props.confirmButtonStyle}
-                                     cancelButtonText={props.cancelButtonText}
-                                     cancelButtonStyle={props.cancelButtonStyle} />
+                <DefaultModalButtons
+                    confirmButtonText={props.confirmButtonText}
+                    confirmButtonStyle={props.confirmButtonStyle}
+                    cancelButtonText={props.cancelButtonText}
+                    cancelButtonStyle={props.cancelButtonStyle}
+                />
             </ModalFooter>
         </Modal>
     );
@@ -60,10 +62,12 @@ export function ConfirmModal(props) {
         <Modal {...attrs}>
             <ModalBody closeButton={true}>
                 {props.children}
-                <DefaultModalButtons confirmButtonText={props.confirmButtonText}
-                                     confirmButtonStyle={props.confirmButtonStyle}
-                                     cancelButtonText={props.cancelButtonText}
-                                     cancelButtonStyle={props.cancelButtonStyle} />
+                <DefaultModalButtons
+                    confirmButtonText={props.confirmButtonText}
+                    confirmButtonStyle={props.confirmButtonStyle}
+                    cancelButtonText={props.cancelButtonText}
+                    cancelButtonStyle={props.cancelButtonStyle}
+                />
             </ModalBody>
         </Modal>
     );
@@ -131,9 +135,13 @@ export function AlertModal(props) {
         <Modal {...attrs}>
             <ModalBody>
                 {props.children}
-                <button type="button"
-                        className={classNames('modal-ok', 'btn', 'btn-block', props.okButtonStyle)}
-                        data-dismiss="modal">{props.okButtonText}</button>
+                <button
+                    type="button"
+                    className={classNames('modal-ok', 'btn', 'btn-block', props.okButtonStyle)}
+                    data-dismiss="modal"
+                >
+                    {props.okButtonText}
+                </button>
             </ModalBody>
         </Modal>
     );
@@ -158,10 +166,18 @@ export function DefaultModalButtons(props) {
     const confirmStyles = classNames('btn', props.confirmButtonStyle, 'modal-ok');
     return (
         <div {...attrs}>
-            <button type="button" className={cancelStyles} tabIndex={-1} data-dismiss="modal">
+            <button
+                type="button"
+                className={cancelStyles}
+                tabIndex={-1}
+                data-dismiss="modal"
+            >
                 {props.cancelButtonText}
             </button>
-            <button type="button" className={confirmStyles}>
+            <button
+                type="button"
+                className={confirmStyles}
+            >
                 {props.confirmButtonText}
             </button>
         </div>
@@ -269,7 +285,12 @@ export const ModalFooter = createWrapperComponent('modal-footer');
  */
 export function ModalCloseButton(props) {
     return (
-        <button type="button" className="close modal-close" data-dismiss="modal" aria-label="Close">
+        <button
+            type="button"
+            className="close modal-close"
+            data-dismiss="modal"
+            aria-label="Close"
+        >
             <span aria-hidden="true">&times;</span>
         </button>
     );

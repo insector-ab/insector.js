@@ -1,9 +1,4 @@
-import Model, {
-    identities as modelIdentities,
-    SET_SILENT,
-    SOFT_UPDATE
-} from 'mozy/model';
-
+import {Model, modelIdentities} from 'mozy';
 import {addConstantsToClass} from 'insector-utils';
 import ExtendableError from 'es6-error';
 
@@ -21,7 +16,7 @@ export default class FormViewModel extends Model {
 
     unset(key, flags) {
         super.unset(key, flags);
-        super.unset(`validation:${key}`, SET_SILENT);
+        super.unset(`validation:${key}`, {setSilent: true});
         if (this.hasChanged(`validation:${key}`)) {
             this.dispatchChange('validation');
         }
@@ -31,14 +26,14 @@ export default class FormViewModel extends Model {
         if (typeof key === 'undefined') {
             throw new TypeError('setValidation "key" undefined.');
         }
-        this.set(`validation:${key}`, value, SET_SILENT);
+        this.set(`validation:${key}`, value, {setSilent: true});
         if (this.hasChanged(`validation:${key}`)) {
             this.dispatchChange('validation');
         }
     }
 
     unsetValidation(key) {
-        this.unset(`validation:${key}`, SET_SILENT);
+        this.unset(`validation:${key}`, {setSilent: true});
         if (this.hasChanged(`validation:${key}`)) {
             this.dispatchChange('validation');
         }

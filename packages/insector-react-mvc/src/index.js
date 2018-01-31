@@ -1,19 +1,12 @@
+import AppEvent from './appevent';
 import MVCContainer from './mvccontainer';
-
-import ViewModel from './viewmodel';
-import ReactView from './view';
 import ReactController from './controller';
-
-import AppEvent from './app/event';
-import AppController from './app/controller';
+import ReactView from './view';
+import ViewModel from './viewmodel';
 
 // Exports
-
-export { MVCContainer };
-
-export { ViewModel };
-export { ReactView };
-export { ReactController };
-
 export { AppEvent };
-export { AppController };
+export { MVCContainer };
+export { ReactController };
+export { ReactView };
+export { ViewModel };

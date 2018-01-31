@@ -1,8 +1,10 @@
-import NodeModel, {NodeState,
-                   nodeGraph,
-                   nodeIdentities,
-                   nodeFactory,
-                   nodeRegistry} from './model';
+import NodeModel, {
+    NodeState,
+    nodeGraph,
+    nodeIdentities,
+    nodeFactory,
+    nodeRegistry
+} from './model';
 
 import Graph from './graph';
 

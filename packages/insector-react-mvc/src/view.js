@@ -1,152 +1,103 @@
+/* eslint indent: ["error", 2, {"SwitchCase": 1}] */
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import isObject from 'lodash.isobject';
-import isFunction from 'lodash.isfunction';
-import uniqueId from 'lodash.uniqueid';
-import result from 'lodash.result';
+import {resolveModelEventHandlers} from 'resolve-handlers';
 
 /**
  * ReactView
  */
 export default class ReactView extends React.Component {
 
-    constructor(props) {
-        super(props);
-        // Unique client id
-        this.cid = uniqueId('view');
-    }
+  constructor(...args) {
+    super(...args);
+    // Resolve model event handlers
+    this._resolvedEventHandlers = resolveModelEventHandlers(this.getModelEventHandlerStrings(), this);
+    // Bind
+    this.onInvalidation = this.onInvalidation.bind(this);
+  }
 
-    get model() {
-        if (isObject(this.props) && this.props.hasOwnProperty('model')) {
-            return this.props.model;
-        }
-        if (this.hasOwnProperty('_model')) {
-            return this._model;
-        }
-    }
+  get model() {
+    return this.props.model;
+  }
 
-    get element() {
-        return ReactDOM.findDOMNode(this);
-    }
+  getModelEventHandlerStrings() {
+    return [];
+  }
 
-    events() {
-        return {};
+  componentWillReceiveProps(nextProps) {
+    // If model change
+    if (nextProps.model !== this.model) {
+      // Remove listeners from current model
+      this.removeModelListeners();
+      // If new model
+      if (nextProps.model) {
+        // Add to new model
+        this.addModelListeners(nextProps.model);
+      }
     }
+  }
 
-    dispose() {
-        this.removeEventListeners();
-        this._dispose();
-        this._deleteReferences();
-    }
+  componentDidMount() {
+    // Add listeners
+    this.addModelListeners();
+  }
 
-    componentWillReceiveProps(nextProps) {
-        // console.log('componentWillReceiveProps', this.constructor.name, this.cid);
-        if (nextProps.model !== this.model) {
-            // Remove listeners from current model
-            this.removeEventListeners();
-            // If new model
-            if (nextProps.model) {
-                // Add to new model
-                this.addEventListeners(nextProps.model);
-            }
-        }
-    }
+  componentWillUnmount() {
+    // Dispose
+    this.dispose();
+  }
 
-    componentDidMount() {
-        // Add listeners
-        this.addEventListeners();
-    }
+  invalidate() {
+    // Cancel animation frame
+    window.cancelAnimationFrame(this._frame);
+    // Request animation frame
+    this._frame = window.requestAnimationFrame(this.onInvalidation);
+  }
 
-    componentWillUnmount() {
-        // Dispose
-        this.dispose();
-    }
+  onInvalidation() {
+    this.setState({});
+  }
 
-    addEventListeners(model) {
-        this._delegateEvents(model || this.model);
+  addModelListeners(model) {
+    model = model || this.model;
+    if (model) {
+      this._resolvedEventHandlers.forEach(eventHandler => {
+        model.addListener(eventHandler.eventType, eventHandler);
+      });
     }
+  }
 
-    removeEventListeners() {
-        this._undelegateEvents();
+  removeModelListeners() {
+    if (this.model) {
+      this._resolvedEventHandlers.forEach(eventHandler => {
+        this.model.removeListener(eventHandler.eventType, eventHandler);
+      });
     }
+  }
 
-    _delegateEvents(target) {
-        target = target || this.model;
-        const events = this._getResolvedEvents();
-        // Events found, delegate
-        if (events) {
-            // Events, but no target found, throw error.
-            if (!target) {
-                throw new Error('Could not delegate controller events. No target model.');
-            }
-            // Undelegate
-            this._undelegateEvents();
-            // Delegate
-            Object.keys(events).forEach(key => {
-                target.addListener(key, events[key]);
-            });
-            // Save target
-            this._delegatedTarget = target;
-        }
-        // Return
-        return this;
-    }
+  dispose() {
+    window.cancelAnimationFrame(this._frame);
+    this.removeModelListeners();
+    this._dispose();
+    this._deleteReferences();
+  }
 
-    _undelegateEvents(target) {
-        target = target || this._delegatedTarget || this.model;
-        // Undelegate
-        if (this._resolvedEvents) {
-            Object.keys(this._resolvedEvents).forEach(key => {
-                target.removeListener(key, this._resolvedEvents[key]);
-            });
-        }
-        // Return
-        return this;
-    }
+  _dispose() {
+    // Abstract
+  }
 
-    _getResolvedEvents() {
-        if (!this._resolvedEvents) {
-            const events = result(this, 'events');
-            if (!events) {
-                return;
-            }
-            this._resolvedEvents = {};
-            Object.keys(events).forEach(key => {
-                this._resolvedEvents[key] = this._getEventHandler(key, events);
-            });
-        }
-        return this._resolvedEvents;
-    }
-
-    _getEventHandler(key, events) {
-        events = events || result(this, 'events');
-        let handler = events[key];
-        if (!isFunction(handler)) {
-            handler = this[ events[key] ];
-        }
-        if (!handler) {
-            throw new Error('Could not find handler for event "' + key + '".');
-        }
-        return handler.bind(this);
-    }
-
-    _dispose() {
-        // Abstract
-    }
-
-    _deleteReferences() {
-        delete this.cid;
-        delete this._model;
-        delete this._delegatedTarget;
-        // Resolved event handlers
-        Object.keys(this._resolvedEvents || {}).forEach(key => {
-            delete this._resolvedEvents[key];
-        });
-        delete this._resolvedEvents;
-    }
+  _deleteReferences() {
+    // Resolved event handlers
+    Object.keys(this._resolvedEvents || {}).forEach(key => {
+      delete this._resolvedEvents[key];
+    });
+    delete this._resolvedEvents;
+  }
 
 }
 ReactView.propTypes = {
-    model: PropTypes.object
+  model: PropTypes.shape({
+    addListener: PropTypes.func,
+    removeListener: PropTypes.func
+  })
 };

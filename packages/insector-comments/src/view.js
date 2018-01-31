@@ -34,8 +34,10 @@ export default class CommentsView extends ReactView {
         return (
             <div {...attrs}>
                 <div className="comments-header">
-                    <button type="button"
-                            className="btn btn-sm btn-transp pull-right btn-show-new-comment">
+                    <button
+                        type="button"
+                        className="btn btn-sm btn-transp pull-right btn-show-new-comment"
+                    >
                         <span className="fa fa-fw fa-comment" />
                         <span className=""> Comment</span>
                     </button>
@@ -43,25 +45,31 @@ export default class CommentsView extends ReactView {
                     <span className="fa fa-comments-o m-l-1" />
                     <span className="m-h-1">{comments.length} Comments</span>
 
-                    <button type="button"
-                            className="btn btn-sm btn-transp btn-show-all"
-                            disabled={comments.length <= this.props.limit}>
+                    <button
+                        type="button"
+                        className="btn btn-sm btn-transp btn-show-all"
+                        disabled={comments.length <= this.props.limit}
+                    >
                         <span className="fa fa-angle-down" />
                         <span> Show all</span>
                     </button>
                 </div>
 
                 {comments.length > 0 &&
-                    <CommentList comments={comments}
-                                 limit={this.model.showAll ? 0 : this.props.limit}
-                                 getUserIconElement={this.props.getUserIconElement}
-                                 getCreatedByElement={this.props.getCreatedByElement}
-                                 canDeleteComment={this.props.canDeleteComment} />
+                    <CommentList
+                        comments={comments}
+                        limit={this.model.showAll ? 0 : this.props.limit}
+                        getUserIconElement={this.props.getUserIconElement}
+                        getCreatedByElement={this.props.getCreatedByElement}
+                        canDeleteComment={this.props.canDeleteComment}
+                    />
                 }
 
                 {this.model.showNewComment &&
-                    <NewCommentForm model={this.model.commentForm}
-                                    placeholder={this.props.placeholder} />
+                    <NewCommentForm
+                        model={this.model.commentForm}
+                        placeholder={this.props.placeholder}
+                    />
                 }
 
             </div>

@@ -13,13 +13,17 @@ import {NewCommentForm, CommentList} from './components';
  */
 export default class CommentsView extends ReactView {
 
-    events() {
-        return Object.assign(super.events(), {
-            'change showNewComment': 'onModelChange',
-            'change showAll': 'onModelChange',
-            'change limit': 'onModelChange',
-            'change comments': 'onModelChange'
-        });
+    getModelEventHandlerStrings() {
+        return super.getModelEventHandlerStrings().concat([
+            'change showNewComment: onModelChange',
+            'change showAll: onModelChange',
+            'change limit: onModelChange',
+            'change comments: onModelChange'
+        ]);
+    }
+
+    onModelChange(event) {
+        this.invalidate();
     }
 
     render() {

@@ -1,157 +1,83 @@
-import $ from 'jquery';
+/* eslint indent: ["error", 2, {"SwitchCase": 1}] */
 import ReactDOM from 'react-dom';
-import isFunction from 'lodash.isfunction';
-import uniqueId from 'lodash.uniqueid';
-import result from 'lodash.result';
+import ElementController from 'element-controller';
 
 /**
  * ReactController
  */
-export default class ReactController {
+export default class ReactController extends ElementController {
 
-    constructor(model, view) {
-        // public
-        this.cid = uniqueId('controller');
-        // private
-        this._model = model;
-        this._view = view;
-        this._delegatedEl = undefined;
-    }
+  constructor(mountedContainer) {
+    // super takes DOM element
+    super(ReactDOM.findDOMNode(mountedContainer));
+    // Container ref
+    this.container = mountedContainer;
+    // Binds
+    this.bindHandlers('onInitializeFulfilled', 'onInitializeRejected');
 
-    events() {
-        return {};
-    }
-
-    get model() {
-        return this._model;
-    }
-    set model(value) {
-        if (value !== this._model) {
-            // Remove listeners from current model
-            this.removeModelEventListeners();
-            // Set new model
-            this._model = value;
-            // Add listeners to new model
-            if (value) {
-                this.addModelEventListeners(value);
-            }
-        }
+    // If initialized, launch directly
+    if (this.model.initialized) {
+      this.launch();
+    // else, initialize
+    } else {
+      this.initialize()
+        .then(
+          this.onInitializeFulfilled,
+          this.onInitializeRejected
+        );
     }
 
-    get view() {
-        return this._view;
-    }
-    set view(value) {
-        if (value !== this.view) {
-            // remove view listners
-            if (this.view) {
-                this.removeViewEventListeners();
-            }
-            // Set new
-            this._view = value;
-        }
-    }
+  }
 
-    get element() {
-        return ReactDOM.findDOMNode(this.view);
-    }
+  get model() {
+    return this.container.model;
+  }
 
-    // Called when component will mount and ModuleModel is not initialized
-    // intialize should always return a promise
-    // Override and do stuff
-    initialize(props) {
-        return Promise.resolve();
+  get view() {
+    if (!this.container.refs.view) {
+      throw new Error(
+        `No ref attribute in ${this.container.constructor.name}.render:
+        <div ref="view" />.`
+      );
     }
+    return this.container.refs.view;
+  }
 
-    // Called when component is mounted and initialized promise is resolved
-    // Override and do stuff
-    launch(props) {
-        // ABSTRACT
-    }
+  // Called when container mounted if model not initialized.
+  // Should always return a promise.
+  initialize() {
+    return Promise.resolve();
+  }
 
-    dispose() {
-        this.removeViewEventListeners();
-        this.removeModelEventListeners();
-        this._dispose();
-        this._deleteReferences();
-    }
+  // Called when container mounted and initialize promise fulfilled.
+  launch() {
+    // ABSTRACT
+  }
 
-    dispatchDOMEvent(event, target) {
-        // console.log(this.constructor.name, 'dispatchDOMEvent', event.type);
-        event.target = target || this.element;
-        $(event.target).trigger(event.type, event);
-    }
+  // Bind helper
+  bindHandlers(...handlers) {
+    handlers.forEach(h => { this[h] = this[h].bind(this); });
+  }
 
-    delegateEvents(targetEl) {
-        targetEl = targetEl || this.element;
-        let events = result(this, 'events');
-        let key;
-        // Events, but no target found, throw error.
-        if (events && !targetEl) {
-            throw new Error('Could not delegate controller events. No target element.');
-        }
-        // Events found, delegate
-        if (events) {
-            // Undelegate
-            this.undelegateEvents();
-            let method, match, eventName, selector;
-            // Delegate
-            for (key in events) {
-                if (!events.hasOwnProperty(key)) { continue; }
-                method = events[key];
-                if (!isFunction(method)) { method = this[ events[key] ]; }
-                if (!method) { continue; }
-                match = key.match(/^(\S+)\s*(.*)$/);
-                eventName = match[1];
-                selector = match[2];
-                method = method.bind(this);
-                eventName += '.delegateEvents' + this.cid;
-                if (selector === '') {
-                    $(targetEl).on(eventName, method);
-                } else {
-                    $(targetEl).on(eventName, selector, method);
-                }
-            }
-            // Save new target
-            this._delegatedEl = targetEl;
-        }
-        // Return
-        return this;
-    }
+  onInitializeFulfilled() {
+    // Set initialized on model
+    this.model.initialized = true;
+    // Launch
+    this.launch();
+  }
 
-    undelegateEvents() {
-        if (this._delegatedEl) {
-            $(this._delegatedEl).off('.delegateEvents' + this.cid);
-            delete this._delegatedEl;
-        }
-        return this;
-    }
+  onInitializeRejected(reason) {
+    throw new Error(
+      `${this.constructor.name} initialize was rejected.
+      Reason: "${reason}"`
+    );
+  }
 
-    addModelEventListeners(model) {
-        // Abstract
-    }
-
-    removeModelEventListeners(model) {
-        // Abstract
-    }
-
-    addViewEventListeners(targetEl) {
-        this.delegateEvents(targetEl);
-    }
-
-    removeViewEventListeners() {
-        this.undelegateEvents();
-    }
-
-    _dispose() {
-        // Abstract
-    }
-
-    _deleteReferences() {
-        delete this.cid;
-        delete this._model;
-        delete this._view;
-        delete this._delegatedEl;
-    }
+  _deleteReferences() {
+    super._deleteReferences();
+    delete this.container;
+    delete this.onInitializeFulfilled;
+    delete this.onInitializeRejected;
+  }
 
 }

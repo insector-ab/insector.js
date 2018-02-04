@@ -1,19 +1,16 @@
 {
   "name": "insector-react-mvc",
   "version": "0.1.2",
-  "description": "MVC using React components and Backbone-ish event delegation.",
+  "description": "MVC for React",
   "main": "lib/index.js",
   "author": "Martin Söderholm",
   "license": "MIT",
   "repository": "https://github.com/insector-ab/insector.js/tree/master/packages/insector-react-mvc",
   "dependencies": {
-    "lodash.isfunction": "^3.0.8",
-    "lodash.result": "^4.5.2",
-    "lodash.uniqueid": "^4.0.1",
-    "resolve-handlers": "^0.1.0"
+    "element-controller": "^0.1.5",
+    "resolve-handlers": "^0.1.3"
   },
   "peerDependencies": {
-    "jquery": "3.x",
     "react": "15.x - 16.x",
     "react-dom": "15.x - 16.x",
     "mozy": "0.2.x",

@@ -121,10 +121,14 @@ Comment.defaultProps = {
  */
 export class NewCommentForm extends ReactView {
 
-    events() {
-        return Object.assign(super.events(), {
-            'change text': 'onModelChange'
-        });
+    getModelEventHandlerStrings() {
+        return super.getModelEventHandlerStrings().concat([
+            'change text: onModelChange'
+        ]);
+    }
+
+    onModelChange(event) {
+        this.invalidate();
     }
 
     render() {

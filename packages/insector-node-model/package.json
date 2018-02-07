@@ -11,7 +11,7 @@
     "lodash.sortby": "^4.7.0"
   },
   "peerDependencies": {
-    "insector-utils": "0.1.x",
+    "insector-utils": "0.2.x",
     "mozy": "0.2.x"
   }
 }

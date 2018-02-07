@@ -1,5 +1,4 @@
-import $ from 'jquery';
-import defaults from 'lodash.defaults';
+/* eslint indent: ["error", 2, {"SwitchCase": 1}] */
 import uniqueId from 'lodash.uniqueid';
 import path from 'path';
 
@@ -10,91 +9,93 @@ import {addConstantsToClass} from 'insector-utils';
  */
 export class XHRService {
 
-    constructor(baseUrl = '/', defaultAjaxParams) {
-        // public
-        this.cid = uniqueId('service');
-        this._baseUrl = baseUrl;
-        this._defaultAjaxParams = defaultAjaxParams || {};
-        this._jqXHRs = {};
-    }
+  constructor(baseUrl = '/', defaultRequestParams = {}) {
+    // public
+    this.cid = uniqueId('service');
+    this._baseUrl = baseUrl;
+    this._defaultRequestParams = Object.assign(
+      {credentials: 'same-origin'},
+      defaultRequestParams
+    );
+  }
 
-    get baseUrl() {
-        return this._baseUrl;
-    }
-    set baseUrl(value) {
-        this._baseUrl = path.normalize(value);
-    }
+  get baseUrl() {
+    return this._baseUrl;
+  }
+  set baseUrl(value) {
+    this._baseUrl = path.normalize(value);
+  }
 
-    get defaultAjaxParams() {
-        return this._defaultAjaxParams;
-    }
+  get defaultRequestParams() {
+    return this._defaultRequestParams;
+  }
 
-    get(relativeUrl, ajaxParams = {}) {
-        let params = this._getAjaxParams(ajaxParams, {method: 'GET'});
-        return this.request(relativeUrl, params);
-    }
+  get(relativeUrl, requestParams = {}) {
+    const params = this._getRequestParams(requestParams, {method: 'GET'});
+    return this.request(relativeUrl, params);
+  }
 
-    delete(relativeUrl, ajaxParams = {}) {
-        let params = this._getAjaxParams(ajaxParams, {method: 'DELETE'});
-        return this.request(relativeUrl, params);
-    }
+  deconste(relativeUrl, requestParams = {}) {
+    const params = this._getRequestParams(requestParams, {method: 'DELETE'});
+    return this.request(relativeUrl, params);
+  }
 
-    post(relativeUrl, data, ajaxParams = {}) {
-        let params = this._getAjaxParams(ajaxParams, {method: 'POST', data: data});
-        return this.request(relativeUrl, params);
-    }
+  post(relativeUrl, data, requestParams = {}) {
+    const params = this._getRequestParams(requestParams, {method: 'POST', body: data});
+    return this.request(relativeUrl, params);
+  }
 
-    put(relativeUrl, data, ajaxParams = {}) {
-        let params = this._getAjaxParams(ajaxParams, {method: 'PUT', data: data});
-        return this.request(relativeUrl, params);
-    }
+  put(relativeUrl, data, requestParams = {}) {
+    const params = this._getRequestParams(requestParams, {method: 'PUT', body: data});
+    return this.request(relativeUrl, params);
+  }
 
-    request(relativeUrl, ajaxParams = {}) {
-        let url = this._getUrl(relativeUrl);
-        return this.ajax(url, ajaxParams);
-    }
+  request(relativeUrl, requestParams = {}) {
+    // Get url
+    const url = this._getUrl(relativeUrl);
+    // Fetch API, returns promise
+    return window.fetch(url, requestParams);
+  }
 
-    ajax(url, ajaxParams = {}) {
-        // console.log(ajaxParams.method, url, ajaxParams.data);
-        return $.ajax(url, ajaxParams);
-    }
+  dispose() {
+    this._deleteReferences();
+  }
 
-    dispose() {
-        this._deleteReferences();
-    }
+  _getUrl(relativeUrl) {
+    return path.join(this.baseUrl, relativeUrl);
+  }
 
-    _getUrl(relativeUrl) {
-        return path.join(this.baseUrl, relativeUrl);
-    }
+  _getRequestParams(...requestParamObjs) {
+    return Object.assign({}, this.defaultRequestParams, ...requestParamObjs);
+  }
 
-    _getAjaxParams(...ajaxParamObjs) {
-        return defaults(...ajaxParamObjs, this.defaultAjaxParams);
-    }
+  _getResolveValue(request) {
+    return request.responseText;
+  }
 
-    _deleteReferences() {
-        delete this._baseUrl;
-        delete this._defaultAjaxParams;
-        delete this._jqXHRs;
-    }
+  _deleteReferences() {
+    delete this._baseUrl;
+    delete this._defaultRequestParams;
+  }
 
 }
 
 // Store multitons
 XHRService._instances = new Map();
 // Multiton getter
-XHRService.get = function(baseUrl = '/', defaultAjaxParams, Constructor) {
-    baseUrl = path.normalize(baseUrl);
-    // Instance exists?
-    if (XHRService._instances.has(baseUrl)) {
-        return XHRService._instances.get(baseUrl);
-    }
-    // Create new XHRService
-    Constructor = Constructor || XHRService;
-    let service = new Constructor(baseUrl, defaultAjaxParams);
-    // Register
-    XHRService._instances.set(baseUrl, service);
-    // return
-    return service;
+XHRService.get = function(baseUrl = '/', defaultRequestParams, Constructor) {
+  baseUrl = path.normalize(baseUrl);
+  // Instance exists?
+  if (XHRService._instances.has(baseUrl)) {
+    return XHRService._instances.get(baseUrl);
+  }
+  // Create new XHRService
+  Constructor = Constructor || XHRService;
+  const service = new Constructor(baseUrl, defaultRequestParams);
+  // Register
+  XHRService._instances.set(baseUrl, service);
+  // return
+  return service;
 };
 // Alias
 XHRService.at = XHRService.get;
@@ -104,56 +105,61 @@ XHRService.at = XHRService.get;
  */
 export class JSONService extends XHRService {
 
-    constructor(baseUrl = '/', defaultAjaxParams) {
-        super(baseUrl, defaults(defaultAjaxParams, {
-            dataType: 'json',
-            contentType: 'application/json; charset=UTF-8',
-            processData: false
-        }));
-        // http://www.jsonrpc.org/specification
-        this._version = '2.0';
-    }
+  constructor(baseUrl = '/', defaultRequestParams = {}) {
+    // Default headers
+    const headers = new window.Headers({
+      'Content-Type': 'application/json; charset=UTF-8'
+    });
+    // Super
+    super(baseUrl, Object.assign({headers}, defaultRequestParams));
+    // http://www.jsonrpc.org/specification
+    this._version = '2.0';
+  }
 
-    get version() {
-        return this._version;
-    }
-    set version(value) {
-        this._version = value;
-    }
+  get version() {
+    return this._version;
+  }
+  set version(value) {
+    this._version = value;
+  }
 
-    rpc(rpcMethod, params, ajaxParams = {}) {
-        ajaxParams = this._getAjaxParams(ajaxParams, {
-            method: 'POST',
-            data: this._getRPCData(rpcMethod, params)
-        });
-        return this.ajax(this.baseUrl, ajaxParams);
-    }
+  request(...args) {
+    return super.request(...args).then(response => response.json());
+  }
 
-    // {"jsonrpc": "2.0", "id": 345, "method": "user.get", params: {id: 163886}}
-    // {"jsonrpc": "2.0", "id": 346, "method": "diff", "params": [42, 23]}
-    // {"jsonrpc": "2.0", "id": 347, "method": "divide", "params": {"dividend": 42, "divisor": 23}}
-    _getRPCData(method, params) {
-        return {
-            method,
-            params,
-            jsonrpc: this.version,
-            id: uniqueId('rpc')
-        };
-    }
+  rpc(rpcMethod, params, requestParams = {}) {
+    requestParams = this._getRequestParams(requestParams, {
+      method: 'POST',
+      body: this._getRPCData(rpcMethod, params)
+    });
+    return this.request('', requestParams);
+  }
 
-    _getAjaxParams(...ajaxParamObjs) {
-        let params = super._getAjaxParams(...ajaxParamObjs);
-        // if POST or PUT, stringify json data
-        if (params.hasOwnProperty('data') && ['POST', 'PUT'].indexOf(params.method) !== -1) {
-            params.data = JSON.stringify(params.data);
-        }
-        return params;
+  // {"jsonrpc": "2.0", "id": 345, "method": "user.get", params: {id: 163886}}
+  // {"jsonrpc": "2.0", "id": 346, "method": "diff", "params": [42, 23]}
+  // {"jsonrpc": "2.0", "id": 347, "method": "divide", "params": {"dividend": 42, "divisor": 23}}
+  _getRPCData(method, params) {
+    return {
+      method,
+      params,
+      jsonrpc: this.version,
+      id: uniqueId('rpc')
+    };
+  }
+
+  _getRequestParams(...requestParamObjs) {
+    const params = super._getRequestParams(...requestParamObjs);
+    // if POST or PUT, stringify json data
+    if (params.body && ['POST', 'PUT'].includes(params.method)) {
+      params.body = JSON.stringify(params.body);
     }
+    return params;
+  }
 
 }
 // Multiton getter
-JSONService.at = function(baseUrl = '/', defaultAjaxParams) {
-    return XHRService.at(baseUrl, defaultAjaxParams, JSONService);
+JSONService.at = function(baseUrl = '/', defaultRequestParams) {
+  return XHRService.at(baseUrl, defaultRequestParams, JSONService);
 };
 
 /**
@@ -168,13 +174,13 @@ JSONService.at = function(baseUrl = '/', defaultAjaxParams) {
  */
 export class JSONRPCErrorCode {}
 addConstantsToClass(JSONRPCErrorCode, {
-    INVALID_JSON: -32700,
-    INVALID_REQUEST: -32600,
-    METHOD_NOT_FOUND: -32601,
-    INVALID_PARAMS: -32602,
-    INTERNAL_ERROR: -32603,
-    SERVER_ERROR: -32000,
-    VALIDATION_ERROR: -32010
+  INVALID_JSON: -32700,
+  INVALID_REQUEST: -32600,
+  METHOD_NOT_FOUND: -32601,
+  INVALID_PARAMS: -32602,
+  INTERNAL_ERROR: -32603,
+  SERVER_ERROR: -32000,
+  VALIDATION_ERROR: -32010
 });
 
 /**
@@ -182,11 +188,11 @@ addConstantsToClass(JSONRPCErrorCode, {
  */
 export class JSONRPCError {
 
-    constructor(id, code, message, data) {
-        this.id = id;
-        this.errorCode = code;
-        this.errorMessage = message;
-        this.errorData = data;
-    }
+  constructor(id, code, message, data) {
+    this.id = id;
+    this.errorCode = code;
+    this.errorMessage = message;
+    this.errorData = data;
+  }
 
 }

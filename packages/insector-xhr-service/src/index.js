@@ -13,7 +13,10 @@ export class XHRService {
     // public
     this.cid = uniqueId('service');
     this._baseUrl = baseUrl;
-    this._defaultRequestParams = defaultRequestParams;
+    this._defaultRequestParams = Object.assign(
+      {credentials: 'same-origin'},
+      defaultRequestParams
+    );
   }
 
   get baseUrl() {

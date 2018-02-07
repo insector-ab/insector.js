@@ -1,18 +1,16 @@
 {
   "name": "insector-xhr-service",
-  "version": "0.1.0",
-  "description": "Wrapper classes for ajax and JSON RPC requests.",
+  "version": "0.2.0",
+  "description": "Wrapper classes for XHR and JSON RPC requests.",
   "main": "lib/index.js",
   "author": "Martin Söderholm",
   "license": "MIT",
   "repository": "https://github.com/insector-ab/insector.js/tree/master/packages/xhr-service",
   "dependencies": {
-    "lodash.defaults": "^4.2.0",
     "lodash.uniqueid": "^4.0.1",
     "path": "^0.12.7"
   },
   "peerDependencies": {
-    "jquery": "3.x",
     "insector-utils": "0.1.x"
   }
 }

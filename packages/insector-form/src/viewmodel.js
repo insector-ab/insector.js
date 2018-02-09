@@ -92,9 +92,14 @@ export default class FormViewModel extends Model {
     }
 
     getError(key) {
+        console.log('getError', key);
         if (this.hasError(key)) {
             return this.get(`validation:${key}`, {}).error;
         }
+    }
+
+    getErrors() {
+        return Object.keys(this.getDataReference()).filter(key => key.substring(0, 11) === 'validation:' && !!this.get(key).error).map(key => this.get(key).error);
     }
 
     getErrorMessage(key) {

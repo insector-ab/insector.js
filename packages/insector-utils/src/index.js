@@ -79,7 +79,12 @@ export function addConstantsToClass(Cls, keyValues) {
 export function importConstantsToClass(Cls, FromCls, keys) {
     for (let key, i = 0, il = keys.length; i < il; i++) {
         key = keys[i];
-        Cls[key] = FromCls[key];
+        Object.defineProperty(Cls, key, {
+            value: FromCls[key],
+            writable: false,
+            enumerable: true,
+            configurable: false
+        });
     }
     // If no class methods defined
     if (!Cls.hasOwnProperty('has')) {

@@ -1,6 +1,6 @@
 {
   "name": "insector-react-components",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Mixed React components.",
   "main": "lib/index.js",
   "author": "Martin Söderholm",

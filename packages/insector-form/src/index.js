@@ -1,5 +1,3 @@
-import FormModel, {FormInputModel} from './model';
-
 import FormViewModel, {
     FormStatus,
     ValidationStatus,
@@ -16,18 +14,13 @@ import {
 
 // Exports
 
-export { FormModel };
-export { FormInputModel };
-
 export { FormViewModel };
+export { FormStatus };
+export { ValidationStatus };
+export { ValidationError };
 
 export { FormTextInput };
 export { FormPasswordInput };
 export { FormCheckbox };
 export { FormSelect };
 export { FormTextarea };
-
-export {FormStatus};
-
-export { ValidationStatus };
-export { ValidationError };

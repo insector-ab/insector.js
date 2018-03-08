@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-npm install --save insector-utils
+npm install insector-utils
 ```
 
 ## Usage

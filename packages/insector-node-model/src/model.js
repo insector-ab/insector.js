@@ -1,4 +1,4 @@
-import {Model, ModelRegistry, Factory} from 'mozy';
+import {Model, Registry, Factory} from 'mozy';
 import {addConstantsToClass} from 'insector-utils';
 import Graph from './graph';
 
@@ -80,10 +80,10 @@ export default class NodeModel extends Model {
     }
 
     _getDefaults() {
-        let d = super._getDefaults();
-        d.identity = NodeModel.identity;
-        d.discriminator = NodeModel.discriminator;
-        return d;
+        return Object.assign(super._getDefaults(), {
+            identity: NodeModel.identity,
+            discriminator: NodeModel.discriminator
+        });
     }
 
 }
@@ -93,46 +93,19 @@ NodeModel.discriminator = 'node';
 
 /**
  * nodeGraph
- * @type {Graph}
  */
 export const nodeGraph = new Graph({identityKey: 'discriminator'});
 /**
  * nodeIdentities
- * @type {Registry}
  */
 export const nodeIdentities = new Map();
 // Register Classes/Constructors
 nodeIdentities.set(NodeModel.discriminator, NodeModel);
 /**
  * nodeFactory
- * @type {Factory}
  */
 export const nodeFactory = new Factory(nodeIdentities, 'discriminator');
 /**
  * nodeRegistry
- * @type {ModelRegistry}
  */
-export const nodeRegistry = new ModelRegistry('uuid', nodeFactory);
-/**
- * getNodeRelationListHandler
- */
-// export function getNodeRelationListHandler(nodeDataMap, nodeModelRegistry) {
-//     return {
-//         getModel: function(key) {
-//             const data = nodeDataMap.get(key);
-//             if (!data) {
-//                 throw new Error('Node data for key ' + key + 'not found.');
-//             }
-//             return nodeModelRegistry.getModel(data);
-//         },
-//         getItem: function(model) {
-//             return model.uuid;
-//         },
-//         findModel: function(key) {
-//             return nodeModelRegistry.get(key);
-//         },
-//         disposeModel: function(key) {
-//             return nodeModelRegistry.disposeModelByKey(key);
-//         }
-//     };
-// }
+export const nodeRegistry = new Registry(nodeFactory);

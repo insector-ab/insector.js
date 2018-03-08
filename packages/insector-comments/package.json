@@ -12,10 +12,10 @@
   "peerDependencies": {
     "react": "15.x - 16.x",
     "react-dom": "15.x - 16.x",
-    "insector-utils": "0.1.x",
-    "insector-form": "0.1.x",
-    "insector-react-mvc": "0.1.x",
-    "mozy": "0.1.x",
+    "insector-utils": "0.2.x",
+    "insector-form": "0.2.x",
+    "insector-react-mvc": "0.2.x",
+    "mozy": "0.2.x",
     "prop-types": "^15.6.0"
   }
 }

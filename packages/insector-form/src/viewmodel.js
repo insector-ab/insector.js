@@ -1,9 +1,4 @@
-import Model, {
-    identities as modelIdentities,
-    SET_SILENT,
-    SOFT_UPDATE
-} from 'mozy/model';
-
+import {Model, modelIdentities} from 'mozy';
 import {addConstantsToClass} from 'insector-utils';
 import ExtendableError from 'es6-error';
 
@@ -21,7 +16,7 @@ export default class FormViewModel extends Model {
 
     unset(key, flags) {
         super.unset(key, flags);
-        super.unset(`validation:${key}`, SET_SILENT);
+        super.unset(`validation:${key}`, {setSilent: true});
         if (this.hasChanged(`validation:${key}`)) {
             this.dispatchChange('validation');
         }
@@ -31,14 +26,14 @@ export default class FormViewModel extends Model {
         if (typeof key === 'undefined') {
             throw new TypeError('setValidation "key" undefined.');
         }
-        this.set(`validation:${key}`, value, SET_SILENT);
+        this.set(`validation:${key}`, value, {setSilent: true});
         if (this.hasChanged(`validation:${key}`)) {
             this.dispatchChange('validation');
         }
     }
 
     unsetValidation(key) {
-        this.unset(`validation:${key}`, SET_SILENT);
+        this.unset(`validation:${key}`, {setSilent: true});
         if (this.hasChanged(`validation:${key}`)) {
             this.dispatchChange('validation');
         }
@@ -102,6 +97,15 @@ export default class FormViewModel extends Model {
         }
     }
 
+    getErrors() {
+        return Object.keys(this.getDataReference())
+            .filter(key => (
+                key.substring(0, 11) === 'validation:' && !!this.get(key).error
+            )).map(key => (
+                this.get(key).error
+            ));
+    }
+
     getErrorMessage(key) {
         if (this.hasError(key)) {
             return this.get(`validation:${key}`, {}).error.message;
@@ -124,11 +128,6 @@ export default class FormViewModel extends Model {
 
     hasFeedback(key) {
         return this.getFeedback(key) !== ValidationStatus.NONE;
-    }
-
-    reset(data, flags = 0) {
-        // override flags, always SOFT_UPDATE
-        super.reset(data, SOFT_UPDATE);
     }
 
     _getDefaults() {

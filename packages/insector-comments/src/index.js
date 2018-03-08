@@ -20,9 +20,11 @@ export default class Comments extends MVCContainer {
     render() {
         const attrs = getAttrs(this.props, Comments);
         return (
-            <CommentsView ref="view"
-                          model={this.model}
-                          {...attrs} />
+            <CommentsView
+                ref="view"
+                model={this.model}
+                {...attrs}
+            />
         );
     }
 

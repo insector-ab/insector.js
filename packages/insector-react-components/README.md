@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-npm install --save insector-react-components
+npm install insector-react-components
 ```
 
 ## Usage

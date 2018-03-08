@@ -1,11 +1,11 @@
 # insector-comments
 
-> Comments MVC container..
+> Comments MVC container.
 
 ## Install
 
 ```sh
-npm install --save insector-comments
+npm install insector-comments
 ```
 
 ## Usage

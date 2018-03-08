@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-npm install --save insector-xhr-service
+npm install insector-xhr-service
 ```
 
 ## Usage
@@ -14,5 +14,4 @@ npm install --save insector-xhr-service
 import {JSONService} from 'insector-xhr-service';
 
 const promise = JSONService.at('/api').rpc('system.registry');
-
 ```

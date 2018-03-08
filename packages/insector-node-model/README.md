@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-npm install --save insector-node-model
+npm install insector-node-model
 ```
 
 ## Usage

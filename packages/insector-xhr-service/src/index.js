@@ -7,7 +7,7 @@ import {addConstantsToClass} from 'insector-utils';
 /**
  * XHRService
  */
-export class XHRService {
+export default class XHRService {
 
   constructor(baseUrl = '/', defaultRequestParams = {}) {
     // public
@@ -99,6 +99,8 @@ XHRService.get = function(baseUrl = '/', defaultRequestParams, Constructor) {
 };
 // Alias
 XHRService.at = XHRService.get;
+
+export { XHRService };
 
 /**
  * JSONService

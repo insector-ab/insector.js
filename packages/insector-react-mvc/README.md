@@ -1,11 +1,11 @@
 # insector-react-mvc
 
-> MVC using React components and Backbone-ish event delegation.
+> MVC for React.
 
 ## Install
 
 ```sh
-npm install --save insector-react-mvc
+npm install insector-react-mvc
 ```
 
 ## Usage

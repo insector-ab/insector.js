@@ -98,7 +98,12 @@ export default class FormViewModel extends Model {
     }
 
     getErrors() {
-        return Object.keys(this.getDataReference()).filter(key => key.substring(0, 11) === 'validation:' && !!this.get(key).error).map(key => this.get(key).error);
+        return Object.keys(this.getDataReference())
+            .filter(key => (
+                key.substring(0, 11) === 'validation:' && !!this.get(key).error
+            )).map(key => (
+                this.get(key).error
+            ));
     }
 
     getErrorMessage(key) {

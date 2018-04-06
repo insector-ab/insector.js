@@ -5,12 +5,12 @@ import {ReactController} from 'insector-react-mvc';
  */
 export default class CommentsController extends ReactController {
 
-    events() {
-        return Object.assign(super.events(), {
-            'input textarea': 'onTextareaInput',
-            'click .btn-show-new-comment': 'onShowNewCommentClick',
-            'click .btn-show-all': 'onShowAllClick'
-        });
+    getDOMEventHandlerStrings() {
+        return super.getDOMEventHandlerStrings().concat([
+            'input textarea: onTextareaInput',
+            'click .btn-show-new-comment: onShowNewCommentClick',
+            'click .btn-show-all: onShowAllClick'
+        ]);
     }
 
     onShowNewCommentClick(event) {
@@ -18,7 +18,7 @@ export default class CommentsController extends ReactController {
     }
 
     onTextareaInput(event) {
-        const {name, value} = event.originalEvent.target;
+        const {name, value} = event.currentTarget;
         const form = this.model.commentForm;
         form.set(name, value, {unsetIfFalsey: true});
     }

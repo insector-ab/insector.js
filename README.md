@@ -10,7 +10,6 @@
 * [insector-xhr-service](https://github.com/insector-ab/insector.js/tree/master/packages/insector-xhr-service)
 * [insector-node-model](https://github.com/insector-ab/insector.js/tree/master/packages/insector-node-model)
 * [insector-form](https://github.com/insector-ab/insector.js/tree/master/packages/insector-form)
-* [insector-comments](https://github.com/insector-ab/insector.js/tree/master/packages/insector-comments)
 
 ## Develop
 
@@ -21,3 +20,8 @@ cd insector.js
 npm install
 npm run watch
 ```
+
+## Change log
+
+### 0.2.1 (unpublished)
+* Removed insector-comments package.

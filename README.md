@@ -23,5 +23,7 @@ npm run watch
 
 ## Change log
 
-### 0.2.1 (unpublished)
+### 0.2.1
+* insector-utils: Prevent getAttrs from failing if propTypes undefined on React component.
+* insector-utils: Added .flex-align-stretch helper.
 * Removed insector-comments package.

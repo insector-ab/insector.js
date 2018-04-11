@@ -96,7 +96,7 @@ export function importConstantsToClass(Cls, FromCls, keys) {
  * Return attributes present in props but not in defined propTypes.
  */
 export function getAttrs(props, cls) {
-    return omit(props, ...Object.keys(cls.propTypes));
+    return omit(props, ...Object.keys(cls.propTypes || {}));
 }
 
 /**

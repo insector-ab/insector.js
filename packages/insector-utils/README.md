@@ -18,3 +18,4 @@ import {getAttrs} from 'insector-utils';
 
 ### 0.2.1 (unpublished)
 * Prevent getAttrs from failing if propTypes undefined on React component.
+* Added .flex-align-stretch helper

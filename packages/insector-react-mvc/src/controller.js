@@ -14,19 +14,6 @@ export default class ReactController extends ElementController {
     this.container = mountedContainer;
     // Binds
     this.bindHandlers('onInitializeFulfilled', 'onInitializeRejected');
-
-    // If initialized, launch directly
-    if (this.model.initialized) {
-      this.launch();
-    // else, initialize
-    } else {
-      this.initialize()
-        .then(
-          this.onInitializeFulfilled,
-          this.onInitializeRejected
-        );
-    }
-
   }
 
   get model() {
@@ -41,6 +28,20 @@ export default class ReactController extends ElementController {
       );
     }
     return this.container.refs.view;
+  }
+
+  componentDidMount() {
+    // If initialized, launch directly
+    if (this.model.initialized) {
+      this.launch();
+    // else, initialize
+    } else {
+      this.initialize()
+        .then(
+          this.onInitializeFulfilled,
+          this.onInitializeRejected
+        );
+    }
   }
 
   // Called when container mounted if model not initialized.

@@ -1,6 +1,6 @@
 {
   "name": "insector-react-mvc",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "MVC for React",
   "main": "lib/index.js",
   "author": "Martin Söderholm",

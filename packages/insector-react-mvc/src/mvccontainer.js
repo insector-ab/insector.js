@@ -15,6 +15,8 @@ export default class MVCContainer extends React.Component {
   componentDidMount() {
     // Instantiate controller
     this.controller = this._newControllerInstance(this);
+    // Notify of mount
+    this.controller.componentDidMount();
   }
 
   componentWillUnmount() {

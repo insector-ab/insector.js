@@ -21,9 +21,11 @@ npm run watch
 
 ## Change log
 
-### 0.2.2
+### 0.3.0
 * Removed insector-xhr-service package.
 * Removed insector-form package.
+* insector-react-mvc 0.2.2
+  - Updated dependencies
 
 ### 0.2.1
 * insector-utils: Prevent getAttrs from failing if propTypes undefined on React component.

@@ -1,14 +1,14 @@
 {
   "name": "insector-react-mvc",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "MVC for React",
   "main": "lib/index.js",
   "author": "Martin Söderholm",
   "license": "MIT",
   "repository": "https://github.com/insector-ab/insector.js/tree/master/packages/insector-react-mvc",
   "dependencies": {
-    "element-controller": "^0.1.5",
-    "resolve-handlers": "^0.1.4"
+    "element-controller": "^0.2.0",
+    "resolve-handlers": "^0.2.0"
   },
   "peerDependencies": {
     "react": "15.x - 16.x",

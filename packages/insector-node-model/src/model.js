@@ -1,5 +1,5 @@
 import {Model, Registry, Factory} from 'mozy';
-import {addConstantsToClass} from 'insector-utils';
+import {addConstantsToClass} from 'object-constants';
 import Graph from './graph';
 
 /**

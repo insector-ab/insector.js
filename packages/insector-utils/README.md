@@ -10,12 +10,11 @@ npm install insector-utils
 
 ## Usage
 
-```js
-import {getAttrs} from 'insector-utils';
-```
+N/A
 
 ## Change log
 
-### 0.2.1 (unpublished)
-* Prevent getAttrs from failing if propTypes undefined on React component.
+### 0.3.0
+* Removed `!important` flag from flex helpers.
+* Removed getAttrs and lodash.omit dependency.
 * Added .flex-align-stretch helper

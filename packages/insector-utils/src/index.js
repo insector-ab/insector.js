@@ -1,5 +1,3 @@
-import omit from 'lodash.omit';
-
 /**
  * mixin
  * @param  {Class} TargetCls [description]
@@ -90,13 +88,6 @@ export function importConstantsToClass(Cls, FromCls, keys) {
     if (!Cls.hasOwnProperty('has')) {
         defineConstantsClassMethods(Cls);
     }
-}
-
-/**
- * Return attributes present in props but not in defined propTypes.
- */
-export function getAttrs(props, cls) {
-    return omit(props, ...Object.keys(cls.propTypes || {}));
 }
 
 /**
